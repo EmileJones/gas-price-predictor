@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.gas.mapper.GasStationGeoMapper">
+    
+    <resultMap type="GasStationGeo" id="GasStationGeoResult">
+        <result property="id"    column="id"    />
+        <result property="systemStationId"    column="system_station_id"    />
+        <result property="outSystemStationId"    column="out_system_station_id"    />
+        <result property="distance"    column="distance"    />
+        <result property="trafficLights"    column="traffic_lights"    />
+        <result property="trafficFactor"    column="traffic_factor"    />
+        <result property="routeShape"    column="route_shape"    />
+        <result property="routeShapeFactor"    column="route_shape_factor"    />
+        <result property="routeFactor"    column="route_factor"    />
+    </resultMap>
+
+    <sql id="selectGasStationGeoVo">
+        select id, system_station_id, out_system_station_id, distance, traffic_lights, traffic_factor, route_shape, route_shape_factor, route_factor from gas_station_geo
+    </sql>
+
+    <select id="selectGasStationGeoList" parameterType="GasStationGeo" resultMap="GasStationGeoResult">
+        <include refid="selectGasStationGeoVo"/>
+        <where>  
+            <if test="systemStationId != null  and systemStationId != ''"> and system_station_id = #{systemStationId}</if>
+            <if test="outSystemStationId != null  and outSystemStationId != ''"> and out_system_station_id = #{outSystemStationId}</if>
+            <if test="distance != null "> and distance = #{distance}</if>
+            <if test="trafficLights != null "> and traffic_lights = #{trafficLights}</if>
+            <if test="trafficFactor != null "> and traffic_factor = #{trafficFactor}</if>
+            <if test="routeShape != null  and routeShape != ''"> and route_shape = #{routeShape}</if>
+            <if test="routeShapeFactor != null "> and route_shape_factor = #{routeShapeFactor}</if>
+            <if test="routeFactor != null "> and route_factor = #{routeFactor}</if>
+        </where>
+    </select>
+    
+    <select id="selectGasStationGeoById" parameterType="Long" resultMap="GasStationGeoResult">
+        <include refid="selectGasStationGeoVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectGasStationGeoByStationId" resultMap="GasStationGeoResult">
+        <include refid="selectGasStationGeoVo"/>
+        where `system_station_id` = #{systemStationId} and
+              `out_system_station_id` = #{outSystemStationId}
+    </select>
+        
+    <insert id="insertGasStationGeo" parameterType="GasStationGeo">
+        insert into gas_station_geo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="systemStationId != null">system_station_id,</if>
+            <if test="outSystemStationId != null">out_system_station_id,</if>
+            <if test="distance != null">distance,</if>
+            <if test="trafficLights != null">traffic_lights,</if>
+            <if test="trafficFactor != null">traffic_factor,</if>
+            <if test="routeShape != null">route_shape,</if>
+            <if test="routeShapeFactor != null">route_shape_factor,</if>
+            <if test="routeFactor != null">route_factor,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="systemStationId != null">#{systemStationId},</if>
+            <if test="outSystemStationId != null">#{outSystemStationId},</if>
+            <if test="distance != null">#{distance},</if>
+            <if test="trafficLights != null">#{trafficLights},</if>
+            <if test="trafficFactor != null">#{trafficFactor},</if>
+            <if test="routeShape != null">#{routeShape},</if>
+            <if test="routeShapeFactor != null">#{routeShapeFactor},</if>
+            <if test="routeFactor != null">#{routeFactor},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGasStationGeo" parameterType="GasStationGeo">
+        update gas_station_geo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="systemStationId != null">system_station_id = #{systemStationId},</if>
+            <if test="outSystemStationId != null">out_system_station_id = #{outSystemStationId},</if>
+            <if test="distance != null">distance = #{distance},</if>
+            <if test="trafficLights != null">traffic_lights = #{trafficLights},</if>
+            <if test="trafficFactor != null">traffic_factor = #{trafficFactor},</if>
+            <if test="routeShape != null">route_shape = #{routeShape},</if>
+            <if test="routeShapeFactor != null">route_shape_factor = #{routeShapeFactor},</if>
+            <if test="routeFactor != null">route_factor = #{routeFactor},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGasStationGeoById" parameterType="Long">
+        delete from gas_station_geo where id = #{id}
+    </delete>
+
+    <delete id="deleteGasStationGeoByIds" parameterType="String">
+        delete from gas_station_geo where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

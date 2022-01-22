@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.gas.mapper.GasStationInfoMapper">
+    
+    <resultMap type="GasStationInfo" id="GasStationInfoResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="location"    column="location"    />
+        <result property="province"    column="province"    />
+        <result property="city"    column="city"    />
+    </resultMap>
+
+    <sql id="selectGasStationInfoVo">
+        select id, name, location, province, city from gas_station_info
+    </sql>
+
+    <select id="selectGasStationInfoList" parameterType="GasStationInfo" resultMap="GasStationInfoResult">
+        <include refid="selectGasStationInfoVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="location != null  and location != ''"> and location = #{location}</if>
+            <if test="province != null  and province != ''"> and province = #{province}</if>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+        </where>
+    </select>
+    
+    <select id="selectGasStationInfoById" parameterType="String" resultMap="GasStationInfoResult">
+        <include refid="selectGasStationInfoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertGasStationInfo" parameterType="GasStationInfo">
+        insert into gas_station_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="location != null and location != ''">location,</if>
+            <if test="province != null and province != ''">province,</if>
+            <if test="city != null and city != ''">city,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="location != null and location != ''">#{location},</if>
+            <if test="province != null and province != ''">#{province},</if>
+            <if test="city != null and city != ''">#{city},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGasStationInfo" parameterType="GasStationInfo">
+        update gas_station_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="location != null and location != ''">location = #{location},</if>
+            <if test="province != null and province != ''">province = #{province},</if>
+            <if test="city != null and city != ''">city = #{city},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGasStationInfoById" parameterType="String">
+        delete from gas_station_info where id = #{id}
+    </delete>
+
+    <delete id="deleteGasStationInfoByIds" parameterType="String">
+        delete from gas_station_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 自定义Mapper内容 -->
+    <select id="selectOneByCondition" resultMap="GasStationInfoResult">
+        <bind name="prefixLike" value="'%'+sysPrefix+'%'"/>
+        <include refid="selectGasStationInfoVo"/>
+        where id like #{prefixLike} and
+        location = #{location}
+        limit 1
+    </select>
+
+    <select id="selectOneByIdHighest" resultMap="GasStationInfoResult">
+        <bind name="prefixLike" value="'%'+prefix+'%'"/>
+        <include refid="selectGasStationInfoVo"/>
+        where id like #{prefixLike}
+        order by id desc
+        limit 1
+    </select>
+    <select id="selectOneByLocation" resultMap="GasStationInfoResult">
+        <include refid="selectGasStationInfoVo"/>
+        where location = #{location}
+        order by id desc
+        limit 1
+    </select>
+
+    <select id="selectIdByLocation" parameterType="String" resultType="String">
+        select id from gas_station_info
+        where location = #{location}
+    </select>
+
+</mapper>
