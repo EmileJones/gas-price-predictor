@@ -122,7 +122,7 @@ export default {
     /** 导出按钮操作 */
     handleExport() {
       this.download('gas/geo/export', {
-        ...this.queryParams
+        ...this.queryListParams
       }, `geo_${new Date().getTime()}.xlsx`)
     },
     /** 寻找最详细的行政区划单位代码 */
