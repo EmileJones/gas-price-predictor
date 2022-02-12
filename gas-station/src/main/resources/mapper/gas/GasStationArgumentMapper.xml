@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.gas.mapper.GasStationArgumentMapper">
+    
+    <resultMap type="GasStationArgument" id="GasStationArgumentResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="value"    column="value"    />
+    </resultMap>
+
+    <sql id="selectGasStationArgumentVo">
+        select id, name, value from gas_station_argument
+    </sql>
+
+    <select id="selectGasStationArgumentList" parameterType="GasStationArgument" resultMap="GasStationArgumentResult">
+        <include refid="selectGasStationArgumentVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="value != null  and value != ''"> and value = #{value}</if>
+        </where>
+    </select>
+    
+    <select id="selectGasStationArgumentById" parameterType="Long" resultMap="GasStationArgumentResult">
+        <include refid="selectGasStationArgumentVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertGasStationArgument" parameterType="GasStationArgument" useGeneratedKeys="true" keyProperty="id">
+        insert into gas_station_argument
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="value != null">value,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="value != null">#{value},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGasStationArgument" parameterType="GasStationArgument">
+        update gas_station_argument
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="value != null">value = #{value},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGasStationArgumentById" parameterType="Long">
+        delete from gas_station_argument where id = #{id}
+    </delete>
+
+    <delete id="deleteGasStationArgumentByIds" parameterType="String">
+        delete from gas_station_argument where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectGasStationArgumentByName" parameterType="java.lang.String" resultType="GasStationArgument">
+        select *
+        from gas_station_argument
+        where `name` = #{name}
+    </select>
+</mapper>
