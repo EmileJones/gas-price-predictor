@@ -1,4 +1,4 @@
-package com.ruoyi.common.amap.constant;
+package com.ruoyi.gas.constant;
 
 /**
  * 方向常量
@@ -16,9 +16,11 @@ public class DirectionConstant {
     public static final Integer WEST_SOUTH = 7;
 
     /**
-     * 方向权值比重
+     * 方向权值比重：东、西、北、南、东北、东南、西北、西南
+     * 常量将从数据库加载，每次更新同步更新这个常量
      */
-    public static final double[][] DIRECTION_MATRIX = {
+    @Deprecated
+    public static double[][] DIRECTION_MATRIX = {
             {0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1},
             {0.1, 0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1},
             {0.1, 0.1, 0, 0.1, 0.1, 0.1, 0.1, 0.1},

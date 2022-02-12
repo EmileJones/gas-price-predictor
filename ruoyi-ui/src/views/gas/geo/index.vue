@@ -1,12 +1,13 @@
 <template>
   <div class="app-container">
+    <p><strong>注意！！！</strong>尽量不要修改默认的搜索半径，可能会对您的期望结果出现误差</p>
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label-width="300" label="加油站所在地区" prop="location">
+      <el-form-item label-width="300" label="加油站所在地区">
         <template>
           <v-region @values="regionChange" />
         </template>
       </el-form-item>
-      <el-form-item label-width="300" label="加油站名称" prop="systemStationName">
+      <el-form-item label-width="300" label="加油站名称">
         <el-select v-model="queryListParams.location" filterable remote placeholder="请选择" :remote-method="refreshCandidateList">
           <el-option
             v-for="item in candidateGasStations"
@@ -15,6 +16,9 @@
             :value="item.location">
           </el-option>
         </el-select>
+      </el-form-item>
+      <el-form-item label-width="300" label="搜索半径">
+        <el-input-number v-model="queryListParams.radius" :step="100"></el-input-number>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>

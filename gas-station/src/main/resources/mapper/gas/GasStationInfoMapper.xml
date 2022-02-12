@@ -99,4 +99,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where location = #{location}
     </select>
 
+    <update id="truncateTable">
+        truncate table gas_station_info
+    </update>
 </mapper>

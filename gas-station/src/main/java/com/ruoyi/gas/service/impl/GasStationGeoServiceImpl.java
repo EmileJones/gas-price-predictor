@@ -8,29 +8,34 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicLong;
 
+import com.alibaba.fastjson.JSON;
 import com.ruoyi.common.amap.AmapClient;
-import com.ruoyi.common.amap.constant.DirectionConstant;
+import com.ruoyi.gas.constant.DirectionConstant;
 import com.ruoyi.common.amap.model.*;
 import com.ruoyi.common.amap.model.driving.Cost;
 import com.ruoyi.common.amap.model.driving.Paths;
 import com.ruoyi.common.amap.model.driving.Step;
 import com.ruoyi.common.amap.model.place.POI;
 import com.ruoyi.common.exception.GlobalException;
+import com.ruoyi.gas.domain.GasStationArgument;
 import com.ruoyi.gas.domain.GasStationInfo;
 import com.ruoyi.gas.domain.vo.GasStationForm;
-import com.ruoyi.gas.domain.vo.GasStationGeoForm;
 import com.ruoyi.gas.domain.vo.GasStationVO;
-import com.ruoyi.gas.mapper.GasStationInfoMapper;
-import com.ruoyi.gas.service.IGasStationInfoService;
+import com.ruoyi.gas.utils.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import com.ruoyi.gas.mapper.GasStationGeoMapper;
 import com.ruoyi.gas.domain.GasStationGeo;
 import com.ruoyi.gas.service.IGasStationGeoService;
 
 import javax.annotation.Resource;
+
+import static com.ruoyi.gas.constant.ArgumentConstant.ARGUMENT_PREFIX;
+import static com.ruoyi.gas.constant.ArgumentConstant.DIRECTION_MATRIX;
 
 /**
  * 加油站地理信息Service业务层处理
@@ -46,10 +51,13 @@ public class GasStationGeoServiceImpl implements IGasStationGeoService
     private AmapClient amapClient;
     @Autowired
     private GasStationGeoMapper gasStationGeoMapper;
-    @Autowired
-    private GasStationInfoMapper gasStationInfoMapper;
     @Resource(name = "gasStationExecutor")
     private Executor executor;
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
+    @Value("${gas.amap.key}")
+    private String amapKey;
 
 
     @Override
@@ -69,7 +77,7 @@ public class GasStationGeoServiceImpl implements IGasStationGeoService
             CompletableFuture.runAsync(() -> {
                 long staStart = System.currentTimeMillis(); // TODO 统计API时间
                 DrivingDirectionRequest request = new DrivingDirectionRequest(
-                        "25dc8e3377f5d44b60b5a7881cbb7cd2",
+                        amapKey,
                         systemStation.getLocation(),
                         out.getLocation()
                 );
@@ -105,11 +113,15 @@ public class GasStationGeoServiceImpl implements IGasStationGeoService
                 // 计算方向因子
                 StringBuilder routeDirection = new StringBuilder();
                 List<Step> steps = paths.getSteps();
+                String prevDirection = "";
                 for (int i = 0; i < steps.size(); i++) {
+                    String currentDirection = steps.get(i).getOrientation();
                     if (i == 0) {
-                        routeDirection.append(steps.get(i).getOrientation());
+                        routeDirection.append(currentDirection);
+                    } else if (!prevDirection.equals(currentDirection)) {
+                        routeDirection.append(",").append(steps.get(i).getOrientation());
                     }
-                    routeDirection.append(",").append(steps.get(i).getOrientation());
+                    prevDirection = currentDirection;
                 }
                 geo.setRouteShape(routeDirection.toString());
                 Double routeShapeFactor =
@@ -293,6 +305,9 @@ public class GasStationGeoServiceImpl implements IGasStationGeoService
      * @return 路线曲折度因子
      */
     private Double routeShapeFactorAlgorithm(String[] directions) {
+        GasStationArgument gasStationArgument =
+                JSON.parseObject(redisTemplate.opsForValue().get(ARGUMENT_PREFIX + DIRECTION_MATRIX), GasStationArgument.class);
+        double[][] directionMatrix = ArrayUtils.deserialize2DimDoubleArray(gasStationArgument.getValue());
         double ret = 1.0;
         if (directions == null || directions.length < 2) {
             return ret;
@@ -307,7 +322,7 @@ public class GasStationGeoServiceImpl implements IGasStationGeoService
                     DirectionConstant.getDirectionNum(directions[i-1]) == -1?
                             DirectionConstant.getDirectionNum(directions[i]):
                             DirectionConstant.getDirectionNum(directions[i-1]);
-            ret -= DirectionConstant.DIRECTION_MATRIX[prevDirection][currDirection];
+            ret -= directionMatrix[prevDirection][currDirection];
         }
         return ret;
     }

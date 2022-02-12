@@ -71,4 +71,10 @@ public interface GasStationGeoMapper
      */
     GasStationGeo selectGasStationGeoByStationId(@Param("systemStationId") String systemStationId,
                                                  @Param("outSystemStationId") String outSystemStationId);
+
+    /**
+     * 擦除数据库所有数据
+     */
+    void truncateTable();
+
 }
