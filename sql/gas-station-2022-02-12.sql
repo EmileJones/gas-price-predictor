@@ -30,6 +30,21 @@ CREATE TABLE IF NOT EXISTS `gas_station_info` (
 /*!40000 ALTER TABLE `gas_station_info` DISABLE KEYS */;
 /*!40000 ALTER TABLE `gas_station_info` ENABLE KEYS */;
 
+-- 导出  表 ruoyi_t.gas_station_argument 结构
+CREATE TABLE IF NOT EXISTS `gas_station_argument` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(128) DEFAULT NULL,
+  `value` varchar(2048) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `gas_station_argument_name_uindex` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='加油站关键参数表';
+
+-- 正在导出表  ruoyi_t.gas_station_argument 的数据：~0 rows (大约)
+/*!40000 ALTER TABLE `gas_station_argument` DISABLE KEYS */;
+INSERT INTO `gas_station_argument` (`id`, `name`, `value`) VALUES
+    (1, 'DIRECTION_MATRIX', '[[0,0.1,0.1,0.1,0.1,0.1,0.1,0.1],[0.1,0,0.1,0.1,0.1,0.1,0.1,0.1],[0.1,0.1,0,0.1,0.1,0.1,0.1,0.1],[0.1,0.1,0.1,0,0.1,0.1,0.1,0.1],[0.1,0.1,0.1,0.1,0,0.1,0.1,0.1],[0.1,0.1,0.1,0.1,0.1,0,0.1,0.1],[0.1,0.1,0.1,0.1,0.1,0.1,0,0.1],[0.1,0.1,0.1,0.1,0.1,0.1,0.1,0]]');
+/*!40000 ALTER TABLE `gas_station_argument` ENABLE KEYS */;
+
 -- 正在导出表  ruoyi.sys_menu 的数据：~83 rows (大约)
 /*!40000 ALTER TABLE `sys_menu` DISABLE KEYS */;
 INSERT INTO `sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES

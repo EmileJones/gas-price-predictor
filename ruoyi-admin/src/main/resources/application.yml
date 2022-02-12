@@ -9,7 +9,7 @@ ruoyi:
   # 实例演示开关
   demoEnabled: true
   # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
-  profile: /home/sunhongfei/uploadPath
+  profile: /home/ubuntu/ruoyi/uploadPath
   # 获取ip地址开关
   addressEnabled: false
   # 验证码类型 math 数组计算 char 字符验证
@@ -99,8 +99,6 @@ mybatis:
     mapperLocations: classpath*:mapper/**/*Mapper.xml
     # 加载全局的配置文件
     configLocation: classpath:mybatis/mybatis-config.xml
-    # 配置枚举类处理器
-    type-handlers-package: com.ruoyi.gas.module.price.mapper.handler
 
 # PageHelper分页插件
 pagehelper: 
