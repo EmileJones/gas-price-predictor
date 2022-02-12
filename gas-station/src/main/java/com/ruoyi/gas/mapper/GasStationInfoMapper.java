@@ -99,4 +99,9 @@ public interface GasStationInfoMapper
      */
     List<String> selectIdByLocation(@Param("location") String location);
 
+    /**
+     * 清理震哥哥数据库的数据
+     */
+    void truncateTable();
+
 }

@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `gas_station_info` (
   `id` varchar(64) NOT NULL COMMENT '唯一ID',
   `name` varchar(512) NOT NULL COMMENT '加油站名称',
   `location` varchar(64) NOT NULL COMMENT '加油站位置',
-  `province` varchar(4) NOT NULL COMMENT '加油站所在省',
+  `province` varchar(32) NOT NULL COMMENT '加油站所在省',
   `city` varchar(32) NOT NULL COMMENT '加油站所在市',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='加油站信息表';

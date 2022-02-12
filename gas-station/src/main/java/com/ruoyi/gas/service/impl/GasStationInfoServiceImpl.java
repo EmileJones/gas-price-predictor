@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.ruoyi.gas.mapper.GasStationInfoMapper;
 import com.ruoyi.gas.domain.GasStationInfo;
@@ -41,6 +42,9 @@ public class GasStationInfoServiceImpl implements IGasStationInfoService
     private GasStationInfoMapper gasStationInfoMapper;
     @Autowired
     private IGasStationGeoService geoService;
+
+    @Value("${gas.amap.key}")
+    private String amapKey;
 
     /**
      * 查询加油站信息
@@ -82,7 +86,7 @@ public class GasStationInfoServiceImpl implements IGasStationInfoService
 
         // 查询当前加油站的信息，以及周边加油站的信息
         PlaceAroundRequest aroundRequest = new PlaceAroundRequest();
-        aroundRequest.setKey("25dc8e3377f5d44b60b5a7881cbb7cd2");
+        aroundRequest.setKey(amapKey);
         aroundRequest.setLocation(location);
         aroundRequest.setTypes("010100");
         aroundRequest.setRadius(radius);
