@@ -44,7 +44,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where `system_station_id` = #{systemStationId} and
               `out_system_station_id` = #{outSystemStationId}
     </select>
-        
+    <select id="selectGasStationGeoBySystemStationId" resultType="com.ruoyi.gas.module.geo.domain.GasStationGeo">
+        <include refid="selectGasStationGeoVo"/>
+        where `system_station_id` = #{systemStationId}
+    </select>
+
     <insert id="insertGasStationGeo" parameterType="GasStationGeo">
         insert into gas_station_geo
         <trim prefix="(" suffix=")" suffixOverrides=",">
