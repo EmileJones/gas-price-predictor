@@ -1,4 +1,4 @@
-package com.ruoyi.gas.domain.vo;
+package com.ruoyi.gas.geo.domain.form;
 
 /**
  * 查询加油站信息表单

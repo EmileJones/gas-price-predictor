@@ -5,6 +5,10 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * HTTP 请求工具类
+ * @author KlenKiven
+ */
 public class HttpRequestUtils {
 
     private static final RestTemplate restTemplate = new RestTemplate();

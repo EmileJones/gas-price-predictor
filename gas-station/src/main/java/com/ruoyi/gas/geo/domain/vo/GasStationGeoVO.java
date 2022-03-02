@@ -1,18 +1,21 @@
-package com.ruoyi.gas.domain;
+package com.ruoyi.gas.geo.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.NumberSerializers;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.ruoyi.common.annotation.Excel;
+import com.ruoyi.gas.utils.DoubleSerializer;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import com.ruoyi.common.annotation.Excel;
-import com.ruoyi.common.core.domain.BaseEntity;
+
+import java.io.Serializable;
 
 /**
- * 加油站地理信息对象 gas_station_geo
- * 
- * @author ruoyi
- * @date 2022-01-21
+ * 前端展示页面表格
+ * @author KlenKiven
  */
-public class GasStationGeo extends BaseEntity
-{
+public class GasStationGeoVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /** 地理信息主键 */
@@ -22,9 +25,17 @@ public class GasStationGeo extends BaseEntity
     @Excel(name = "系统内加油站ID")
     private String systemStationId;
 
+    /** 系统内加油站名称 */
+    @Excel(name = "系统内加油站名称")
+    private String systemStationName;
+
     /** 系统外加油站ID */
     @Excel(name = "系统外加油站ID")
     private String outSystemStationId;
+
+    /** 系统外加油站名称 */
+    @Excel(name = "系统外加油站名称")
+    private String outSystemStationName;
 
     /** 两加油站之间的距离 */
     @Excel(name = "两加油站之间的距离")
@@ -44,36 +55,54 @@ public class GasStationGeo extends BaseEntity
 
     /** 路线曲折度影响系数 */
     @Excel(name = "路线曲折度影响系数")
+    @JsonSerialize(using = DoubleSerializer.class)
     private Double routeShapeFactor;
 
     /** 路线影响系数 */
     @Excel(name = "路线影响系数")
+    @JsonSerialize(using = DoubleSerializer.class)
     private Double routeFactor;
 
-    public void setId(Long id) 
+    public String getSystemStationName() {
+        return systemStationName;
+    }
+
+    public void setSystemStationName(String systemStationName) {
+        this.systemStationName = systemStationName;
+    }
+
+    public String getOutSystemStationName() {
+        return outSystemStationName;
+    }
+
+    public void setOutSystemStationName(String outSystemStationName) {
+        this.outSystemStationName = outSystemStationName;
+    }
+
+    public void setId(Long id)
     {
         this.id = id;
     }
 
-    public Long getId() 
+    public Long getId()
     {
         return id;
     }
-    public void setSystemStationId(String systemStationId) 
+    public void setSystemStationId(String systemStationId)
     {
         this.systemStationId = systemStationId;
     }
 
-    public String getSystemStationId() 
+    public String getSystemStationId()
     {
         return systemStationId;
     }
-    public void setOutSystemStationId(String outSystemStationId) 
+    public void setOutSystemStationId(String outSystemStationId)
     {
         this.outSystemStationId = outSystemStationId;
     }
 
-    public String getOutSystemStationId() 
+    public String getOutSystemStationId()
     {
         return outSystemStationId;
     }
@@ -104,12 +133,12 @@ public class GasStationGeo extends BaseEntity
     {
         return trafficFactor;
     }
-    public void setRouteShape(String routeShape) 
+    public void setRouteShape(String routeShape)
     {
         this.routeShape = routeShape;
     }
 
-    public String getRouteShape() 
+    public String getRouteShape()
     {
         return routeShape;
     }
@@ -134,16 +163,19 @@ public class GasStationGeo extends BaseEntity
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("systemStationId", getSystemStationId())
-            .append("outSystemStationId", getOutSystemStationId())
-            .append("distance", getDistance())
-            .append("trafficLights", getTrafficLights())
-            .append("trafficFactor", getTrafficFactor())
-            .append("routeShape", getRouteShape())
-            .append("routeShapeFactor", getRouteShapeFactor())
-            .append("routeFactor", getRouteFactor())
-            .toString();
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("id", getId())
+                .append("systemStationId", getSystemStationId())
+                .append("systemStationName", getSystemStationName())
+                .append("outSystemStationId", getOutSystemStationId())
+                .append("outSystemStationName", getOutSystemStationName())
+                .append("distance", getDistance())
+                .append("trafficLights", getTrafficLights())
+                .append("trafficFactor", getTrafficFactor())
+                .append("routeShape", getRouteShape())
+                .append("routeShapeFactor", getRouteShapeFactor())
+                .append("routeFactor", getRouteFactor())
+                .toString();
     }
+
 }

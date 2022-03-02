@@ -1,8 +1,7 @@
-package com.ruoyi.gas.mapper;
+package com.ruoyi.gas.geo.mapper;
 
 import java.util.List;
-import com.ruoyi.gas.domain.GasStationInfo;
-import com.ruoyi.gas.domain.vo.GasStationGeoVO;
+import com.ruoyi.gas.geo.domain.GasStationInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

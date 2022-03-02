@@ -1,6 +1,5 @@
-package com.ruoyi.gas.service.impl;
+package com.ruoyi.gas.geo.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,19 +9,19 @@ import com.ruoyi.common.amap.model.PlaceAroundRequest;
 import com.ruoyi.common.amap.model.PlaceAroundResult;
 import com.ruoyi.common.amap.model.place.POI;
 import com.ruoyi.common.exception.GlobalException;
-import com.ruoyi.gas.domain.GasStationGeo;
-import com.ruoyi.gas.domain.vo.GasStationGeoForm;
-import com.ruoyi.gas.domain.vo.GasStationGeoVO;
-import com.ruoyi.gas.service.IGasStationGeoService;
+import com.ruoyi.gas.geo.domain.GasStationGeo;
+import com.ruoyi.gas.geo.domain.form.GasStationGeoForm;
+import com.ruoyi.gas.geo.domain.vo.GasStationGeoVO;
+import com.ruoyi.gas.geo.domain.GasStationInfo;
+import com.ruoyi.gas.geo.mapper.GasStationInfoMapper;
+import com.ruoyi.gas.geo.service.IGasStationGeoService;
+import com.ruoyi.gas.geo.service.IGasStationInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.ruoyi.gas.mapper.GasStationInfoMapper;
-import com.ruoyi.gas.domain.GasStationInfo;
-import com.ruoyi.gas.service.IGasStationInfoService;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -32,7 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 2022-01-21
  */
 @Service
-public class GasStationInfoServiceImpl implements IGasStationInfoService 
+public class GasStationInfoServiceImpl implements IGasStationInfoService
 {
     protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -45,30 +44,6 @@ public class GasStationInfoServiceImpl implements IGasStationInfoService
 
     @Value("${gas.amap.key}")
     private String amapKey;
-
-    /**
-     * 查询加油站信息
-     * 
-     * @param id 加油站信息主键
-     * @return 加油站信息
-     */
-    @Override
-    public GasStationInfo selectGasStationInfoById(String id)
-    {
-        return gasStationInfoMapper.selectGasStationInfoById(id);
-    }
-
-    /**
-     * 查询加油站信息列表
-     * 
-     * @param gasStationInfo 加油站信息
-     * @return 加油站信息
-     */
-    @Override
-    public List<GasStationInfo> selectGasStationInfoList(GasStationInfo gasStationInfo)
-    {
-        return gasStationInfoMapper.selectGasStationInfoList(gasStationInfo);
-    }
 
     /**
      * 保存或更新加油站信息
@@ -155,30 +130,6 @@ public class GasStationInfoServiceImpl implements IGasStationInfoService
     public int updateGasStationInfo(GasStationInfo gasStationInfo)
     {
         return gasStationInfoMapper.updateGasStationInfo(gasStationInfo);
-    }
-
-    /**
-     * 批量删除加油站信息
-     * 
-     * @param ids 需要删除的加油站信息主键
-     * @return 结果
-     */
-    @Override
-    public int deleteGasStationInfoByIds(String[] ids)
-    {
-        return gasStationInfoMapper.deleteGasStationInfoByIds(ids);
-    }
-
-    /**
-     * 删除加油站信息信息
-     * 
-     * @param id 加油站信息主键
-     * @return 结果
-     */
-    @Override
-    public int deleteGasStationInfoById(String id)
-    {
-        return gasStationInfoMapper.deleteGasStationInfoById(id);
     }
 
     @Override

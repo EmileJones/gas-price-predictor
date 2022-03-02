@@ -1,4 +1,4 @@
-package com.ruoyi.gas.service.impl;
+package com.ruoyi.gas.geo.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.alibaba.fastjson.JSON;
 import com.ruoyi.common.amap.AmapClient;
 import com.ruoyi.gas.constant.DirectionConstant;
 import com.ruoyi.common.amap.model.*;
@@ -17,25 +16,20 @@ import com.ruoyi.common.amap.model.driving.Paths;
 import com.ruoyi.common.amap.model.driving.Step;
 import com.ruoyi.common.amap.model.place.POI;
 import com.ruoyi.common.exception.GlobalException;
-import com.ruoyi.gas.domain.GasStationArgument;
-import com.ruoyi.gas.domain.GasStationInfo;
-import com.ruoyi.gas.domain.vo.GasStationForm;
-import com.ruoyi.gas.domain.vo.GasStationVO;
-import com.ruoyi.gas.utils.ArrayUtils;
+import com.ruoyi.gas.geo.domain.GasStationInfo;
+import com.ruoyi.gas.geo.domain.form.GasStationForm;
+import com.ruoyi.gas.geo.domain.vo.GasStationCandidateVO;
+import com.ruoyi.gas.geo.mapper.GasStationGeoMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import com.ruoyi.gas.mapper.GasStationGeoMapper;
-import com.ruoyi.gas.domain.GasStationGeo;
-import com.ruoyi.gas.service.IGasStationGeoService;
+import com.ruoyi.gas.geo.domain.GasStationGeo;
+import com.ruoyi.gas.geo.service.IGasStationGeoService;
 
 import javax.annotation.Resource;
-
-import static com.ruoyi.gas.constant.ArgumentConstant.ARGUMENT_PREFIX;
-import static com.ruoyi.gas.constant.ArgumentConstant.DIRECTION_MATRIX;
 
 /**
  * 加油站地理信息Service业务层处理
@@ -181,18 +175,6 @@ public class GasStationGeoServiceImpl implements IGasStationGeoService
         updateList.forEach(this::updateGasStationGeo);
     }
 
-    /**
-     * 查询加油站地理信息
-     * 
-     * @param id 加油站地理信息主键
-     * @return 加油站地理信息
-     */
-    @Override
-    public GasStationGeo selectGasStationGeoById(Long id)
-    {
-        return gasStationGeoMapper.selectGasStationGeoById(id);
-    }
-
     @Override
     public List<GasStationGeo> selectGasStationGeoList(GasStationGeo gasStationGeo) {
         return gasStationGeoMapper.selectGasStationGeoList(gasStationGeo);
@@ -223,37 +205,13 @@ public class GasStationGeoServiceImpl implements IGasStationGeoService
     }
 
     /**
-     * 批量删除加油站地理信息
-     * 
-     * @param ids 需要删除的加油站地理信息主键
-     * @return 结果
-     */
-    @Override
-    public int deleteGasStationGeoByIds(Long[] ids)
-    {
-        return gasStationGeoMapper.deleteGasStationGeoByIds(ids);
-    }
-
-    /**
-     * 删除加油站地理信息信息
-     * 
-     * @param id 加油站地理信息主键
-     * @return 结果
-     */
-    @Override
-    public int deleteGasStationGeoById(Long id)
-    {
-        return gasStationGeoMapper.deleteGasStationGeoById(id);
-    }
-
-    /**
      * 查询候选加油站加油站列表
      *
      * @param gasStation 搜索信息
      * @return 返回前十个搜索结果
      */
     @Override
-    public List<GasStationVO> listGasStationCandidateList(GasStationForm gasStation) {
+    public List<GasStationCandidateVO> listGasStationCandidateList(GasStationForm gasStation) {
         PlaceTextRequest request = new PlaceTextRequest();
         request.setKey("25dc8e3377f5d44b60b5a7881cbb7cd2");
         request.setTypes("010100");
@@ -262,9 +220,9 @@ public class GasStationGeoServiceImpl implements IGasStationGeoService
         PlaceAroundResult placeAroundResult = amapClient.placeTextRequest(request);
 
         // 处理返回结果
-        List<GasStationVO> result = new ArrayList<>();
+        List<GasStationCandidateVO> result = new ArrayList<>();
         for (POI poi : placeAroundResult.getPois()) {
-            GasStationVO vo = new GasStationVO();
+            GasStationCandidateVO vo = new GasStationCandidateVO();
             vo.setStationName(poi.getName());
             vo.setLocation(poi.getLocation());
             result.add(vo);
@@ -305,9 +263,6 @@ public class GasStationGeoServiceImpl implements IGasStationGeoService
      * @return 路线曲折度因子
      */
     private Double routeShapeFactorAlgorithm(String[] directions) {
-        GasStationArgument gasStationArgument =
-                JSON.parseObject(redisTemplate.opsForValue().get(ARGUMENT_PREFIX + DIRECTION_MATRIX), GasStationArgument.class);
-        double[][] directionMatrix = ArrayUtils.deserialize2DimDoubleArray(gasStationArgument.getValue());
         double ret = 1.0;
         if (directions == null || directions.length < 2) {
             return ret;
@@ -322,7 +277,7 @@ public class GasStationGeoServiceImpl implements IGasStationGeoService
                     DirectionConstant.getDirectionNum(directions[i-1]) == -1?
                             DirectionConstant.getDirectionNum(directions[i]):
                             DirectionConstant.getDirectionNum(directions[i-1]);
-            ret -= directionMatrix[prevDirection][currDirection];
+            ret -= DirectionConstant.DIRECTION_MATRIX[prevDirection][currDirection];
         }
         return ret;
     }
