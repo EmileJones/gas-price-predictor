@@ -1,10 +1,10 @@
-package com.ruoyi.gas.domain.vo;
+package com.ruoyi.gas.geo.domain.vo;
 
 /**
  * 候选加油站信息
  * @author KlenKiven
  */
-public class GasStationVO {
+public class GasStationCandidateVO {
 
     /** 加油站经纬度信息 */
     private String location;

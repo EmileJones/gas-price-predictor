@@ -1,6 +1,5 @@
 package com.ruoyi.common.amap.model;
 
-
 import com.ruoyi.common.amap.model.driving.Route;
 
 /**

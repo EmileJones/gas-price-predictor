@@ -1,16 +1,15 @@
-package com.ruoyi.gas.controller;
+package com.ruoyi.gas.geo.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.gas.domain.vo.GasStationForm;
-import com.ruoyi.gas.domain.vo.GasStationGeoForm;
-import com.ruoyi.gas.domain.vo.GasStationGeoVO;
-import com.ruoyi.gas.domain.vo.GasStationVO;
-import com.ruoyi.gas.service.IGasStationInfoService;
+import com.ruoyi.gas.geo.domain.form.GasStationForm;
+import com.ruoyi.gas.geo.domain.form.GasStationGeoForm;
+import com.ruoyi.gas.geo.domain.vo.GasStationGeoVO;
+import com.ruoyi.gas.geo.domain.vo.GasStationCandidateVO;
+import com.ruoyi.gas.geo.service.GeoService;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.gas.domain.GasStationGeo;
-import com.ruoyi.gas.service.IGasStationGeoService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
@@ -33,10 +30,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 @RequestMapping("/gas/geo")
 public class GasStationGeoController extends BaseController
 {
-    @Autowired
-    private IGasStationInfoService gasStationInfoService;
-    @Autowired
-    private IGasStationGeoService gasStationGeoService;
+    private final GeoService geoService;
 
     /**
      * 查询加油站地理信息列表
@@ -45,7 +39,7 @@ public class GasStationGeoController extends BaseController
     @GetMapping("/list")
     public AjaxResult list(GasStationGeoForm gasStationGeo)
     {
-        List<GasStationGeoVO> list = gasStationInfoService.selectGasStationGeoInfoList(gasStationGeo);
+        List<GasStationGeoVO> list = geoService.listStationGeo(gasStationGeo);
         return AjaxResult.success(list);
     }
 
@@ -57,7 +51,7 @@ public class GasStationGeoController extends BaseController
     public TableDataInfo station(GasStationForm gasStation)
     {
         startPage();
-        List<GasStationVO> list = gasStationGeoService.listGasStationCandidateList(gasStation);
+        List<GasStationCandidateVO> list = geoService.listCandidateStations(gasStation);
         return getDataTable(list);
     }
 
@@ -69,9 +63,13 @@ public class GasStationGeoController extends BaseController
     @PostMapping("/export")
     public void export(HttpServletResponse response, GasStationGeoForm gasStationGeo)
     {
-        List<GasStationGeoVO> list = gasStationInfoService.selectGasStationGeoInfoList(gasStationGeo);
+        List<GasStationGeoVO> list = geoService.listStationGeo(gasStationGeo);
         ExcelUtil<GasStationGeoVO> util = new ExcelUtil<>(GasStationGeoVO.class);
         util.exportExcel(response, list, "加油站地理信息数据");
+    }
+
+    public GasStationGeoController(GeoService geoService) {
+        this.geoService = geoService;
     }
 
 }

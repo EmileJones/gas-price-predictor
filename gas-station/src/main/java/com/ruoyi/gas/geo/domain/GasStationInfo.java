@@ -1,4 +1,4 @@
-package com.ruoyi.gas.domain;
+package com.ruoyi.gas.geo.domain;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

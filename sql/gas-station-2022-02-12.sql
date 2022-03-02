@@ -39,12 +39,6 @@ CREATE TABLE IF NOT EXISTS `gas_station_argument` (
   UNIQUE KEY `gas_station_argument_name_uindex` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='加油站关键参数表';
 
--- 正在导出表  ruoyi_t.gas_station_argument 的数据：~0 rows (大约)
-/*!40000 ALTER TABLE `gas_station_argument` DISABLE KEYS */;
-INSERT INTO `gas_station_argument` (`id`, `name`, `value`) VALUES
-    (1, 'DIRECTION_MATRIX', '[[0,0.1,0.1,0.1,0.1,0.1,0.1,0.1],[0.1,0,0.1,0.1,0.1,0.1,0.1,0.1],[0.1,0.1,0,0.1,0.1,0.1,0.1,0.1],[0.1,0.1,0.1,0,0.1,0.1,0.1,0.1],[0.1,0.1,0.1,0.1,0,0.1,0.1,0.1],[0.1,0.1,0.1,0.1,0.1,0,0.1,0.1],[0.1,0.1,0.1,0.1,0.1,0.1,0,0.1],[0.1,0.1,0.1,0.1,0.1,0.1,0.1,0]]');
-/*!40000 ALTER TABLE `gas_station_argument` ENABLE KEYS */;
-
 -- 正在导出表  ruoyi.sys_menu 的数据：~83 rows (大约)
 /*!40000 ALTER TABLE `sys_menu` DISABLE KEYS */;
 INSERT INTO `sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`, `component`, `query`, `is_frame`, `is_cache`, `menu_type`, `visible`, `status`, `perms`, `icon`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES
@@ -54,11 +48,5 @@ INSERT INTO `sys_menu` (`menu_id`, `menu_name`, `parent_id`, `order_num`, `path`
 	(2004, '加油站地理信息新增', 2002, 2, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:geo:add', '#', 'admin', '2022-01-21 21:37:51', '', NULL, ''),
 	(2005, '加油站地理信息修改', 2002, 3, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:geo:edit', '#', 'admin', '2022-01-21 21:37:51', '', NULL, ''),
 	(2006, '加油站地理信息删除', 2002, 4, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:geo:remove', '#', 'admin', '2022-01-21 21:37:51', '', NULL, ''),
-	(2007, '加油站地理信息导出', 2002, 5, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:geo:export', '#', 'admin', '2022-01-21 21:37:51', '', NULL, ''),
-    (2008, '加油站关键参数', 2000, 1, 'argument', 'gas/argument/index', NULL, 1, 0, 'C', '0', '0', 'gas:argument:list', 'edit', 'admin', '2022-02-05 15:35:13', 'admin', '2022-02-05 15:38:08', '加油站关键参数菜单'),
-    (2009, '加油站关键参数查询', 2008, 1, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:argument:query', '#', 'admin', '2022-02-05 15:35:13', '', NULL, ''),
-    (2010, '加油站关键参数新增', 2008, 2, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:argument:add', '#', 'admin', '2022-02-05 15:35:13', '', NULL, ''),
-    (2011, '加油站关键参数修改', 2008, 3, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:argument:edit', '#', 'admin', '2022-02-05 15:35:13', '', NULL, ''),
-    (2012, '加油站关键参数删除', 2008, 4, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:argument:remove', '#', 'admin', '2022-02-05 15:35:13', '', NULL, ''),
-    (2013, '加油站关键参数导出', 2008, 5, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:argument:export', '#', 'admin', '2022-02-05 15:35:13', '', NULL, '');
+	(2007, '加油站地理信息导出', 2002, 5, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:geo:export', '#', 'admin', '2022-01-21 21:37:51', '', NULL, '');
 /*!40000 ALTER TABLE `sys_menu` ENABLE KEYS */;

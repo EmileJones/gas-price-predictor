@@ -13,7 +13,7 @@ public class PlaceAroundRequest {
 
     private String types = "";
 
-    private Integer radius = 3500;
+    private Integer radius = 4000;
 
     private String keywords = "";
 
