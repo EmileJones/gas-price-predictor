@@ -6,13 +6,19 @@ package com.ruoyi.gas.module.map.amap.model;
  */
 public class PlaceTextRequest {
 
+    /** 高德地图开发者需要的KEY */
     private String key = "";
 
+    /** 城市的ADCODE
+     * <p>参考：<a href="https://github.com/Vonng/adcode">中国行政区划代码</a></p>
+     */
     private String city = "";
 
+    /** 搜索关键词（必填：默认为空） */
     private String keywords = "";
 
-    private String types = "";
+    /** 搜索地区的类型代码：默认为加油站 */
+    private String types = "010100";
 
     public String getTypes() {
         return types;

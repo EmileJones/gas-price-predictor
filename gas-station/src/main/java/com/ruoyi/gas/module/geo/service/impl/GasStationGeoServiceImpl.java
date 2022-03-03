@@ -83,11 +83,7 @@ public class GasStationGeoServiceImpl implements IGasStationGeoService
             // 异步执行所有的API查询操作
             CompletableFuture.runAsync(() -> {
                 long staStart = System.currentTimeMillis(); // TODO 统计API时间
-                DrivingDirectionRequest request = new DrivingDirectionRequest(
-                        amapKey,
-                        systemStation.getLocation(),
-                        out.getLocation()
-                );
+                DrivingDirectionRequest request = new DrivingDirectionRequest();
                 DrivingDirectionResult result = amapClient.drivingDirectionRequest(request);
                 Paths paths = result.getRoute().getPaths().get(0);
                 apiTime.getAndAdd(System.currentTimeMillis() - staStart); // TODO 统计API时间

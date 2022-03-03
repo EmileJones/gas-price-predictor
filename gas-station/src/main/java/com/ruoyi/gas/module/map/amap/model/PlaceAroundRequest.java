@@ -2,19 +2,23 @@ package com.ruoyi.gas.module.map.amap.model;
 
 
 /**
- * Place Search -- Around
+ * 地区搜索 -- 周边搜索
  * @author klenkiven
  */
 public class PlaceAroundRequest {
 
+    /** 高德地图开发者需要的KEY */
     private String key = "";
 
     private String location = "";
 
-    private String types = "";
+    /** 搜索地区的类型代码：默认为加油站 */
+    private String types = "010100";
 
+    /** 搜索半径：默认更大 */
     private Integer radius = 4000;
 
+    /** 搜索关键词 */
     private String keywords = "";
 
     public String getKey() {

@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 /**
  * 高德地图API封装客户端
- *
+ * <p>下面的API已经全部自动根据配置文件注入amapKey参数。</p>
  * @author klenkiven
  */
 @Repository

@@ -24,21 +24,9 @@ public class DrivingDirectionRequest {
 
     /**
      * 返回结果控制
-     * "cost" by default
+     * 默认："cost"
      */
     private String show_fields = "cost";
-
-    public DrivingDirectionRequest(String key, Coordinates origin, Coordinates destination) {
-        this.key = key;
-        this.origin = origin.toString();
-        this.destination = destination.toString();
-    }
-
-    public DrivingDirectionRequest(String key, String origin, String destination) {
-        this.key = key;
-        this.origin = origin;
-        this.destination = destination;
-    }
 
     public String getKey() {
         return key;

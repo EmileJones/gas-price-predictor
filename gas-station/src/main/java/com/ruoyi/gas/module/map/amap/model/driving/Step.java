@@ -11,6 +11,19 @@ public class Step {
      */
     private String orientation;
 
+    /**
+     *分段距离信息
+     */
+    private Integer step_distance;
+
+    public Integer getStep_distance() {
+        return step_distance;
+    }
+
+    public void setStep_distance(Integer step_distance) {
+        this.step_distance = step_distance;
+    }
+
     public String getOrientation() {
         return orientation;
     }
