@@ -23,7 +23,7 @@ public class GasStationGeo extends BaseEntity
 
     private String outSystemStationId;
 
-    /** 两加油站之间的距离 */
+    /** 两加油站之间的距离（单位：千米） */
     private Double distance;
 
     /** 两加油站之间路线红绿灯数 */

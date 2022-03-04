@@ -22,45 +22,24 @@ public interface IGasStationGeoService
      * 列出所有关于系统内加油站周围的加油站的距离信息
      * <p>不自动重新计算距离，如果数据库数据并没有过期，直接读取数据库内容。<br/>
      * 如果数据库没有关于加油站的距离信息或者信息已经过期，那么，计算距离并保存。</p>
-     * @param systemStationId 系统内加油站ID
+     * @param systemStationId 系统内加油站
+     * @param outSystemStation 系统外加油站列表
      * @return 加油站距离列表
      */
-    List<GasStationGeo> listStationDistance(GasStationInfo systemStationId, List<GasStationInfo> outSystemStation);
+    List<GasStationGeo> listStationDistance(GasStationInfo systemStationId,
+                                            List<GasStationInfo> outSystemStation);
 
     /**
      * 列出所有关于系统内加油站周围的加油站的距离信息
      * <p>参数calculate表示数据库是否需要强制计算，并更新加油站的距离信息数据。<br/>
      * 如果true，那么强制更新；如果为false，不强制更新数据</p>
-     * @param systemStationId 系统内加油站ID
+     * @param systemStation 系统内加油站
+     * @param outSystemStationList 系统外加油站列表
      * @param newest 是否需要重新计算保存
      * @return 加油站距离列表
      */
-    List<GasStationGeo> listStationDistance(GasStationInfo systemStationId, List<GasStationInfo> outSystemStation, boolean newest);
+    List<GasStationGeo> listStationDistance(GasStationInfo systemStation,
+                                            List<GasStationInfo> outSystemStationList, boolean newest);
 
-    // ***********************************************************************************************************
-
-    /**
-     * 查询加油站地理信息列表
-     * 
-     * @param gasStationGeo 加油站地理信息
-     * @return 加油站地理信息集合
-     */
-    public List<GasStationGeo> selectGasStationGeoList(GasStationGeo gasStationGeo);
-
-    /**
-     * 新增加油站地理信息
-     * 
-     * @param gasStationGeo 加油站地理信息
-     * @return 结果
-     */
-    public int insertGasStationGeo(GasStationGeo gasStationGeo);
-
-    /**
-     * 修改加油站地理信息
-     * 
-     * @param gasStationGeo 加油站地理信息
-     * @return 结果
-     */
-    public int updateGasStationGeo(GasStationGeo gasStationGeo);
 
 }
