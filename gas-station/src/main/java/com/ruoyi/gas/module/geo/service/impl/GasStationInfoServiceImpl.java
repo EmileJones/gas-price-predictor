@@ -1,5 +1,6 @@
 package com.ruoyi.gas.module.geo.service.impl;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,10 +10,12 @@ import com.ruoyi.gas.module.geo.domain.GasStationInfo;
 import com.ruoyi.gas.module.geo.domain.form.GasStationGeoForm;
 import com.ruoyi.gas.module.geo.mapper.GasStationInfoMapper;
 import com.ruoyi.gas.module.geo.service.IGasStationInfoService;
+import com.ruoyi.gas.module.map.MapService;
 import com.ruoyi.gas.module.map.amap.AmapClient;
 import com.ruoyi.gas.module.map.amap.model.PlaceAroundRequest;
 import com.ruoyi.gas.module.map.amap.model.PlaceAroundResult;
 import com.ruoyi.gas.module.map.amap.model.place.POI;
+import com.ruoyi.gas.module.map.model.PlaceInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +25,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 加油站信息Service业务层处理
- * 
+ *
  * @author ruoyi
  * @date 2022-01-21
  */
 @Service
-public class GasStationInfoServiceImpl implements IGasStationInfoService
-{
+public class GasStationInfoServiceImpl implements IGasStationInfoService {
     protected final Logger log = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    private MapService mapService;
 
     @Autowired
     private GasStationInfoMapper gasStationInfoMapper;
@@ -73,30 +78,82 @@ public class GasStationInfoServiceImpl implements IGasStationInfoService
     }
 
     @Override
-    public GasStationInfo getSystemStationByLocation(String location) {
+    public GasStationInfo getSystemStationByLocation(String location, int radius) {
+        GasStationInfo gasStationInfo = gasStationInfoMapper.selectOneByLocation(location);
+        if (gasStationInfo == null) {
+            List<PlaceInfo> placeInfos = mapService.listPlaceAroundOrigin(location, radius);
+            gasStationInfo = handlePlaceInfo(placeInfos.get(0), true);
+            for (PlaceInfo placeInfo : placeInfos) {
+                handlePlaceInfo(placeInfo, false);
+            }
+        }
+        return gasStationInfo;
+    }
+
+    @Override
+    public List<GasStationInfo> listOutSystemStationBySystemStationId(String systemId) {
         // TODO impl
         return null;
     }
 
-    @Override
-    public List<GasStationInfo> listOutSystemStationBySystemStationId(String id) {
-        // TODO impl
-        return null;
+    /**
+     * 将PlaceInfo进行处理，并返回GasStationInfo
+     * @param placeInfo 地图API查询到的数据
+     * @param isSystem 是否是系统内
+     * @return GasStationInfo
+     */
+    private GasStationInfo handlePlaceInfo(PlaceInfo placeInfo, boolean isSystem) {
+        GasStationInfo gasStationInfo = new GasStationInfo();
+        gasStationInfo.setProvince(placeInfo.getPname());
+        gasStationInfo.setLocation(placeInfo.getLocation());
+        gasStationInfo.setCity(placeInfo.getCityname());
+        gasStationInfo.setName(placeInfo.getName());
+        gasStationInfo.setIsSystem(isSystem);
+        gasStationInfo.setId(generateId(placeInfo.getPname(), placeInfo.getCityname(), isSystem));
+        gasStationInfoMapper.insertGasStationInfo(gasStationInfo);
+        return gasStationInfo;
+    }
+
+    /**
+     * 生成加油站编码
+     *
+     * @param province 省
+     * @param city     市
+     * @param isSystem 是否是系统内
+     * @return 加油站编码
+     */
+    private String generateId(String province, String city, Boolean isSystem) {
+        if (province == null || city == null || isSystem == null)
+            return null;
+        GasStationInfo temp = new GasStationInfo();
+        temp.setProvince(province);
+        temp.setCity(city);
+        temp.setIsSystem(isSystem);
+        int number = gasStationInfoMapper.selectCount(temp);
+        String provinceFirstLetter = PinyinUtil.getAllFirstLetter(province).toUpperCase();
+        String cityFirstLetter = PinyinUtil.getAllFirstLetter(city).toUpperCase();
+        String system;
+        if (isSystem) {
+            system = "0";
+        } else {
+            system = "Y";
+        }
+
+        return provinceFirstLetter + cityFirstLetter + system + new DecimalFormat("000").format(number + 1);
     }
 
     //********************************************************************************************
 
     /**
      * 保存或更新加油站信息
-     * 
+     *
      * @param info 加油站信息
      * @return 结果
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
     @Deprecated
-    public GasStationInfo saveGasStationInfo(GasStationGeoForm info)
-    {
+    public GasStationInfo saveGasStationInfo(GasStationGeoForm info) {
         long start = System.currentTimeMillis();
         int radius = info.getRadius();
         String location = info.getLocation();
@@ -164,13 +221,12 @@ public class GasStationInfoServiceImpl implements IGasStationInfoService
 
     /**
      * 修改加油站信息
-     * 
+     *
      * @param gasStationInfo 加油站信息
      * @return 结果
      */
     @Override
-    public int updateGasStationInfo(GasStationInfo gasStationInfo)
-    {
+    public int updateGasStationInfo(GasStationInfo gasStationInfo) {
         return gasStationInfoMapper.updateGasStationInfo(gasStationInfo);
     }
 
@@ -189,7 +245,7 @@ public class GasStationInfoServiceImpl implements IGasStationInfoService
         }
         for (String id : ids) {
             // 如果是系统内的ID，那么ID倒数第四个字符一定是 '0'
-            if (id.charAt(id.length()-4) == '0') {
+            if (id.charAt(id.length() - 4) == '0') {
                 return id;
             }
         }
@@ -200,7 +256,7 @@ public class GasStationInfoServiceImpl implements IGasStationInfoService
      * 用于判断是否存在这条记录
      * 如果存在，那么就返回这个结果。
      * <p>
-     *     NOTE: 此方法保证，找到的结果就是系统外的站点结果，因为这是由系统内外加油站的编码规则决定
+     * NOTE: 此方法保证，找到的结果就是系统外的站点结果，因为这是由系统内外加油站的编码规则决定
      * </p>
      *
      * @param poi 高德地图API的地理信息
@@ -213,6 +269,7 @@ public class GasStationInfoServiceImpl implements IGasStationInfoService
     /**
      * 将高德地图返回的POI信息转换为系统的GasStationInfo
      * 默认设置为系统外的POI
+     *
      * @param poi POI
      * @return GasStationInfo
      */
@@ -228,7 +285,8 @@ public class GasStationInfoServiceImpl implements IGasStationInfoService
 
     /**
      * 根据地区前缀生成编码
-     * @param poi POI
+     *
+     * @param poi              POI
      * @param isSystemLocation 是否属于系统内的位置
      * @return 生成的主键
      */
@@ -241,13 +299,13 @@ public class GasStationInfoServiceImpl implements IGasStationInfoService
         String province = PinyinUtil.getAllFirstLetter(shortProvinceName).toUpperCase();
         String city = PinyinUtil.getAllFirstLetter(shortCityName).toUpperCase();
         GasStationInfo highestOne =
-                gasStationInfoMapper.selectOneByIdHighest(province + city + (isSystemLocation?'0':'Y'));
+                gasStationInfoMapper.selectOneByIdHighest(province + city + (isSystemLocation ? '0' : 'Y'));
         int newestIdNum;
         if (highestOne != null) {
             newestIdNum = Integer.parseInt(highestOne.getId().replaceAll("[a-zA-Z]", ""));
         } else {
             newestIdNum = 0;
         }
-        return String.format("%s%s%c%03d", province, city, (isSystemLocation?'0':'Y'), newestIdNum + 1);
+        return String.format("%s%s%c%03d", province, city, (isSystemLocation ? '0' : 'Y'), newestIdNum + 1);
     }
 }

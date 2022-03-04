@@ -35,13 +35,11 @@ public class GeoServiceImpl implements GeoService {
 
     @Override
     public List<GasStationGeoVO> listStationGeo(GasStationGeoForm geoForm) {
-        GasStationInfo systemInfo = gasStationInfoService.getSystemStationByLocation(geoForm.getLocation());
+        GasStationInfo systemInfo = gasStationInfoService.getSystemStationByLocation(geoForm.getLocation(), geoForm.getRadius());
         List<GasStationInfo> outSystemStationList =
                 gasStationInfoService.listOutSystemStationBySystemStationId(systemInfo.getId());
-
         List<GasStationGeo> gasStationGeos = gasStationGeoService.listStationDistance(systemInfo, outSystemStationList);
-
-        return null;
+        return packGasStationGeo2GasStationGeoVO(gasStationGeos);
     }
 
     @Override
@@ -62,5 +60,39 @@ public class GeoServiceImpl implements GeoService {
         this.gasStationGeoService = gasStationGeoService;
         this.gasStationInfoService = gasStationInfoService;
         this.mapService = mapService;
+    }
+
+    /**
+     * 将多个GasStationGeo打包成GasStationGeoVO
+     * @param gasStationGeos List<GasStationGeo>
+     * @return List<GasStationGeoVO>
+     */
+    private List<GasStationGeoVO> packGasStationGeo2GasStationGeoVO(List<GasStationGeo> gasStationGeos){
+        ArrayList<GasStationGeoVO> gasStationGeoVOS = new ArrayList<>();
+        for (GasStationGeo gasStationGeo : gasStationGeos){
+            gasStationGeoVOS.add(packGasStationGeo2GasStationGeoVO(gasStationGeo));
+        }
+        return gasStationGeoVOS;
+    }
+
+    /**
+     * 将GasStationGeo打包成GasStationGeoVO
+     * @param gasStationGeo GasStationGeo
+     * @return GasStationGeoVO
+     */
+    private GasStationGeoVO packGasStationGeo2GasStationGeoVO(GasStationGeo gasStationGeo){
+        GasStationGeoVO gasStationGeoVO = new GasStationGeoVO();
+        gasStationGeoVO.setId(gasStationGeo.getId());
+        gasStationGeoVO.setSystemStationId(gasStationGeo.getSystemStationId());
+        gasStationGeoVO.setSystemStationName(gasStationInfoService.selectGasStationInfoById(gasStationGeo.getSystemStationId()).getName());
+        gasStationGeoVO.setOutSystemStationId(gasStationGeo.getOutSystemStationId());
+        gasStationGeoVO.setOutSystemStationName(gasStationInfoService.selectGasStationInfoById(gasStationGeo.getOutSystemStationId()).getName());
+        gasStationGeoVO.setDistance(gasStationGeo.getDistance());
+        gasStationGeoVO.setTrafficLights(gasStationGeo.getTrafficLights());
+        gasStationGeoVO.setTrafficFactor(gasStationGeo.getTrafficFactor());
+        gasStationGeoVO.setRouteShape(gasStationGeo.getRouteShape());
+        gasStationGeoVO.setRouteShapeFactor(gasStationGeo.getRouteShapeFactor());
+        gasStationGeoVO.setRouteFactor(gasStationGeo.getRouteFactor());
+        return gasStationGeoVO;
     }
 }

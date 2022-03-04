@@ -1,72 +1,72 @@
 package com.ruoyi.gas.module.geo.mapper;
 
 import java.util.List;
+
 import com.ruoyi.gas.module.geo.domain.GasStationInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 /**
  * 加油站信息Mapper接口
- * 
+ *
  * @author ruoyi
  * @date 2022-01-21
  */
 @Mapper
-public interface GasStationInfoMapper 
-{
+public interface GasStationInfoMapper {
     /**
      * 查询加油站信息
-     * 
+     *
      * @param id 加油站信息主键
      * @return 加油站信息
      */
-    public GasStationInfo selectGasStationInfoById(String id);
+    GasStationInfo selectGasStationInfoById(String id);
 
     /**
      * 查询加油站信息列表
-     * 
+     *
      * @param gasStationInfo 加油站信息
      * @return 加油站信息集合
      */
-    public List<GasStationInfo> selectGasStationInfoList(GasStationInfo gasStationInfo);
+    List<GasStationInfo> selectGasStationInfoList(GasStationInfo gasStationInfo);
 
     /**
      * 新增加油站信息
-     * 
+     *
      * @param gasStationInfo 加油站信息
      * @return 结果
      */
-    public int insertGasStationInfo(GasStationInfo gasStationInfo);
+    int insertGasStationInfo(GasStationInfo gasStationInfo);
 
     /**
      * 修改加油站信息
-     * 
+     *
      * @param gasStationInfo 加油站信息
      * @return 结果
      */
-    public int updateGasStationInfo(GasStationInfo gasStationInfo);
+    int updateGasStationInfo(GasStationInfo gasStationInfo);
 
     /**
      * 删除加油站信息
-     * 
+     *
      * @param id 加油站信息主键
      * @return 结果
      */
-    public int deleteGasStationInfoById(String id);
+    int deleteGasStationInfoById(String id);
 
     /**
      * 批量删除加油站信息
-     * 
+     *
      * @param ids 需要删除的数据主键集合
      * @return 结果
      */
-    public int deleteGasStationInfoByIds(String[] ids);
+    int deleteGasStationInfoByIds(String[] ids);
 
     /**
      * 根据条件查询当前加油站
      *
      * @param sysPrefix 系统ID前缀
-     * @param location 加油站位置
+     * @param location  加油站位置
      * @return 加油站信息
      */
     GasStationInfo selectOneByCondition(@Param("sysPrefix") String sysPrefix,
@@ -97,5 +97,11 @@ public interface GasStationInfoMapper
      * @return ID列表
      */
     List<String> selectIdByLocation(@Param("location") String location);
+
+    /**
+     * 获取对应条件的数据个数
+     * @return 符合传入字段的所有数据的个数
+     */
+    int selectCount(GasStationInfo gasStationInfo);
 
 }
