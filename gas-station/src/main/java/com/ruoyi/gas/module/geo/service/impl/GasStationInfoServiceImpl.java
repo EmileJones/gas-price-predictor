@@ -1,13 +1,16 @@
 package com.ruoyi.gas.module.geo.service.impl;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import cn.hutool.core.util.PinyinUtil;
 import com.ruoyi.common.exception.GlobalException;
+import com.ruoyi.gas.module.geo.domain.GasStationGeo;
 import com.ruoyi.gas.module.geo.domain.GasStationInfo;
 import com.ruoyi.gas.module.geo.domain.form.GasStationGeoForm;
+import com.ruoyi.gas.module.geo.mapper.GasStationGeoMapper;
 import com.ruoyi.gas.module.geo.mapper.GasStationInfoMapper;
 import com.ruoyi.gas.module.geo.service.IGasStationInfoService;
 import com.ruoyi.gas.module.map.MapService;
@@ -20,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +42,9 @@ public class GasStationInfoServiceImpl implements IGasStationInfoService {
 
     @Autowired
     private GasStationInfoMapper gasStationInfoMapper;
+
+    @Autowired
+    private GasStationGeoMapper gasStationGeoMapper;
 
     @Autowired
     @Deprecated
@@ -83,8 +90,10 @@ public class GasStationInfoServiceImpl implements IGasStationInfoService {
         if (gasStationInfo == null) {
             List<PlaceInfo> placeInfos = mapService.listPlaceAroundOrigin(location, radius);
             gasStationInfo = handlePlaceInfo(placeInfos.get(0), true);
-            for (PlaceInfo placeInfo : placeInfos) {
-                handlePlaceInfo(placeInfo, false);
+            String systemStationId = gasStationInfo.getId();
+            for (int i = 1; i < placeInfos.size(); i++) {
+                String outSystemId = handlePlaceInfo(placeInfos.get(i), false).getId();
+                saveRelationBetweenSystemAndOutSystemStation(systemStationId, outSystemId);
             }
         }
         return gasStationInfo;
@@ -92,8 +101,14 @@ public class GasStationInfoServiceImpl implements IGasStationInfoService {
 
     @Override
     public List<GasStationInfo> listOutSystemStationBySystemStationId(String systemId) {
-        // TODO impl
-        return null;
+        List<GasStationGeo> relations = gasStationGeoMapper.selectGasStationGeoBySystemStationId(systemId);
+        if (relations == null || relations.size() == 0) {
+            return new ArrayList<>();
+        }
+        List<String> outSystemIds = relations.stream()
+                .map(GasStationGeo::getOutSystemStationId)
+                .collect(Collectors.toList());
+        return gasStationInfoMapper.selectByIds(outSystemIds);
     }
 
     /**
@@ -103,7 +118,9 @@ public class GasStationInfoServiceImpl implements IGasStationInfoService {
      * @return GasStationInfo
      */
     private GasStationInfo handlePlaceInfo(PlaceInfo placeInfo, boolean isSystem) {
-        GasStationInfo gasStationInfo = new GasStationInfo();
+        GasStationInfo gasStationInfo = gasStationInfoMapper.selectOneByLocation(placeInfo.getLocation());
+        if (gasStationInfo != null) { return gasStationInfo; }
+        gasStationInfo = new GasStationInfo();
         gasStationInfo.setProvince(placeInfo.getPname());
         gasStationInfo.setLocation(placeInfo.getLocation());
         gasStationInfo.setCity(placeInfo.getCityname());
@@ -142,81 +159,16 @@ public class GasStationInfoServiceImpl implements IGasStationInfoService {
         return provinceFirstLetter + cityFirstLetter + system + new DecimalFormat("000").format(number + 1);
     }
 
-    //********************************************************************************************
-
     /**
-     * 保存或更新加油站信息
-     *
-     * @param info 加油站信息
-     * @return 结果
+     * 保存系统内站点和系统外站点的关系
+     * @param systemStationId 系统内站点ID
+     * @param outSystemId 系统外站点ID
      */
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    @Deprecated
-    public GasStationInfo saveGasStationInfo(GasStationGeoForm info) {
-        long start = System.currentTimeMillis();
-        int radius = info.getRadius();
-        String location = info.getLocation();
-
-        // 查询当前加油站的信息，以及周边加油站的信息
-        PlaceAroundRequest aroundRequest = new PlaceAroundRequest();
-        aroundRequest.setKey(amapKey);
-        aroundRequest.setLocation(location);
-        aroundRequest.setTypes("010100");
-        aroundRequest.setRadius(radius);
-        PlaceAroundResult placeAroundResult = amapClient.placeAroundRequest(aroundRequest);
-        List<POI> pois = placeAroundResult.getPois();
-
-        // 保存所有加油站的信息
-        List<GasStationInfo> collect = pois.stream()
-                .map((poi -> {
-                    GasStationInfo gasStationInfo = existInfo(poi);
-                    if (gasStationInfo == null) {
-                        gasStationInfo = mapToInfo(poi);
-                        gasStationInfoMapper.insertGasStationInfo(gasStationInfo);
-                    } else {
-                        GasStationInfo newest = mapToInfo(poi);
-                        newest.setId(gasStationInfo.getId());
-                        updateGasStationInfo(gasStationInfo);
-                    }
-                    return gasStationInfo;
-                }))
-                .collect(Collectors.toList());
-
-        // 保存系统内加油站结果
-        String currOutId = collect.get(0).getId();
-        GasStationInfo currentStation;
-        if (currOutId.charAt(currOutId.length() - 4) == 'Y') {
-            String sysPrefix = currOutId.substring(0, currOutId.lastIndexOf("Y")) + '0';
-            currentStation = gasStationInfoMapper.selectOneByCondition(sysPrefix, collect.get(0).getLocation());
-            if (currentStation == null) {
-                // 如果不存在就新增
-                currentStation = collect.get(0);
-                currentStation.setId(keyGenerator(pois.get(0), true));
-                gasStationInfoMapper.insertGasStationInfo(currentStation);
-            } else {
-                // 如果存在就更新
-                GasStationInfo newest = collect.get(0);
-                newest.setId(currentStation.getId());
-                updateGasStationInfo(newest);
-                currentStation = newest;
-            }
-        } else {
-            throw new GlobalException("【站点信息保存】系统数据出现问题");
-        }
-
-        // 保存加油站之间的地理信息
-        collect.remove(0);
-        log.info("[GasStation-Info-save] currentStation ID: " + currentStation.getId() +
-                ", currentStation name: " + currentStation.getName());
-        log.debug("[GasStation-Info-save] full gasStation collection: " + collect);
-
-        // geoService.saveGeoInfo(radius, currentStation, collect);
-
-        // 花费时间
-        log.info("[GasStation-Info-save] Consume time: " + (System.currentTimeMillis() - start) + "ms");
-
-        return currentStation;
+    private void saveRelationBetweenSystemAndOutSystemStation(String systemStationId, String outSystemId) {
+        GasStationGeo relation = new GasStationGeo();
+        relation.setSystemStationId(systemStationId);
+        relation.setOutSystemStationId(outSystemId);
+        gasStationGeoMapper.insertGasStationGeo(relation);
     }
 
     /**
@@ -230,82 +182,5 @@ public class GasStationInfoServiceImpl implements IGasStationInfoService {
         return gasStationInfoMapper.updateGasStationInfo(gasStationInfo);
     }
 
-    /**
-     * 判断在系统内是否存在这个加油站地点。
-     * 如果存在，那么返回系统内的ID
-     *
-     * @param gasStationGeo 加油站信息
-     * @return 加油站ID
-     */
-    private String existInfoInSystem(GasStationGeoForm gasStationGeo) {
-        List<String> ids =
-                gasStationInfoMapper.selectIdByLocation(gasStationGeo.getLocation());
-        if (ids == null || ids.size() == 0) {
-            return "";
-        }
-        for (String id : ids) {
-            // 如果是系统内的ID，那么ID倒数第四个字符一定是 '0'
-            if (id.charAt(id.length() - 4) == '0') {
-                return id;
-            }
-        }
-        return "";
-    }
 
-    /**
-     * 用于判断是否存在这条记录
-     * 如果存在，那么就返回这个结果。
-     * <p>
-     * NOTE: 此方法保证，找到的结果就是系统外的站点结果，因为这是由系统内外加油站的编码规则决定
-     * </p>
-     *
-     * @param poi 高德地图API的地理信息
-     * @return 系统内地理信息
-     */
-    private GasStationInfo existInfo(POI poi) {
-        return gasStationInfoMapper.selectOneByLocation(poi.getLocation());
-    }
-
-    /**
-     * 将高德地图返回的POI信息转换为系统的GasStationInfo
-     * 默认设置为系统外的POI
-     *
-     * @param poi POI
-     * @return GasStationInfo
-     */
-    private GasStationInfo mapToInfo(POI poi) {
-        GasStationInfo ret = new GasStationInfo();
-        ret.setId(keyGenerator(poi, false));
-        ret.setName(poi.getName());
-        ret.setProvince(poi.getPname());
-        ret.setCity(poi.getCityname());
-        ret.setLocation(poi.getLocation());
-        return ret;
-    }
-
-    /**
-     * 根据地区前缀生成编码
-     *
-     * @param poi              POI
-     * @param isSystemLocation 是否属于系统内的位置
-     * @return 生成的主键
-     */
-    private String keyGenerator(POI poi, boolean isSystemLocation) {
-        String shortProvinceName =
-                poi.getPname()
-                        .replace("省", "")
-                        .replace("市", "");
-        String shortCityName = poi.getCityname().replace("市", "");
-        String province = PinyinUtil.getAllFirstLetter(shortProvinceName).toUpperCase();
-        String city = PinyinUtil.getAllFirstLetter(shortCityName).toUpperCase();
-        GasStationInfo highestOne =
-                gasStationInfoMapper.selectOneByIdHighest(province + city + (isSystemLocation ? '0' : 'Y'));
-        int newestIdNum;
-        if (highestOne != null) {
-            newestIdNum = Integer.parseInt(highestOne.getId().replaceAll("[a-zA-Z]", ""));
-        } else {
-            newestIdNum = 0;
-        }
-        return String.format("%s%s%c%03d", province, city, (isSystemLocation ? '0' : 'Y'), newestIdNum + 1);
-    }
 }

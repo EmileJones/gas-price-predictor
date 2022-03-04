@@ -104,4 +104,10 @@ public interface GasStationInfoMapper {
      */
     int selectCount(GasStationInfo gasStationInfo);
 
+    /**
+     * 根据ID列表查询所有的加油站信息表
+     * @param outSystemIds 系统外ID
+     * @return 系统外加油站列表
+     */
+    List<GasStationInfo> selectByIds(List<String> outSystemIds);
 }

@@ -60,16 +60,6 @@ public interface IGasStationInfoService
      */
     public int deleteGasStationInfoById(String id);
 
-    //***********************************************************************************************************
-
-    /**
-     * 保存或更新加油站信息
-     *
-     * @param info 加油站信息
-     * @return 结果
-     */
-    public GasStationInfo saveGasStationInfo(GasStationGeoForm info);
-
     /**
      * 修改加油站信息
      * 
