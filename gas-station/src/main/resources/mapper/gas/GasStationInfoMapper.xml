@@ -116,10 +116,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select id from gas_station_info
         where location = #{location}
     </select>
-    <select id="selectByIds" resultType="com.ruoyi.gas.module.geo.domain.GasStationInfo">
+    <select id="selectByOutSystemIds" resultMap="GasStationInfoResult">
         <include refid="selectGasStationInfoVo"/>
-        where out_system_station_id in
-        <foreach collection="list" item="outSystemStationId" open="(" separator="," close=")"/>
+        where id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item,jdbcType=VARCHAR}
+        </foreach>
     </select>
 
     <update id="truncateTable">

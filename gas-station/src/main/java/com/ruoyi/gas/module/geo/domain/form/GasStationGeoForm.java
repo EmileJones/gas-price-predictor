@@ -9,8 +9,8 @@ public class GasStationGeoForm {
     /** 加油站位置 */
     private String location;
 
-    /** 加油站搜索半径 */
-    private Integer radius;
+    /** 加油站搜索距离 */
+    private Integer distance;
 
     public String getLocation() {
         return location;
@@ -20,11 +20,11 @@ public class GasStationGeoForm {
         this.location = location;
     }
 
-    public Integer getRadius() {
-        return radius;
+    public Integer getDistance() {
+        return distance;
     }
 
-    public void setRadius(Integer radius) {
-        this.radius = radius;
+    public void setDistance(Integer distance) {
+        this.distance = distance;
     }
 }

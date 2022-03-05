@@ -109,5 +109,5 @@ public interface GasStationInfoMapper {
      * @param outSystemIds 系统外ID
      * @return 系统外加油站列表
      */
-    List<GasStationInfo> selectByIds(List<String> outSystemIds);
+    List<GasStationInfo> selectByOutSystemIds(List<String> outSystemIds);
 }

@@ -42,11 +42,12 @@ public class GasStationGeoServiceImpl implements IGasStationGeoService {
 
     @Override
     public List<GasStationGeo> listStationDistance(GasStationInfo systemStation,
-                                                   List<GasStationInfo> outSystemStationList) {
+                                                   List<GasStationInfo> outSystemStationList, Integer distance) {
         List<GasStationGeo> systemStationGeos =
-                gasStationGeoMapper.selectGasStationGeoBySystemStationId(systemStation.getId());
-        if (systemStationGeos == null) {
-            return listStationDistance(systemStation, outSystemStationList, true);
+                gasStationGeoMapper.selectGasStationGeoBySystemStationIdAndDistance(systemStation.getId(), distance / 1000.0);
+        // 如果内容是空的，那么就强制更新地理信息内容
+        if (systemStationGeos == null || systemStationGeos.size() == 0) {
+            return listStationDistance(systemStation, outSystemStationList, distance, true);
         }
         return systemStationGeos;
     }
@@ -63,6 +64,7 @@ public class GasStationGeoServiceImpl implements IGasStationGeoService {
     @Override
     public List<GasStationGeo> listStationDistance(GasStationInfo systemStation,
                                                    List<GasStationInfo> outSystemStationList,
+                                                   Integer distance,
                                                    boolean newest) {
         if (outSystemStationList == null || outSystemStationList.size() == 0) {
             return new ArrayList<>();
@@ -70,13 +72,15 @@ public class GasStationGeoServiceImpl implements IGasStationGeoService {
 
         if (!newest) {
             List<GasStationGeo> gasStationGeos =
-                    gasStationGeoMapper.selectGasStationGeoBySystemStationId(systemStation.getId());
+                    gasStationGeoMapper.selectGasStationGeoBySystemStationIdAndDistance(systemStation.getId(), distance / 1000.0);
             if (gasStationGeos != null) {
                 return gasStationGeos;
             }
         }
 
-        return updateStationGeo(systemStation, outSystemStationList);
+        // 更新并返回最新结果
+        updateStationGeo(systemStation, outSystemStationList);
+        return gasStationGeoMapper.selectGasStationGeoBySystemStationIdAndDistance(systemStation.getId(), distance / 1000.0);
     }
 
     /**
@@ -85,22 +89,27 @@ public class GasStationGeoServiceImpl implements IGasStationGeoService {
      * @param outSystemStationList 系统外加油站列表
      * @return 地理信息列表
      */
-    private List<GasStationGeo> updateStationGeo(GasStationInfo systemStation, List<GasStationInfo> outSystemStationList) {
-        List<GasStationGeo> result = new ArrayList<>();
+    private void updateStationGeo(GasStationInfo systemStation, List<GasStationInfo> outSystemStationList) {
         CountDownLatch countDownLatch = new CountDownLatch(outSystemStationList.size());
         for (GasStationInfo outSystemStation : outSystemStationList) {
             CompletableFuture.runAsync(() -> {
-                PathCost pathCost = mapService.getPathCost(systemStation.getLocation(), outSystemStation.getLocation());
-                String systemStationId = systemStation.getId();
-                String outSystemStationId = outSystemStation.getId();
-                GasStationGeo geo =
-                        convertToGasStationGeo(systemStationId, outSystemStationId, pathCost);
-                gasStationGeoMapper.updateGasStationGeo(geo);
-                result.add(geo);
-                countDownLatch.countDown();
+                try {
+                    PathCost pathCost = mapService.getPathCost(systemStation.getLocation(), outSystemStation.getLocation());
+                    String systemStationId = systemStation.getId();
+                    String outSystemStationId = outSystemStation.getId();
+                    GasStationGeo geo =
+                            convertToGasStationGeo(systemStationId, outSystemStationId, pathCost);
+                    gasStationGeoMapper.updateGasStationGeo(geo);
+                } finally {
+                    countDownLatch.countDown();
+                }
             }, executor);
         }
-        return result;
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            // Do Nothing
+        }
     }
 
     /**

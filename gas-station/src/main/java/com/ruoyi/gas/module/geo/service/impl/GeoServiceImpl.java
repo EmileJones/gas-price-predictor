@@ -35,10 +35,10 @@ public class GeoServiceImpl implements GeoService {
 
     @Override
     public List<GasStationGeoVO> listStationGeo(GasStationGeoForm geoForm) {
-        GasStationInfo systemInfo = gasStationInfoService.getSystemStationByLocation(geoForm.getLocation(), geoForm.getRadius());
+        GasStationInfo systemInfo = gasStationInfoService.getSystemStationByLocation(geoForm.getLocation());
         List<GasStationInfo> outSystemStationList =
                 gasStationInfoService.listOutSystemStationBySystemStationId(systemInfo.getId());
-        List<GasStationGeo> gasStationGeos = gasStationGeoService.listStationDistance(systemInfo, outSystemStationList);
+        List<GasStationGeo> gasStationGeos = gasStationGeoService.listStationDistance(systemInfo, outSystemStationList, geoForm.getDistance());
         return packGasStationGeo2GasStationGeoVO(gasStationGeos);
     }
 

@@ -24,10 +24,11 @@ public interface IGasStationGeoService
      * 如果数据库没有关于加油站的距离信息或者信息已经过期，那么，计算距离并保存。</p>
      * @param systemStationId 系统内加油站
      * @param outSystemStation 系统外加油站列表
+     * @param distance
      * @return 加油站距离列表
      */
     List<GasStationGeo> listStationDistance(GasStationInfo systemStationId,
-                                            List<GasStationInfo> outSystemStation);
+                                            List<GasStationInfo> outSystemStation, Integer distance);
 
     /**
      * 列出所有关于系统内加油站周围的加油站的距离信息
@@ -39,7 +40,6 @@ public interface IGasStationGeoService
      * @return 加油站距离列表
      */
     List<GasStationGeo> listStationDistance(GasStationInfo systemStation,
-                                            List<GasStationInfo> outSystemStationList, boolean newest);
-
+                                            List<GasStationInfo> outSystemStationList, Integer distance, boolean newest);
 
 }

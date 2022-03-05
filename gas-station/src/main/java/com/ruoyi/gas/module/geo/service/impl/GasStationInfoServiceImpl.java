@@ -6,26 +6,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import cn.hutool.core.util.PinyinUtil;
-import com.ruoyi.common.exception.GlobalException;
+import com.ruoyi.gas.constant.GeoConstant;
 import com.ruoyi.gas.module.geo.domain.GasStationGeo;
 import com.ruoyi.gas.module.geo.domain.GasStationInfo;
-import com.ruoyi.gas.module.geo.domain.form.GasStationGeoForm;
 import com.ruoyi.gas.module.geo.mapper.GasStationGeoMapper;
 import com.ruoyi.gas.module.geo.mapper.GasStationInfoMapper;
 import com.ruoyi.gas.module.geo.service.IGasStationInfoService;
 import com.ruoyi.gas.module.map.MapService;
 import com.ruoyi.gas.module.map.amap.AmapClient;
-import com.ruoyi.gas.module.map.amap.model.PlaceAroundRequest;
-import com.ruoyi.gas.module.map.amap.model.PlaceAroundResult;
-import com.ruoyi.gas.module.map.amap.model.place.POI;
 import com.ruoyi.gas.module.map.model.PlaceInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 加油站信息Service业务层处理
@@ -85,10 +79,10 @@ public class GasStationInfoServiceImpl implements IGasStationInfoService {
     }
 
     @Override
-    public GasStationInfo getSystemStationByLocation(String location, int radius) {
+    public GasStationInfo getSystemStationByLocation(String location) {
         GasStationInfo gasStationInfo = gasStationInfoMapper.selectOneByLocation(location);
         if (gasStationInfo == null) {
-            List<PlaceInfo> placeInfos = mapService.listPlaceAroundOrigin(location, radius);
+            List<PlaceInfo> placeInfos = mapService.listPlaceAroundOrigin(location, GeoConstant.DEFAULT_RADIUS);
             gasStationInfo = handlePlaceInfo(placeInfos.get(0), true);
             String systemStationId = gasStationInfo.getId();
             for (int i = 1; i < placeInfos.size(); i++) {
@@ -108,7 +102,7 @@ public class GasStationInfoServiceImpl implements IGasStationInfoService {
         List<String> outSystemIds = relations.stream()
                 .map(GasStationGeo::getOutSystemStationId)
                 .collect(Collectors.toList());
-        return gasStationInfoMapper.selectByIds(outSystemIds);
+        return gasStationInfoMapper.selectByOutSystemIds(outSystemIds);
     }
 
     /**

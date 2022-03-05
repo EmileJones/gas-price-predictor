@@ -68,7 +68,7 @@ public interface IGasStationInfoService
      */
     public int updateGasStation(GasStationInfo gasStationInfo);
 
-    GasStationInfo getSystemStationByLocation(String location,int radius);
+    GasStationInfo getSystemStationByLocation(String location);
 
     List<GasStationInfo> listOutSystemStationBySystemStationId(String SystemId);
 }
