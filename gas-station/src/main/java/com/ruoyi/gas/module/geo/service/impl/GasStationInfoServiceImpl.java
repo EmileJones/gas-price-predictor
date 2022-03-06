@@ -81,7 +81,7 @@ public class GasStationInfoServiceImpl implements IGasStationInfoService {
     @Override
     public GasStationInfo getSystemStationByLocation(String location) {
         GasStationInfo gasStationInfo = gasStationInfoMapper.selectOneByLocation(location);
-        if (gasStationInfo == null) {
+        if (gasStationInfo == null || !gasStationInfo.getIsSystem()) {
             List<PlaceInfo> placeInfos = mapService.listPlaceAroundOrigin(location, GeoConstant.DEFAULT_RADIUS);
             gasStationInfo = handlePlaceInfo(placeInfos.get(0), true);
             String systemStationId = gasStationInfo.getId();
@@ -113,7 +113,7 @@ public class GasStationInfoServiceImpl implements IGasStationInfoService {
      */
     private GasStationInfo handlePlaceInfo(PlaceInfo placeInfo, boolean isSystem) {
         GasStationInfo gasStationInfo = gasStationInfoMapper.selectOneByLocation(placeInfo.getLocation());
-        if (gasStationInfo != null) { return gasStationInfo; }
+        if (gasStationInfo != null && (isSystem == gasStationInfo.getIsSystem())) { return gasStationInfo; }
         gasStationInfo = new GasStationInfo();
         gasStationInfo.setProvince(placeInfo.getPname());
         gasStationInfo.setLocation(placeInfo.getLocation());
