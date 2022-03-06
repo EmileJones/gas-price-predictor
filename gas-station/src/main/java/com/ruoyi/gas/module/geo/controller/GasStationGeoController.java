@@ -39,6 +39,13 @@ public class GasStationGeoController extends BaseController
     @GetMapping("/list")
     public AjaxResult list(GasStationGeoForm gasStationGeo)
     {
+        String location = gasStationGeo.getLocation();
+        Integer distance = gasStationGeo.getDistance();
+        if (location == null || "".equals(location) ||
+            distance == null || distance == 0
+        ) {
+            return AjaxResult.error("参数缺失，请重新查询");
+        }
         List<GasStationGeoVO> list = geoService.listStationGeo(gasStationGeo);
         return AjaxResult.success(list);
     }

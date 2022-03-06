@@ -72,6 +72,16 @@ public interface GasStationGeoMapper
 
     /**
      * 根据加油站的站点ID获取地理信息
+     * <p>搜索距离范围内的加油站站点信息</p>
+     * @param systemStationId 系统内加油站ID
+     * @param distance 搜索距离范围
+     * @return 加油站信息
+     */
+    List<GasStationGeo> selectGasStationGeoBySystemStationIdAndDistance(@Param("systemStationId") String systemStationId,
+                                                             @Param("distance") double distance);
+
+    /**
+     * 根据加油站的站点ID获取地理信息
      *
      * @param systemStationId 系统内加油站ID
      * @param outSystemStationId 系统外加油站ID

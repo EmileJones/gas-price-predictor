@@ -6,7 +6,7 @@ package com.ruoyi.gas.module.map.model;
  */
 public class PathCost {
 
-    /** 两个地点之间的路线距离 */
+    /** 两个地点之间的路线距离(单位米) */
     private Integer distance;
 
     /** 两个地点之间需要经过的红绿灯数 */

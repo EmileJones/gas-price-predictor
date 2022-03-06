@@ -1,5 +1,7 @@
 package com.ruoyi.gas.module.map.amap;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.ruoyi.gas.module.map.amap.constant.AmapConstant;
 import com.ruoyi.gas.module.map.amap.model.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,6 +10,10 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * 高德地图API封装客户端
@@ -75,8 +81,13 @@ public class AmapClient {
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<T> entity = new HttpEntity<>(requestParam);
         System.out.println("[HttpRequestUtils - DEBUG] " + url + requestParam);
-        ResponseEntity<R> exchange =
-                restTemplate.exchange(url + requestParam, HttpMethod.GET, entity, responseType);
-        return exchange.getBody();
+        ResponseEntity<String> exchange =
+                restTemplate.exchange(url + requestParam, HttpMethod.GET, entity, String.class);
+        // 下面的操作是用来替换高德地图空数据使用 '[]' 来表示，导致数据出现问题。例如，
+        // address: []  ==处理==>  address: ""
+        // 直接将数据替换为空字符串就可以解决。
+        if (exchange.getBody() == null) { return null; }
+        String json = exchange.getBody().replace("[]", "\"\"");
+        return JSON.parseObject(json, responseType);
     }
 }

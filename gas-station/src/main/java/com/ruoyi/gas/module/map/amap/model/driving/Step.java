@@ -11,6 +11,19 @@ public class Step {
      */
     private String orientation;
 
+    public String getRoad_name() {
+        return road_name;
+    }
+
+    public void setRoad_name(String road_name) {
+        this.road_name = road_name;
+    }
+
+    /**
+     * 道路名称
+     */
+    private String road_name;
+
     /**
      *分段距离信息
      */

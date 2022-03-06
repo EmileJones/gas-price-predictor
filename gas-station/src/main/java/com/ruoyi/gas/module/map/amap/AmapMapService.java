@@ -79,6 +79,8 @@ public class AmapMapService implements MapService {
     public PathCost getPathCost(String origin, String destination) {
         PathCost pathCost = new PathCost();
         DrivingDirectionRequest request = new DrivingDirectionRequest();
+        request.setOrigin(origin);
+        request.setDestination(destination);
         DrivingDirectionResult result = amapClient.drivingDirectionRequest(request);
         Paths path = result.getRoute().getPaths().get(0);
 
@@ -101,16 +103,16 @@ public class AmapMapService implements MapService {
     private String[] getPathDirection(List<Step> steps) {
         List<String> routeDirection = new ArrayList<>();
         String prevDirection = "";
-        for (int i = 0; i < steps.size(); i++) {
+        for (Step step : steps) {
             // 路线小于30米，去除此段路线的计算
-            if (steps.get(i).getStep_distance() < 30) {
+            if (step.getRoad_name() == null || step.getStep_distance() < 30) {
                 continue;
             }
-            String currentDirection = steps.get(i).getOrientation();
-            if (i == 0) {
+            String currentDirection = step.getOrientation();
+            if ("".equals(prevDirection)) {
                 routeDirection.add(currentDirection);
             } else if (!prevDirection.equals(currentDirection)) {
-                routeDirection.add(steps.get(i).getOrientation());
+                routeDirection.add(step.getOrientation());
             }
             prevDirection = currentDirection;
         }

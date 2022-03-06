@@ -10,19 +10,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="location"    column="location"    />
         <result property="province"    column="province"    />
         <result property="city"    column="city"    />
+        <result property="isSystem"    column="isSystem"    />
     </resultMap>
 
     <sql id="selectGasStationInfoVo">
-        select id, name, location, province, city from gas_station_info
+        select id, name, location, province, city, isSystem from gas_station_info
     </sql>
 
-    <select id="selectGasStationInfoList" parameterType="GasStationInfo" resultMap="GasStationInfoResult">
-        <include refid="selectGasStationInfoVo"/>
-        <where>  
+    <select id="selectCount" resultType="int" parameterType="GasStationInfo">
+        select count(*) from gas_station_info
+        <where>
+            <if test="id != null"> and id = #{id}</if>
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="location != null  and location != ''"> and location = #{location}</if>
             <if test="province != null  and province != ''"> and province = #{province}</if>
             <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="isSystem != null"> and isSystem = #{isSystem}</if>
+        </where>
+    </select>
+
+    <select id="selectGasStationInfoList" parameterType="GasStationInfo" resultMap="GasStationInfoResult">
+        <include refid="selectGasStationInfoVo"/>
+        <where>
+            <if test="id != null"> and id = #{id}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="location != null  and location != ''"> and location = #{location}</if>
+            <if test="province != null  and province != ''"> and province = #{province}</if>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="isSystem != null"> and isSystem = #{isSystem}</if>
         </where>
     </select>
     
@@ -39,6 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="location != null and location != ''">location,</if>
             <if test="province != null and province != ''">province,</if>
             <if test="city != null and city != ''">city,</if>
+            <if test="isSystem != null">isSystem,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -46,6 +62,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="location != null and location != ''">#{location},</if>
             <if test="province != null and province != ''">#{province},</if>
             <if test="city != null and city != ''">#{city},</if>
+            <if test="isSystem != null">#{isSystem},</if>
          </trim>
     </insert>
 
@@ -56,6 +73,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="location != null and location != ''">location = #{location},</if>
             <if test="province != null and province != ''">province = #{province},</if>
             <if test="city != null and city != ''">city = #{city},</if>
+            <if test="isSystem != null">city = #{isSystem},</if>
         </trim>
         where id = #{id}
     </update>
@@ -97,6 +115,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectIdByLocation" parameterType="String" resultType="String">
         select id from gas_station_info
         where location = #{location}
+    </select>
+    <select id="selectByOutSystemIds" resultMap="GasStationInfoResult">
+        <include refid="selectGasStationInfoVo"/>
+        where id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item,jdbcType=VARCHAR}
+        </foreach>
     </select>
 
     <update id="truncateTable">
