@@ -13,7 +13,7 @@ public class OilTypeHandler implements TypeHandler<OilType> {
 
     @Override
     public void setParameter(PreparedStatement preparedStatement, int i, OilType oilType, JdbcType jdbcType) throws SQLException {
-        preparedStatement.setInt(i,oilType.getTypeNumber());
+        preparedStatement.setInt(i, oilType.getTypeNumber());
     }
 
     @Override

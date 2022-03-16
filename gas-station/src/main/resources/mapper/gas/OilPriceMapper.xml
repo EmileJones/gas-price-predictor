@@ -23,6 +23,15 @@
         <result property="price98" column="price_98"/>
     </resultMap>
 
+    <parameterMap id="OilPrice" type="com.ruoyi.gas.module.price.domain.framwork.OilPrice">
+        <parameter property="gasStationId"/>
+        <parameter property="outGasStationId"/>
+        <parameter property="periodId"/>
+        <parameter property="oilType"
+                   typeHandler="com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler"/>
+        <parameter property="price"/>
+    </parameterMap>
+
     <insert id="addEmptyPrice">
         insert into `gas_station_oil_price`(`gas_station_id`, `out_gas_station_id`, `period_id`)
             value (#{gasStationId},#{outGasStationId} , #{periodId});
@@ -33,7 +42,7 @@
                `out_gas_station_id`,
                `period_id`,
                `price_${oilType}` as `price`,
-               ${oilType}         as `oil_type`
+               #{oilType}         as `oil_type`
         from `gas_station_oil_price`
         where `gas_station_id` = #{gasStationId}
           and `out_gas_station_id` = #{outGasStationId}
@@ -47,11 +56,11 @@
         order by `period_id` DESC;
     </select>
 
-    <update id="updatePrice" parameterType="com.ruoyi.gas.module.price.domain.framwork.OilPrice">
+    <update id="updatePrice" parameterType="OilPrice">
         update `gas_station_oil_price`
         set `price_${oilType}` = #{price}
         where `gas_station_id` = #{gasStationId}
-          and `period_id` = #{period}
+          and `period_id` = #{periodId}
           and `out_gas_station_id` = #{outGasStationId}
     </update>
 

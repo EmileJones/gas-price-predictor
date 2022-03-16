@@ -16,6 +16,18 @@
         <result property="price98" column="price_98"/>
     </resultMap>
 
+    <parameterMap id="Period" type="com.ruoyi.gas.module.price.domain.Period">
+        <parameter property="id"/>
+        <parameter property="startTime"
+                typeHandler="com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler"/>
+        <parameter property="endTime"
+                typeHandler="com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler"/>
+        <parameter property="price00"/>
+        <parameter property="price92"/>
+        <parameter property="price95"/>
+        <parameter property="price98"/>
+    </parameterMap>
+
     <select id="selectLastPeriod" resultMap="Period">
         select *
         from `gas_station_price_period`
@@ -39,7 +51,7 @@
         where `id` = #{id};
     </delete>
 
-    <update id="updatePeriod" parameterType="com.ruoyi.gas.module.price.domain.Period">
+    <update id="updatePeriod" parameterMap="Period">
         update `gas_station_price_period`
         set `start_time` = #{startTime},
             `end_time`   = #{endTime},

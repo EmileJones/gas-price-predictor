@@ -15,7 +15,16 @@
                 typeHandler="com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler"/>
     </resultMap>
 
-
+    <parameterMap id="OilSaleData" type="com.ruoyi.gas.module.price.domain.OilSaleData">
+        <parameter property="id"/>
+        <parameter property="gasStationId"/>
+        <parameter property="oilType"
+                typeHandler="com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler"/>
+        <parameter property="number"/>
+        <parameter property="price"/>
+        <parameter property="date"
+                typeHandler="com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler"/>
+    </parameterMap>
 
     <select id="selectHistorySaleData" resultMap="OilSaleData">
         select *
@@ -25,7 +34,7 @@
         order by `id` DESC;
     </select>
 
-    <insert id="addSaleData" parameterType="com.ruoyi.gas.module.price.domain.OilSaleData">
+    <insert id="addSaleData" parameterMap="OilSaleData">
         insert into `gas_station_sale_data`(`gas_station_id`, `price`, `number`, `oil_type`, `date`)
             value (#{gasStationId},#{price},#{number},#{oilType},#{date});
     </insert>
