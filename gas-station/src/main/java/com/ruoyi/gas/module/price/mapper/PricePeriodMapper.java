@@ -34,4 +34,11 @@ public interface PricePeriodMapper {
      * @return 是否成功
      */
     int deletePeriod(int id);
+
+    /**
+     * 修改周期信息
+     * @param period 周期信息
+     * @return 是否成功
+     */
+    int updatePeriod(Period period);
 }

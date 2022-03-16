@@ -4,14 +4,21 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.gas.module.price.mapper.OilSaleDataMapper">
 
+
+
+
     <resultMap id="OilSaleData" type="com.ruoyi.gas.module.price.domain.OilSaleData">
         <result property="id" column="id"/>
         <result property="gasStationId" column="gas_station_id"/>
         <result property="oilType" column="oil_type"
                 typeHandler="com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler"/>
         <result property="number" column="number"/>
-        <result property="date" column="date" typeHandler="com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler"/>
+        <result property="price" column="price"/>
+        <result property="date" column="date"
+                typeHandler="com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler"/>
     </resultMap>
+
+
 
     <select id="selectHistorySaleData" resultMap="OilSaleData">
         select *
@@ -21,7 +28,7 @@
         order by `id` DESC;
     </select>
 
-    <insert id="addSaleData">
+    <insert id="addSaleData" parameterType="com.ruoyi.gas.module.price.domain.OilSaleData">
         insert into `gas_station_sale_data`(`gas_station_id`, `price`, `number`, `oil_type`, `date`)
             value (#{gasStationId},#{price},#{number},#{oilType},#{date});
     </insert>
@@ -51,4 +58,5 @@
           and `date` &gt;= #{startTime}
           and `date` $lt #{endTime};
     </select>
+
 </mapper>

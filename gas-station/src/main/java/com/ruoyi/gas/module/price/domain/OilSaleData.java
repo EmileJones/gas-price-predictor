@@ -3,6 +3,7 @@ package com.ruoyi.gas.module.price.domain;
 import com.ruoyi.gas.module.price.domain.framwork.OilType;
 import org.joda.time.DateTime;
 
+
 public class OilSaleData {
     /**
      * 唯一标识符

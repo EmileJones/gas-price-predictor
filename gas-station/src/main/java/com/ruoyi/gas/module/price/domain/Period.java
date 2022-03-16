@@ -31,9 +31,6 @@ public class Period {
     }
 
     public DateTime getEndTime() {
-        if(endTime == null){
-            return new DateTime();
-        }
         return endTime;
     }
 

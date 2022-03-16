@@ -5,6 +5,7 @@ import com.ruoyi.gas.module.price.domain.Period;
 import com.ruoyi.gas.module.price.domain.form.DataForCalculation;
 import com.ruoyi.gas.module.price.domain.GuessPrice;
 import com.ruoyi.gas.module.price.exception.DataIsExistException;
+import com.ruoyi.gas.module.price.exception.DataIsNotEnoughException;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface IOilPriceService {
      * @param data 用户输入的信息封装
      * @return 日均销量
      */
-    double getAverageSalesVolume(DataForCalculation data);
+    double getAverageSalesVolume(DataForCalculation data) throws DataIsNotEnoughException;
 
     /**
      * 添加一组估价数据
@@ -23,6 +24,24 @@ public interface IOilPriceService {
      * @param guessPrice 石油价格
      */
     void addPrice(GuessPrice guessPrice) throws DataIsExistException;
+
+    /**
+     * 添加系统内加油站的销售记录 <br>
+     * id是数据库自增的，不用填
+     *
+     * @param oilSaleData 销售记录
+     */
+    void addOilSaleData(OilSaleData oilSaleData);
+
+    /**
+     * 添加周期信息 <br>
+     * startTime为必须字段 <br>
+     * endTime为null则代此周期是最新周期，结束时间是当前时间，直到添加下一个周期为止 <br>
+     * id是数据库自增的，不用填
+     *
+     * @param period 周期信息
+     */
+    void addPeriod(Period period);
 
     /**
      * 获取某个时间段内（用户猜的系统外）的价格记录

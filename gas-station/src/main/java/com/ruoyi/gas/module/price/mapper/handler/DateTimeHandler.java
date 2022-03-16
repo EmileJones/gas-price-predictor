@@ -9,7 +9,11 @@ import java.sql.*;
 public class DateTimeHandler implements TypeHandler<DateTime> {
     @Override
     public void setParameter(PreparedStatement preparedStatement, int i, DateTime dateTime, JdbcType jdbcType) throws SQLException {
-        preparedStatement.setDate(i, new Date(dateTime.getMillis()));
+        if (dateTime != null){
+            preparedStatement.setDate(i, new Date(dateTime.getMillis()));
+        }else {
+            preparedStatement.setNull(i,Types.DATE);
+        }
     }
 
     @Override

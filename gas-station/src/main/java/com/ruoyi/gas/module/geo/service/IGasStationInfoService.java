@@ -7,10 +7,10 @@ import com.ruoyi.gas.module.geo.domain.GasStationInfo;
 /**
  * 加油站信息服务模块
  * <p>加油站信息的增删查改<p/>
+ *
  * @author KlenKiven
  */
-public interface IGasStationInfoService 
-{
+public interface IGasStationInfoService {
     /**
      * 查询加油站信息
      *
@@ -61,9 +61,13 @@ public interface IGasStationInfoService
 
     /**
      * 修改加油站信息
-     * 
+     *
      * @param gasStationInfo 加油站信息
      * @return 结果
      */
     public int updateGasStation(GasStationInfo gasStationInfo);
+
+    public GasStationInfo getSystemStationByLocation(String location);
+
+    public List<GasStationInfo> listOutSystemStationBySystemStationId(String systemId);
 }

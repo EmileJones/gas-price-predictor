@@ -28,7 +28,7 @@
             value (#{gasStationId},#{outGasStationId} , #{periodId});
     </insert>
 
-    <select id="selectPrice" resultType="OilPrice">
+    <select id="selectPrice" resultMap="OilPrice">
         select `gas_station_id`,
                `out_gas_station_id`,
                `period_id`,
@@ -40,14 +40,14 @@
           and `period_id` = #{periodId}
     </select>
 
-    <select id="selectHistoryPrice" resultType="GuessPeriod">
+    <select id="selectHistoryPrice" resultMap="GuessPrice">
         select *
         from `gas_station_oil_price`
         where `gas_station_id` = #{gasStationId}
         order by `period_id` DESC;
     </select>
 
-    <update id="updatePrice">
+    <update id="updatePrice" parameterType="com.ruoyi.gas.module.price.domain.framwork.OilPrice">
         update `gas_station_oil_price`
         set `price_${oilType}` = #{price}
         where `gas_station_id` = #{gasStationId}
