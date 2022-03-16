@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.gas.module.price.mapper.OilPriceMapper">
+
+    <resultMap id="OilPrice" type="com.ruoyi.gas.module.price.domain.framwork.OilPrice">
+        <result property="gasStationId" column="gas_station_id"/>
+        <result property="outGasStationId" column="out_gas_station_id"/>
+        <result property="periodId" column="period_id"/>
+        <result property="oilType" column="oil_type"
+                typeHandler="com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler"/>
+        <result property="price" column="price"/>
+    </resultMap>
+
+    <resultMap id="GuessPrice" type="com.ruoyi.gas.module.price.domain.GuessPrice">
+        <result property="gasStationId" column="gas_station_id"/>
+        <result property="outGasStationId" column="out_gas_station_id"/>
+        <result property="periodId" column="period_id"/>
+        <result property="price00" column="price_00"/>
+        <result property="price92" column="price_92"/>
+        <result property="price95" column="price_95"/>
+        <result property="price98" column="price_98"/>
+    </resultMap>
+
+    <insert id="addEmptyPrice">
+        insert into `gas_station_oil_price`(`gas_station_id`, `out_gas_station_id`, `period_id`)
+            value (#{gasStationId},#{outGasStationId} , #{periodId});
+    </insert>
+
+    <select id="selectPrice" resultType="OilPrice">
+        select `gas_station_id`,
+               `out_gas_station_id`,
+               `period_id`,
+               `price_${oilType}` as `price`,
+               ${oilType}         as `oil_type`
+        from `gas_station_oil_price`
+        where `gas_station_id` = #{gasStationId}
+          and `out_gas_station_id` = #{outGasStationId}
+          and `period_id` = #{periodId}
+    </select>
+
+    <select id="selectHistoryPrice" resultType="GuessPeriod">
+        select *
+        from `gas_station_oil_price`
+        where `gas_station_id` = #{gasStationId}
+        order by `period_id` DESC;
+    </select>
+
+    <update id="updatePrice">
+        update `gas_station_oil_price`
+        set `price_${oilType}` = #{price}
+        where `gas_station_id` = #{gasStationId}
+          and `period_id` = #{period}
+          and `out_gas_station_id` = #{outGasStationId}
+    </update>
+
+    <delete id="deletePrice">
+        delete
+        from `gas_station_oil_price`
+        where `gas_station_id` = #{gasStationId}
+          and `out_gas_station_id` = #{outGasStationId}
+          and `period_id` = #{periodId};
+    </delete>
+</mapper>

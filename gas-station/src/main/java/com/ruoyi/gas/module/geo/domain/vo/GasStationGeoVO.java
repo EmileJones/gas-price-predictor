@@ -38,7 +38,7 @@ public class GasStationGeoVO implements Serializable {
     private String outSystemStationName;
 
     /** 两加油站之间的距离 */
-    @Excel(name = "两加油站之间的距离")
+    @Excel(name = "两加油站之间的距离",cellType = Excel.ColumnType.NUMERIC)
     private Double distance;
 
     /** 两加油站之间路线红绿灯数 */
@@ -46,7 +46,7 @@ public class GasStationGeoVO implements Serializable {
     private Integer trafficLights;
 
     /** 两加油站红绿灯数的影响因子 */
-    @Excel(name = "两加油站红绿灯数的影响因子")
+    @Excel(name = "两加油站红绿灯数的影响因子",cellType = Excel.ColumnType.NUMERIC)
     private Double trafficFactor;
 
     /** 路线形状 */
@@ -54,12 +54,12 @@ public class GasStationGeoVO implements Serializable {
     private String routeShape;
 
     /** 路线曲折度影响系数 */
-    @Excel(name = "路线曲折度影响系数")
+    @Excel(name = "路线曲折度影响系数",cellType = Excel.ColumnType.NUMERIC)
     @JsonSerialize(using = DoubleSerializer.class)
     private Double routeShapeFactor;
 
     /** 路线影响系数 */
-    @Excel(name = "路线影响系数")
+    @Excel(name = "路线影响系数",cellType = Excel.ColumnType.NUMERIC)
     @JsonSerialize(using = DoubleSerializer.class)
     private Double routeFactor;
 

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.gas.module.price.mapper.PricePeriodMapper">
+    <resultMap id="Period" type="com.ruoyi.gas.module.price.domain.Period">
+        <result property="id" column="id"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="price00" column="price_00"/>
+        <result property="price92" column="price_92"/>
+        <result property="price95" column="price_95"/>
+        <result property="price98" column="price_98"/>
+    </resultMap>
+
+    <select id="selectLastPeriod" resultType="Period">
+        select *
+        from `gas_station_price_period`
+        order by `id` DESC limit 0,#{periodNumber};
+    </select>
+
+    <select id="selectPeriod">
+        select *
+        from `gas_station_price_period`
+        where `id` = #{id};
+    </select>
+
+    <insert id="addPeriod">
+        insert into `gas_station_price_period`(`start_time`, `end_time`, `price_00`, `price_92`, `price_95`, `price_98`)
+            value (#{startTime},#{endTime},#{price00},#{price92},#{price95},#{price98});
+    </insert>
+
+    <delete id="deletePeriod">
+        delete
+        from `gas_station_price_period`
+        where `id` = #{id};
+    </delete>
+</mapper>

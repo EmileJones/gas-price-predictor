@@ -3,7 +3,6 @@ package com.ruoyi.gas.module.geo.service;
 import java.util.List;
 
 import com.ruoyi.gas.module.geo.domain.GasStationInfo;
-import com.ruoyi.gas.module.geo.domain.form.GasStationGeoForm;
 
 /**
  * 加油站信息服务模块
@@ -67,8 +66,4 @@ public interface IGasStationInfoService
      * @return 结果
      */
     public int updateGasStation(GasStationInfo gasStationInfo);
-
-    GasStationInfo getSystemStationByLocation(String location);
-
-    List<GasStationInfo> listOutSystemStationBySystemStationId(String SystemId);
 }
