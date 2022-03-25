@@ -15,7 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
+/**
+ * <p>根据客户要求，使用BaiduMap</p>
+ */
 public class AmapMapService implements MapService {
 
     /** Log的类应该是 {@link MapService} 而不是自己的实现类 */
