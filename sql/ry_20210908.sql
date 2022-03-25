@@ -462,7 +462,8 @@ insert into sys_dict_type values(7,  '通知类型', 'sys_notice_type',     '0',
 insert into sys_dict_type values(8,  '通知状态', 'sys_notice_status',   '0', 'admin', sysdate(), '', null, '通知状态列表');
 insert into sys_dict_type values(9,  '操作类型', 'sys_oper_type',       '0', 'admin', sysdate(), '', null, '操作类型列表');
 insert into sys_dict_type values(10, '系统状态', 'sys_common_status',   '0', 'admin', sysdate(), '', null, '登录状态列表');
-
+-- 行政区划字典类型
+insert into sys_dict_type values(11, '行政区划', 'region_adcode', '0', 'admin', now(), '', null, '行政区划和地区名称');
 
 -- ----------------------------
 -- 12、字典数据表
