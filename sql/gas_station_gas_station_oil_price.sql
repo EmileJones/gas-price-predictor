@@ -16,31 +16,23 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `gas_station_info`
+-- Table structure for table `gas_station_oil_price`
 --
 
-DROP TABLE IF EXISTS `gas_station_info`;
+DROP TABLE IF EXISTS `gas_station_oil_price`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `gas_station_info` (
-  `id` varchar(45) NOT NULL COMMENT '唯一ID',
-  `name` varchar(512) NOT NULL COMMENT '加油站名称',
-  `location` varchar(64) NOT NULL COMMENT '加油站位置',
-  `province` varchar(4) NOT NULL COMMENT '加油站所在省',
-  `city` varchar(32) NOT NULL COMMENT '加油站所在市',
-  `isSystem` tinyint NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='加油站信息表';
+CREATE TABLE `gas_station_oil_price` (
+  `gas_station_id` varchar(45) NOT NULL,
+  `out_gas_station_id` varchar(45) NOT NULL,
+  `period_id` int NOT NULL,
+  `price_92` double unsigned DEFAULT NULL,
+  `price_95` double unsigned DEFAULT NULL,
+  `price_98` double unsigned DEFAULT NULL,
+  `price_00` double unsigned DEFAULT NULL,
+  PRIMARY KEY (`gas_station_id`,`out_gas_station_id`,`period_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `gas_station_info`
---
-
-LOCK TABLES `gas_station_info` WRITE;
-/*!40000 ALTER TABLE `gas_station_info` DISABLE KEYS */;
-/*!40000 ALTER TABLE `gas_station_info` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -51,4 +43,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-03-04 15:57:27
+-- Dump completed on 2022-03-16 12:51:53

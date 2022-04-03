@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.gas.module.price.mapper.OilSaleDataMapper">
+
+    <resultMap id="OilSaleData" type="com.ruoyi.gas.module.price.domain.OilSaleData">
+        <result property="id" column="id"/>
+        <result property="gasStationId" column="gas_station_id"/>
+        <result property="oilType" column="oil_type"
+                typeHandler="com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler"/>
+        <result property="number" column="number"/>
+        <result property="price" column="price"/>
+        <result property="date" column="date"
+                typeHandler="com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler"/>
+    </resultMap>
+
+    <parameterMap id="OilSaleData" type="com.ruoyi.gas.module.price.domain.OilSaleData">
+        <parameter property="id"/>
+        <parameter property="gasStationId"/>
+        <parameter property="oilType"
+                typeHandler="com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler"/>
+        <parameter property="number"/>
+        <parameter property="price"/>
+        <parameter property="date"
+                typeHandler="com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler"/>
+    </parameterMap>
+
+    <select id="selectHistorySaleData" resultMap="OilSaleData">
+        select *
+        from `gas_station_sale_data`
+        where `gas_station_id` = #{gasStationId}
+          and `effective` = true
+        order by `id` DESC;
+    </select>
+
+    <insert id="addSaleData" parameterMap="OilSaleData">
+        insert into `gas_station_sale_data`(`gas_station_id`, `price`, `number`, `oil_type`, `date`)
+            value (#{gasStationId},#{price},#{number},#{oilType},#{date});
+    </insert>
+
+    <update id="deleteSaleData">
+        update `gas_station_sale_data`
+        set `effective` = 0
+        where `id` = #{id};
+    </update>
+
+    <select id="selectTotalPrice">
+        select sum(`price`)
+        from `gas_station_sale_data`
+        where `gas_station_id` = #{gasStationId}
+          and `effect` = true
+          and `oil_type` = #{oilType}
+          and `date` &gt;= #{startTime}
+          and `date` $lt #{endTime};
+    </select>
+
+    <select id="selectTotalSalesVolume">
+        select sum(`number`)
+        from `gas_station_sale_data`
+        where `gas_station_id` = #{gasStationId}
+          and `effect` = true
+          and `oil_type` = #{oilType}
+          and `date` &gt;= #{startTime}
+          and `date` $lt #{endTime};
+    </select>
+
+</mapper>

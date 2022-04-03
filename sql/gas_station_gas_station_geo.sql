@@ -1,25 +1,3 @@
---
--- Table structure for table `gas_station_info`
---
-
-DROP TABLE IF EXISTS `gas_station_info`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `gas_station_info` (
-  `id` varchar(45) NOT NULL COMMENT '唯一ID',
-  `name` varchar(512) NOT NULL COMMENT '加油站名称',
-  `location` varchar(64) NOT NULL COMMENT '加油站位置',
-  `province` varchar(4) NOT NULL COMMENT '加油站所在省',
-  `city` varchar(32) NOT NULL COMMENT '加油站所在市',
-  `isSystem` tinyint NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='加油站信息表';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
--- 正在导出表  ruoyi.gas_station_info 的数据：~0 rows (大约)
-/*!40000 ALTER TABLE `gas_station_info` DISABLE KEYS */;
-/*!40000 ALTER TABLE `gas_station_info` ENABLE KEYS */;
-
 -- 导出  表 ruoyi.gas_station_geo 结构
 CREATE TABLE IF NOT EXISTS `gas_station_geo` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '地理信息主键',

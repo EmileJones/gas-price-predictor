@@ -21,6 +21,8 @@ public class GasStationGeo extends BaseEntity
     /** 系统内加油站ID */
     private String systemStationId;
 
+
+    /** 系统外加油站ID */
     private String outSystemStationId;
 
     /** 两加油站之间的距离（单位：千米） */

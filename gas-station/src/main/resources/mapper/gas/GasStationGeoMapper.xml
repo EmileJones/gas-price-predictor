@@ -1,39 +1,51 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.gas.module.geo.mapper.GasStationGeoMapper">
-    
+
     <resultMap type="GasStationGeo" id="GasStationGeoResult">
-        <result property="id"    column="id"    />
-        <result property="systemStationId"    column="system_station_id"    />
-        <result property="outSystemStationId"    column="out_system_station_id"    />
-        <result property="distance"    column="distance"    />
-        <result property="trafficLights"    column="traffic_lights"    />
-        <result property="trafficFactor"    column="traffic_factor"    />
-        <result property="routeShape"    column="route_shape"    />
-        <result property="routeShapeFactor"    column="route_shape_factor"    />
-        <result property="routeFactor"    column="route_factor"    />
+        <result property="id" column="id"/>
+        <result property="systemStationId" column="system_station_id"/>
+        <result property="outSystemStationId" column="out_system_station_id"/>
+        <result property="distance" column="distance"/>
+        <result property="trafficLights" column="traffic_lights"/>
+        <result property="trafficFactor" column="traffic_factor"/>
+        <result property="routeShape" column="route_shape"/>
+        <result property="routeShapeFactor" column="route_shape_factor"/>
+        <result property="routeFactor" column="route_factor"/>
     </resultMap>
 
     <sql id="selectGasStationGeoVo">
-        select id, system_station_id, out_system_station_id, distance, traffic_lights, traffic_factor, route_shape, route_shape_factor, route_factor from gas_station_geo
+        select id,
+               system_station_id,
+               out_system_station_id,
+               distance,
+               traffic_lights,
+               traffic_factor,
+               route_shape,
+               route_shape_factor,
+               route_factor
+        from gas_station_geo
     </sql>
 
     <select id="selectGasStationGeoList" parameterType="GasStationGeo" resultMap="GasStationGeoResult">
         <include refid="selectGasStationGeoVo"/>
-        <where>  
-            <if test="systemStationId != null  and systemStationId != ''"> and system_station_id = #{systemStationId}</if>
-            <if test="outSystemStationId != null  and outSystemStationId != ''"> and out_system_station_id = #{outSystemStationId}</if>
-            <if test="distance != null "> and distance = #{distance}</if>
-            <if test="trafficLights != null "> and traffic_lights = #{trafficLights}</if>
-            <if test="trafficFactor != null "> and traffic_factor = #{trafficFactor}</if>
-            <if test="routeShape != null  and routeShape != ''"> and route_shape = #{routeShape}</if>
-            <if test="routeShapeFactor != null "> and route_shape_factor = #{routeShapeFactor}</if>
-            <if test="routeFactor != null "> and route_factor = #{routeFactor}</if>
+        <where>
+            <if test="systemStationId != null  and systemStationId != ''">and system_station_id = #{systemStationId}
+            </if>
+            <if test="outSystemStationId != null  and outSystemStationId != ''">and out_system_station_id =
+                #{outSystemStationId}
+            </if>
+            <if test="distance != null ">and distance = #{distance}</if>
+            <if test="trafficLights != null ">and traffic_lights = #{trafficLights}</if>
+            <if test="trafficFactor != null ">and traffic_factor = #{trafficFactor}</if>
+            <if test="routeShape != null  and routeShape != ''">and route_shape = #{routeShape}</if>
+            <if test="routeShapeFactor != null ">and route_shape_factor = #{routeShapeFactor}</if>
+            <if test="routeFactor != null ">and route_factor = #{routeFactor}</if>
         </where>
     </select>
-    
+
     <select id="selectGasStationGeoById" parameterType="Long" resultMap="GasStationGeoResult">
         <include refid="selectGasStationGeoVo"/>
         where id = #{id}
@@ -42,7 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectGasStationGeoByStationId" resultMap="GasStationGeoResult">
         <include refid="selectGasStationGeoVo"/>
         where `system_station_id` = #{systemStationId} and
-              `out_system_station_id` = #{outSystemStationId}
+        `out_system_station_id` = #{outSystemStationId}
     </select>
     <select id="selectGasStationGeoBySystemStationId" resultMap="GasStationGeoResult">
         <include refid="selectGasStationGeoVo"/>
@@ -65,7 +77,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="routeShape != null">route_shape,</if>
             <if test="routeShapeFactor != null">route_shape_factor,</if>
             <if test="routeFactor != null">route_factor,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
             <if test="systemStationId != null">#{systemStationId},</if>
@@ -76,7 +88,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="routeShape != null">#{routeShape},</if>
             <if test="routeShapeFactor != null">#{routeShapeFactor},</if>
             <if test="routeFactor != null">#{routeFactor},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateGasStationGeo" parameterType="GasStationGeo">
@@ -95,11 +107,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteGasStationGeoById" parameterType="Long">
-        delete from gas_station_geo where id = #{id}
+        delete
+        from gas_station_geo
+        where id = #{id}
     </delete>
 
     <delete id="deleteGasStationGeoByIds" parameterType="String">
-        delete from gas_station_geo where id in 
+        delete from gas_station_geo where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

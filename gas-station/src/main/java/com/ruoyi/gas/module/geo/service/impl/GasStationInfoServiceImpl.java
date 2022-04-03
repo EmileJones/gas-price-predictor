@@ -40,14 +40,6 @@ public class GasStationInfoServiceImpl implements IGasStationInfoService {
     @Autowired
     private GasStationGeoMapper gasStationGeoMapper;
 
-    @Autowired
-    @Deprecated
-    private AmapClient amapClient;
-
-    @Value("${gas.amap.key}")
-    @Deprecated
-    private String amapKey;
-
     @Override
     public GasStationInfo selectGasStationInfoById(String id) {
         return gasStationInfoMapper.selectGasStationInfoById(id);

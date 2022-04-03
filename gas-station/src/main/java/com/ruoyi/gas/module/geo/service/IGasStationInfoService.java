@@ -3,15 +3,14 @@ package com.ruoyi.gas.module.geo.service;
 import java.util.List;
 
 import com.ruoyi.gas.module.geo.domain.GasStationInfo;
-import com.ruoyi.gas.module.geo.domain.form.GasStationGeoForm;
 
 /**
  * 加油站信息服务模块
  * <p>加油站信息的增删查改<p/>
+ *
  * @author KlenKiven
  */
-public interface IGasStationInfoService 
-{
+public interface IGasStationInfoService {
     /**
      * 查询加油站信息
      *
@@ -62,13 +61,13 @@ public interface IGasStationInfoService
 
     /**
      * 修改加油站信息
-     * 
+     *
      * @param gasStationInfo 加油站信息
      * @return 结果
      */
     public int updateGasStation(GasStationInfo gasStationInfo);
 
-    GasStationInfo getSystemStationByLocation(String location);
+    public GasStationInfo getSystemStationByLocation(String location);
 
-    List<GasStationInfo> listOutSystemStationBySystemStationId(String SystemId);
+    public List<GasStationInfo> listOutSystemStationBySystemStationId(String systemId);
 }
