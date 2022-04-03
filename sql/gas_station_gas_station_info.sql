@@ -30,7 +30,7 @@ CREATE TABLE `gas_station_info` (
   `city` varchar(32) NOT NULL COMMENT '加油站所在市',
   `isSystem` tinyint NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='加油站信息表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='加油站信息表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `gas_station_sale_data`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `gas_station_sale_data` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `gas_station_id` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `gas_station_id` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `price` double NOT NULL,
   `number` double NOT NULL,
   `oil_type` int NOT NULL,
