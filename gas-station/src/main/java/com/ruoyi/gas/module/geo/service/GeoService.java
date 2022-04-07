@@ -15,13 +15,6 @@ import java.util.List;
 public interface GeoService {
 
     /**
-     * 查询所有的用户拥有的加油站列表
-     * <p>这部分功能主要由：加油站信息子模块完成</p>
-     * @return 用户拥有的加油站列表
-     */
-    GasStationInfo listGasStationInfoByUserId();
-
-    /**
      * 查询系统内加油站的距离信息
      * <p>这部分信息主要由：加油站距离计算子模块完成</p>
      * @param geoForm 系统内加油站ID
