@@ -8,10 +8,10 @@ public class GuessPrice {
     private String gasStationId;
     private String outGasStationId;
     private Integer periodId;
-    private Double price_00;
-    private Double price_92;
-    private Double price_95;
-    private Double price_98;
+    private Double price00;
+    private Double price92;
+    private Double price95;
+    private Double price98;
 
     public String getGasStationId() {
         return gasStationId;

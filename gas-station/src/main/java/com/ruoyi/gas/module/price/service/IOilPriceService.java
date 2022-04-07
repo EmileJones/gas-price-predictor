@@ -23,6 +23,7 @@ public interface IOilPriceService {
      *
      * @param guessPrice 石油价格
      */
+    @Deprecated
     void addPrice(GuessPrice guessPrice) throws DataIsExistException;
 
     /**
@@ -49,6 +50,7 @@ public interface IOilPriceService {
      * @param gasStationId 加油站ID
      * @return 某时间内的价格记录
      */
+    @Deprecated
     List<GuessPrice> getHistoryPrice(String gasStationId);
 
     /**
