@@ -1,28 +1,34 @@
 package com.ruoyi.gas.module.price.service.impl;
 
-import com.ruoyi.gas.module.price.domain.form.DataForCalculation;
-import com.ruoyi.gas.module.price.domain.form.OutGasStationDataForCalculation;
+import com.ruoyi.gas.module.price.domain.dto.DataForCalculation;
+import com.ruoyi.gas.module.price.domain.dto.OpponentGasStationDataForCalculation;
 import com.ruoyi.gas.module.price.domain.framwork.OilPrice;
 import com.ruoyi.gas.module.price.domain.framwork.OilType;
-import com.ruoyi.gas.module.price.domain.GuessPrice;
 import com.ruoyi.gas.module.price.domain.OilSaleData;
 import com.ruoyi.gas.module.price.domain.Period;
-import com.ruoyi.gas.module.price.exception.DataIsExistException;
 import com.ruoyi.gas.module.price.exception.DataIsNotEnoughException;
 import com.ruoyi.gas.module.price.mapper.OilPriceMapper;
 import com.ruoyi.gas.module.price.mapper.OilSaleDataMapper;
 import com.ruoyi.gas.module.price.mapper.PricePeriodMapper;
 import com.ruoyi.gas.module.price.math.Data;
 import com.ruoyi.gas.module.price.math.PriceMath;
-import com.ruoyi.gas.module.price.service.IOilPriceService;
+import com.ruoyi.gas.module.price.service.ICaculatorService;
+import com.ruoyi.gas.module.price.service.IOperateDataBase;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 @Service
-public class OilPriceService implements IOilPriceService {
+public class OilPriceService implements ICaculatorService, IOperateDataBase {
+    private static final String GAS_STATION_ID = "gas_station_id";
+    private static final String OUT_GAS_STATION_ID = "out_gas_station_id";
+    private static final String PERIOD_ID = "period_id";
+
     @Autowired
     OilPriceMapper priceMapper;
     @Autowired
@@ -30,16 +36,17 @@ public class OilPriceService implements IOilPriceService {
     @Autowired
     PricePeriodMapper periodMapper;
 
+
     @Override
     public double getAverageSalesVolume(DataForCalculation data) throws DataIsNotEnoughException {
-        List<OutGasStationDataForCalculation> outSystemDatas = data.getOutSystemData();
+        List<OpponentGasStationDataForCalculation> outSystemDatas = data.getOutSystemData();
         List<Period> periods = periodMapper.selectLastPeriod(data.getPeriodNumber());
         if (periods.size() != data.getPeriodNumber()) {
             throw new DataIsNotEnoughException("数据库中存入的周期不足,期望[" + data.getPeriodNumber() + "]个周期实际[" + periods.size() + "]个周期");
         }
         Data neededData = new Data(outSystemDatas.size(), data.getPeriodNumber());
         for (int i = 0; i < outSystemDatas.size(); i++) {
-            OutGasStationDataForCalculation outGasStationData = outSystemDatas.get(i);
+            OpponentGasStationDataForCalculation outGasStationData = outSystemDatas.get(i);
             neededData.setChaseMoney(i, outGasStationData.getChaseMoney());
             neededData.setPresentMoney(i, outGasStationData.getPresentMoney());
             neededData.setDistance(i, outGasStationData.getDistance());
@@ -47,20 +54,20 @@ public class OilPriceService implements IOilPriceService {
             for (int j = 0; j < data.getPeriodNumber(); j++) {
                 Period period = periods.get(i);
                 OilPrice oilPrice = priceMapper.selectPrice(data.getGasStationId(),
-                        outGasStationData.getOutGasStationId(),
+                        outGasStationData.getOpponentGasStationId(),
                         period.getId(),
                         data.getOilType());
                 if (oilPrice.getPrice() == null) {
                     StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("数据库中没有存加油站[");
-                    stringBuilder.append(outGasStationData.getOutGasStationId());
-                    stringBuilder.append("]在[");
-                    stringBuilder.append(period.getStartTime());
-                    stringBuilder.append("~");
-                    stringBuilder.append(period.getEndTime());
-                    stringBuilder.append("]周期的");
-                    stringBuilder.append(data.getOilType().getTypeName());
-                    stringBuilder.append("估计价格");
+                    stringBuilder.append("数据库中没有存加油站[")
+                            .append(outGasStationData.getOpponentGasStationId())
+                            .append("]在[")
+                            .append(period.getStartTime())
+                            .append("~")
+                            .append(period.getEndTime())
+                            .append("]周期的")
+                            .append(data.getOilType().getTypeName())
+                            .append("估计价格");
                     throw new DataIsNotEnoughException(stringBuilder.toString());
                 }
                 neededData.setOutMoney(i, j, oilPrice.getPrice());
@@ -99,40 +106,53 @@ public class OilPriceService implements IOilPriceService {
     }
 
     @Override
-    public List<GuessPrice> getHistoryPrice(String gasStationId) {
-        return priceMapper.selectHistoryPrice(gasStationId);
+    public double getTotalPrice(String gasStationId, OilType oilType, DateTime startTime, DateTime endTime) {
+        return saleDataMapper.selectTotalPrice(gasStationId, oilType, startTime, endTime);
     }
 
     @Override
-    public void addPrice(GuessPrice guessPrice) throws DataIsExistException {
-        OilPrice test = priceMapper.selectPrice(guessPrice.getGasStationId(), guessPrice.getOutGasStationId(), guessPrice.getPeriodId(), OilType.Oil92);
-        if (test != null) {
-            Period period = periodMapper.selectPeriod(test.getPeriodId());
+    public double getTotalSalesVolume(String gasStationId, OilType oilType, DateTime startTime, DateTime endTime) {
+        return saleDataMapper.selectTotalSalesVolume(gasStationId, oilType, startTime, endTime);
+    }
 
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("数据库中已存在加油站[");
-            stringBuilder.append(test.getOutGasStationId());
-            stringBuilder.append("]在[");
-            stringBuilder.append(period.getStartTime().toString("yyyy-MM-dd"));
-            stringBuilder.append("~");
-            stringBuilder.append(period.getEndTime().toString("yyyy-MM-dd"));
-            stringBuilder.append("]周期的数据，请先删除此数据后再添加");
-
-            DataIsExistException exception = new DataIsExistException(stringBuilder.toString());
-            exception.setGasStationId(test.getGasStationId());
-            exception.setOutGasStationId(test.getOutGasStationId());
-            exception.setPeriodId(test.getPeriodId());
-            throw exception;
+    @Override
+    public List<Map<String, String>> getHistoryPrice(String gasStationId) {
+        List<Map<String, String>> list = new LinkedList<>();
+        OilType[] values = OilType.values();
+        // 初始化
+        List<OilPrice> oilPrices = priceMapper.selectHistoryPrice(gasStationId, values[0]);
+        for (OilPrice oilPrice : oilPrices) {
+            Map<String, String> map = new HashMap<>();
+            map.put("gas_station_id", oilPrice.getGasStationId());
+            map.put("out_gas_station_id", oilPrice.getOutGasStationId());
+            map.put("period_id", oilPrice.getPeriodId().toString());
+            map.put(values[0].getTypeName(), oilPrice.getPrice().toString());
         }
-        priceMapper.addEmptyPrice(guessPrice.getGasStationId(), guessPrice.getOutGasStationId(), guessPrice.getPeriodId());
+        // 完善
+        for (int i = 1; i < values.length; i++) {
+            oilPrices = priceMapper.selectHistoryPrice(gasStationId, values[i]);
+            for (int j = 0; j < list.size(); j++) {
+                OilPrice oilPrice = oilPrices.get(j);
+                list.get(j).put(values[i].getTypeName(), oilPrice.getPrice().toString());
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public void addPrice(Map<String, String> map) {
+        String gasStationId = map.get(GAS_STATION_ID);
+        String outGasStationId = map.get(OUT_GAS_STATION_ID);
+        int periodId = Integer.parseInt(map.get(PERIOD_ID));
+        priceMapper.addEmptyPrice(gasStationId, outGasStationId, periodId);
         OilType[] values = OilType.values();
         for (int i = 0; i < values.length; i++) {
             OilPrice temp = new OilPrice();
-            temp.setGasStationId(guessPrice.getGasStationId());
-            temp.setOutGasStationId(guessPrice.getOutGasStationId());
-            temp.setPeriodId(guessPrice.getPeriodId());
+            temp.setGasStationId(gasStationId);
+            temp.setOutGasStationId(outGasStationId);
+            temp.setPeriodId(periodId);
             temp.setOilType(values[i]);
-            temp.setPrice(guessPrice.getPrice(values[i]));
+            temp.setPrice(map.containsKey(values[i].getTypeName()) ? Double.parseDouble(map.get(values[i].getTypeName())) : 0);
             priceMapper.updatePrice(temp);
         }
     }

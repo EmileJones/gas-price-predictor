@@ -2,7 +2,6 @@ package com.ruoyi.gas.module.price.mapper;
 
 import com.ruoyi.gas.module.price.domain.framwork.OilPrice;
 import com.ruoyi.gas.module.price.domain.framwork.OilType;
-import com.ruoyi.gas.module.price.domain.GuessPrice;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -42,10 +41,12 @@ public interface OilPriceMapper {
 
     /**
      * 获取此用户的历史估价信息（按periodId降序）
-     * @param gasStation    用户加油站ID
+     *
+     * @param gasStation 用户加油站ID
      * @return 估价信息
      */
-    List<GuessPrice> selectHistoryPrice(String gasStation);
+    List<OilPrice> selectHistoryPrice(@Param("gasStation") String gasStation,
+                                      @Param("oilType") OilType oilType);
 
     /**
      * 修改价格信息

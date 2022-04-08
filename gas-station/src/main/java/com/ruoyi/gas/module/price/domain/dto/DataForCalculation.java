@@ -1,4 +1,4 @@
-package com.ruoyi.gas.module.price.domain.form;
+package com.ruoyi.gas.module.price.domain.dto;
 
 import com.ruoyi.gas.module.price.domain.framwork.OilType;
 
@@ -12,7 +12,7 @@ public class DataForCalculation {
     /**
      * 系统外加油站相关参数
      */
-    private List<OutGasStationDataForCalculation> outSystemData;
+    private List<OpponentGasStationDataForCalculation> outSystemData;
     /**
      * 计算时的周期数
      */
@@ -35,11 +35,11 @@ public class DataForCalculation {
      */
     private OilType oilType;
 
-    public List<OutGasStationDataForCalculation> getOutSystemData() {
+    public List<OpponentGasStationDataForCalculation> getOutSystemData() {
         return outSystemData;
     }
 
-    public void setOutSystemData(List<OutGasStationDataForCalculation> outSystemData) {
+    public void setOutSystemData(List<OpponentGasStationDataForCalculation> outSystemData) {
         this.outSystemData = outSystemData;
     }
 

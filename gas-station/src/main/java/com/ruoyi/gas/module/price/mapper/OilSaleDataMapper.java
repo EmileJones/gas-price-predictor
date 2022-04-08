@@ -63,4 +63,6 @@ public interface OilSaleDataMapper {
                                   @Param("oilType") OilType oilType,
                                   @Param("startTime") DateTime startTime,
                                   @Param("endTime") DateTime endTime);
+
+
 }
