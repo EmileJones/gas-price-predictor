@@ -11,7 +11,7 @@ import org.joda.time.DateTime;
 import java.util.List;
 import java.util.Map;
 
-public interface ICaculatorService {
+public interface ICalculatorService {
     /**
      * 计算日均销量
      *
@@ -21,17 +21,8 @@ public interface ICaculatorService {
     double getAverageSalesVolume(DataForCalculation data) throws DataIsNotEnoughException;
 
 
-
     /**
-     * 获取历史周期信息（降序排列）
-     *
-     * @param periodNumber 需要获得的历史数据数量
-     * @return 周期信息
-     */
-    List<Period> getHistoryPeriod(int periodNumber);
-
-    /**
-     * 获取某期间内的某种石油的总销量
+     * 获取某期间内的某种石油的总销量(系统内)
      *
      * @param gasStationId 加油站ID
      * @param oilType      石油类型
@@ -45,7 +36,7 @@ public interface ICaculatorService {
                          DateTime endTime);
 
     /**
-     * 获取某期间内的某种石油的总收入
+     * 获取某期间内的某种石油的总收入(系统内)
      *
      * @param gasStationId 加油站ID
      * @param oilType      石油类型

@@ -70,6 +70,7 @@ CREATE TABLE IF NOT EXISTS `gas_station_sale_data`
     `oil_type`       int          NOT NULL,
     `date`           datetime     NOT NULL,
     `effective`      tinyint      NOT NULL DEFAULT '1',
+    `batch`          int unsigned                                                 NOT NULL,
     PRIMARY KEY (`id`, `gas_station_id`, `date`),
     UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE = InnoDB

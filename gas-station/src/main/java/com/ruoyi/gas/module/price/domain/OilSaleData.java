@@ -30,6 +30,11 @@ public class OilSaleData {
      */
     private DateTime date;
 
+    /**
+     * 批号(用于回滚)
+     */
+    private Integer batch;
+
     public int getId() {return id;}
     public void setId(int id) {this.id = id;}
 
@@ -47,4 +52,7 @@ public class OilSaleData {
 
     public double getNumber() {return number;}
     public void setNumber(double number) {this.number = number;}
+
+    public Integer getBatch() {return batch;}
+    public void setBatch(Integer batch) {this.batch = batch;}
 }

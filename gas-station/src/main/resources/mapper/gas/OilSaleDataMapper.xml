@@ -13,17 +13,19 @@
         <result property="price" column="price"/>
         <result property="date" column="date"
                 typeHandler="com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler"/>
+        <result property="batch" column="batch"/>
     </resultMap>
 
     <parameterMap id="OilSaleData" type="com.ruoyi.gas.module.price.domain.OilSaleData">
         <parameter property="id"/>
         <parameter property="gasStationId"/>
         <parameter property="oilType"
-                typeHandler="com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler"/>
+                   typeHandler="com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler"/>
         <parameter property="number"/>
         <parameter property="price"/>
         <parameter property="date"
-                typeHandler="com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler"/>
+                   typeHandler="com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler"/>
+        <parameter property="batch"/>
     </parameterMap>
 
     <select id="selectHistorySaleData" resultMap="OilSaleData">
@@ -65,4 +67,18 @@
           and `date` $lt #{endTime};
     </select>
 
+    <update id="rollBackLastBatch">
+        update `gas_station_sale_data`
+        set `effective` = FALSE
+        where `batch` = (select `a`.`max`
+                         from (select max(`batch`) as `max`
+                               from `gas_station_sale_data`
+                               where `effective` = TRUE ) as `a`
+                         );
+    </update>
+
+    <select id="selectLastBatch" parameterType="int">
+        select max(`batch`)
+        from `gas_station_sale_data`;
+    </select>
 </mapper>

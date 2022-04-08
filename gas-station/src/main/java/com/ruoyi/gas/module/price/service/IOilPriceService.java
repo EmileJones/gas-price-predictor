@@ -1,12 +1,9 @@
 package com.ruoyi.gas.module.price.service;
 
-import com.ruoyi.gas.module.price.domain.OilSaleData;
-import com.ruoyi.gas.module.price.domain.Period;
-
 import java.util.List;
 import java.util.Map;
 
-public interface IOperateDataBase {
+public interface IOilPriceService {
 
     /**
      * 添加一组估价数据
@@ -14,9 +11,9 @@ public interface IOperateDataBase {
      * @param map 石油价格相关的信息 <br>
      *            map中需要有: <br>
      *            "gas_station_id","out_gas_station_id","period_id" <br>
-     *            还需要有OilType类的typeName字段    <br><br>
+     *            还需要有OilType类的typeName字段,无则代表默认为0    <br><br>
      *
-     *            eg: <br><br>
+     *            eg: <br>
      *            { <br>
      *                "gas_station_id": SXTY0001,    <br>
      *                "out_gas_station_id": SXTYY001,    <br>
@@ -26,26 +23,13 @@ public interface IOperateDataBase {
      *                "98号汽油": 70,    <br>
      *                "柴油": 100        <br>
      *            }
-     */
-    void addPrice(Map<String, String> map);
-
-    /**
-     * 添加系统内加油站的销售记录 <br>
-     * id是数据库自增的，不用填
      *
-     * @param oilSaleData 销售记录
+     * @return 返回添加成功的数据量
      */
-    void addOilSaleData(OilSaleData oilSaleData);
+    int addPrice(Map<String, String> map);
 
-    /**
-     * 添加周期信息 <br>
-     * startTime为必须字段 <br>
-     * endTime为null则代此周期是最新周期，结束时间是当前时间，直到添加下一个周期为止 <br>
-     * id是数据库自增的，不用填
-     *
-     * @param period 周期信息
-     */
-    void addPeriod(Period period);
+
+
 
     /**
      * 获取历史记录（用户猜的系统外的价格）
@@ -77,10 +61,21 @@ public interface IOperateDataBase {
     List<Map<String, String>> getHistoryPrice(String gasStationId);
 
     /**
-     * 获取某个加油站的某种汽油的历史销售记录
+     * 修改一组数据
+     * @param map 一组数据 <br><br>
+     *        map中需要有: <br>
+     *        "gas_station_id","out_gas_station_id","period_id" <br>
+     *        OilType类的typeName字段可有可无,有则代表需要修改，无则代表不需要修改    <br><br>
      *
-     * @param gasStationId 加油站ID
-     * @return 某时间段内的历史销量
+     *        eg: <br>
+     *            修改92号汽油的价格<br>
+     *        { <br>
+     *            "gas_station_id": SXTY0001,    <br>
+     *            "out_gas_station_id": SXTYY001,    <br>
+     *            "period_id": 1,    <br>
+     *            "92号汽油": 20,    <br>
+     *        }
+     * @return 修改成功的数据数
      */
-    List<OilSaleData> getHistorySaleDataByOilType(String gasStationId);
+    int updatePrice(Map<String, String> map);
 }

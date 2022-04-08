@@ -64,5 +64,15 @@ public interface OilSaleDataMapper {
                                   @Param("startTime") DateTime startTime,
                                   @Param("endTime") DateTime endTime);
 
+    /**
+     * 回滚最近一次的提交记录
+     * @return 修改成功的数据量
+     */
+    int rollBackLastBatch();
 
+    /**
+     * 获取最新的Batch编号
+     * @return 最新的Batch编号
+     */
+    int selectLastBatch();
 }

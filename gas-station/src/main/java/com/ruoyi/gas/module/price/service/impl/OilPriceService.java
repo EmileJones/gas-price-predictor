@@ -12,8 +12,10 @@ import com.ruoyi.gas.module.price.mapper.OilSaleDataMapper;
 import com.ruoyi.gas.module.price.mapper.PricePeriodMapper;
 import com.ruoyi.gas.module.price.math.Data;
 import com.ruoyi.gas.module.price.math.PriceMath;
-import com.ruoyi.gas.module.price.service.ICaculatorService;
-import com.ruoyi.gas.module.price.service.IOperateDataBase;
+import com.ruoyi.gas.module.price.service.ICalculatorService;
+import com.ruoyi.gas.module.price.service.IOilPriceService;
+import com.ruoyi.gas.module.price.service.IPeriodService;
+import com.ruoyi.gas.module.price.service.ISaleDataService;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class OilPriceService implements ICaculatorService, IOperateDataBase {
+public class OilPriceService implements ICalculatorService, IOilPriceService, ISaleDataService, IPeriodService {
     private static final String GAS_STATION_ID = "gas_station_id";
     private static final String OUT_GAS_STATION_ID = "out_gas_station_id";
     private static final String PERIOD_ID = "period_id";
@@ -106,6 +108,11 @@ public class OilPriceService implements ICaculatorService, IOperateDataBase {
     }
 
     @Override
+    public int updatePeriod(Period period) {
+        return periodMapper.updatePeriod(period);
+    }
+
+    @Override
     public double getTotalPrice(String gasStationId, OilType oilType, DateTime startTime, DateTime endTime) {
         return saleDataMapper.selectTotalPrice(gasStationId, oilType, startTime, endTime);
     }
@@ -140,11 +147,33 @@ public class OilPriceService implements ICaculatorService, IOperateDataBase {
     }
 
     @Override
-    public void addPrice(Map<String, String> map) {
+    public int updatePrice(Map<String, String> map) {
+        boolean flag = false;
         String gasStationId = map.get(GAS_STATION_ID);
         String outGasStationId = map.get(OUT_GAS_STATION_ID);
         int periodId = Integer.parseInt(map.get(PERIOD_ID));
-        priceMapper.addEmptyPrice(gasStationId, outGasStationId, periodId);
+        OilType[] values = OilType.values();
+        for (int i = 0; i < values.length; i++) {
+            if (map.containsKey(values[i].getTypeName())) {
+                OilPrice oilPrice = new OilPrice();
+                double price = Double.parseDouble(map.get(values[i].getTypeName()));
+                oilPrice.setPrice(price);
+                oilPrice.setOilType(values[i]);
+                oilPrice.setGasStationId(gasStationId);
+                oilPrice.setOutGasStationId(outGasStationId);
+                priceMapper.updatePrice(oilPrice);
+                flag = true;
+            }
+        }
+        return flag ? 1 : 0;
+    }
+
+    @Override
+    public int addPrice(Map<String, String> map) {
+        String gasStationId = map.get(GAS_STATION_ID);
+        String outGasStationId = map.get(OUT_GAS_STATION_ID);
+        int periodId = Integer.parseInt(map.get(PERIOD_ID));
+        int result = priceMapper.addEmptyPrice(gasStationId, outGasStationId, periodId);
         OilType[] values = OilType.values();
         for (int i = 0; i < values.length; i++) {
             OilPrice temp = new OilPrice();
@@ -155,18 +184,26 @@ public class OilPriceService implements ICaculatorService, IOperateDataBase {
             temp.setPrice(map.containsKey(values[i].getTypeName()) ? Double.parseDouble(map.get(values[i].getTypeName())) : 0);
             priceMapper.updatePrice(temp);
         }
+        return result;
     }
 
     @Override
-    public void addOilSaleData(OilSaleData oilSaleData) {
-        saleDataMapper.addSaleData(oilSaleData);
+    public int addOilSaleData(OilSaleData oilSaleData) {
+        int i = saleDataMapper.selectLastBatch() + 1;
+        oilSaleData.setBatch(i);
+        return saleDataMapper.addSaleData(oilSaleData);
     }
 
     @Override
-    public void addPeriod(Period period) {
+    public int rollBackLastBatch() {
+        return saleDataMapper.rollBackLastBatch();
+    }
+
+    @Override
+    public int addPeriod(Period period) {
         Period lastPeriod = periodMapper.selectLastPeriod(1).get(0);
         lastPeriod.setEndTime(period.getStartTime());
         periodMapper.updatePeriod(lastPeriod);
-        periodMapper.addPeriod(period);
+        return periodMapper.addPeriod(period);
     }
 }
