@@ -11,7 +11,7 @@ public interface ISaleDataService {
      * @param gasStationId 加油站ID
      * @return 某时间段内的历史销量
      */
-    List<OilSaleData> getHistorySaleDataByStationId(String gasStationId);
+    List<OilSaleData> getHistorySaleDataByGasStationId(String gasStationId);
 
     /**
      * 添加系统内加油站的销售记录 <br>
@@ -23,7 +23,7 @@ public interface ISaleDataService {
     int addOilSaleDatas(List<OilSaleData> oilSaleData);
 
     /**
-     * 将最新一次的数据删除
+     * 将最新一批的数据删除
      * @return 删除的数据条数
      */
     int rollBackLastBatch();
