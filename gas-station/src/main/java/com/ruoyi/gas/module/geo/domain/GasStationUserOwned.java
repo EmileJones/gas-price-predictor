@@ -31,7 +31,7 @@ public class GasStationUserOwned extends BaseEntity
     private String stationName;
 
     /** 加油站状态（0:创建,1:正常,2:禁用,3:审核中） */
-    @Excel(name = "加油站状态", readConverterExp = "0=:创建,1:正常,2:禁用,3:审核中")
+    @Excel(name = "加油站状态")
     private Long status;
 
     public void setId(Long id) 

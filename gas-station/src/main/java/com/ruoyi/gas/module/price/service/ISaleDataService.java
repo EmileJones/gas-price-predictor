@@ -11,7 +11,7 @@ public interface ISaleDataService {
      * @param gasStationId 加油站ID
      * @return 某时间段内的历史销量
      */
-    List<OilSaleData> getHistorySaleDataByOilType(String gasStationId);
+    List<OilSaleData> getHistorySaleDataByStationId(String gasStationId);
 
     /**
      * 添加系统内加油站的销售记录 <br>
