@@ -32,7 +32,15 @@ public class GasStationUserOwned extends BaseEntity
 
     /** 加油站状态（0:创建,1:正常,2:禁用,3:审核中） */
     @Excel(name = "加油站状态")
-    private Long status;
+    private Integer status;
+
+    /** 加油站状态常量 */
+    public static final class StationStatus {
+        public static final int CREATED = 0;
+        public static final int ENABLED = 1;
+        public static final int DISABLED = 2;
+        public static final int PENDING = 3;
+    }
 
     public void setId(Long id) 
     {
@@ -61,12 +69,12 @@ public class GasStationUserOwned extends BaseEntity
     {
         return stationId;
     }
-    public void setStatus(Long status) 
+    public void setStatus(Integer status)
     {
         this.status = status;
     }
 
-    public Long getStatus() 
+    public Integer getStatus()
     {
         return status;
     }

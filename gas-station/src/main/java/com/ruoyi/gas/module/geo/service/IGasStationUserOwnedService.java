@@ -1,6 +1,8 @@
 package com.ruoyi.gas.module.geo.service;
 
 import java.util.List;
+
+import com.ruoyi.gas.module.geo.domain.GasStationInfo;
 import com.ruoyi.gas.module.geo.domain.GasStationUserOwned;
 import com.ruoyi.gas.module.geo.domain.vo.UserStationVO;
 
@@ -18,6 +20,13 @@ public interface IGasStationUserOwnedService
      * @return 加油站列表
      */
     List<UserStationVO> listUserOwnedStation(Long userId);
+
+    /**
+     * 用户创建加油站信息
+     * <p>创建用户加油站表信息，保存信息</p>
+     * @param station 加油站信息
+     */
+    void createStationForUser(GasStationInfo station);
 
     /**
      * 查询用户加油站

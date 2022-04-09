@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.gas.module.geo.domain.GasStationInfo;
 import com.ruoyi.gas.module.geo.domain.GasStationUserOwned;
+import com.ruoyi.gas.module.geo.domain.GasStationUserOwned.StationStatus;
 import com.ruoyi.gas.module.geo.domain.vo.UserStationVO;
 import com.ruoyi.gas.module.geo.mapper.GasStationUserOwnedMapper;
 import com.ruoyi.gas.module.geo.service.IGasStationUserOwnedService;
@@ -41,6 +44,21 @@ public class GasStationUserOwnedServiceImpl implements IGasStationUserOwnedServi
                     BeanUtils.copyProperties(entity, vo);
                     return vo;
                 }).collect(Collectors.toList());
+    }
+
+    @Override
+    public void createStationForUser(GasStationInfo station) {
+        Long userId = SecurityUtils.getUserId();
+        String stationId = station.getId();
+        String stationName = station.getName();
+
+        GasStationUserOwned userStation = new GasStationUserOwned();
+        userStation.setUserId(userId);
+        userStation.setStationId(stationId);
+        userStation.setStationName(stationName);
+        userStation.setStatus(StationStatus.CREATED);
+
+        gasStationUserOwnedMapper.insertGasStationUserOwned(userStation);
     }
 
     /**

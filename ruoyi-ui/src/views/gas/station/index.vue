@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <h1>我的加油站页面</h1>
+    <h1>我的加油站</h1>
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
@@ -49,7 +49,7 @@
             :icon="scope.row.status == 2 ? 'el-icon-circle-close' : 'el-icon-circle-check'"
             @click="handleChangeStatus(scope.row)"
             v-hasPermi="['gas:station:edit']"
-          >禁用</el-button>
+          >{{scope.row.status == 2 ? '禁用' : '启用'}}</el-button>
           <el-button
             size="mini"
             type="text"
@@ -89,14 +89,14 @@
 </template>
 
 <script>
-import { listStation } from '@/api/gas/station'
+import { listStation, addStation } from '@/api/gas/station'
 import { listGasStationCandidate } from "@/api/gas/geo"
 
 export default {
   data() {
     return {
       // 加油站数据正在加载中
-      loading: false,
+      loading: true,
       // 加油站状态数据
       statusMap: [
         { label: '创建', value: 0, cssName: 'primary' },
@@ -112,7 +112,10 @@ export default {
       // 是否显示弹出层
       open: false,
       // 表单参数
-      form: {},
+      form: {
+        location: "",
+        stationName: ""
+      },
 
       // 加油站查询信息候选数据
       candidateGasStations: [],
@@ -130,6 +133,7 @@ export default {
     getList() {
       listStation().then(response => {
         this.stationList = response.rows
+        this.loading = false
       })
     },
 
@@ -139,10 +143,21 @@ export default {
     // 增加加油站按钮
     handleAddStation() {
       this.open = true
+      this.form = {
+        location: "",
+        stationName: ""
+      },
+      this.candidateGasStations = []
     },
     // 提交增加加油站表单
     submitForm() {
-      this.open = false
+      addStation(this.form).then(response => {
+        if (response != null && response.code === 200) {
+          this.$modal.msgSuccess("新增成功")
+          this.getList()
+        }
+        this.open = false
+      })
       console.log("提交加油站：", this.form)
     },
     // 关闭Dialog
