@@ -34,11 +34,11 @@ CREATE TABLE IF NOT EXISTS `gas_station_oil_price`
 (
     `gas_station_id`     varchar(45) NOT NULL COMMENT '系统内加油站ID',
     `out_gas_station_id` varchar(45) NOT NULL COMMENT '系统外加油站ID',
-    `period_id`          int         NOT NULL COMMENT '变价周期ID',
-    `price_92`           double unsigned DEFAULT NULL COMMENT '92#商品油价格',
-    `price_95`           double unsigned DEFAULT NULL COMMENT '95#商品油价格',
-    `price_98`           double unsigned DEFAULT NULL COMMENT '98#商品油价格',
-    `price_00`           double unsigned DEFAULT NULL COMMENT '0#商品油价格',
+    `period_id`          int         NOT NULL COMMENT '周期ID',
+    `price_92`           double unsigned DEFAULT NULL COMMENT '92号汽油价格',
+    `price_95`           double unsigned DEFAULT NULL COMMENT '95号汽油价格',
+    `price_98`           double unsigned DEFAULT NULL COMMENT '98号汽油价格',
+    `price_00`           double unsigned DEFAULT NULL COMMENT '柴油价格',
     PRIMARY KEY (`gas_station_id`, `out_gas_station_id`, `period_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -47,13 +47,13 @@ CREATE TABLE IF NOT EXISTS `gas_station_oil_price`
 -- 加油站周期表
 CREATE TABLE IF NOT EXISTS `gas_station_price_period`
 (
-    `id`         int      NOT NULL AUTO_INCREMENT,
-    `start_time` datetime NOT NULL,
-    `end_time`   datetime DEFAULT NULL,
-    `price_92`   int      NOT NULL,
-    `price_95`   int      NOT NULL,
-    `price_98`   int      NOT NULL,
-    `price_00`   int      NOT NULL,
+    `id`         int      NOT NULL AUTO_INCREMENT COMMENT '唯一ID',
+    `start_time` datetime NOT NULL COMMENT '开始时间',
+    `end_time`   datetime DEFAULT NULL COMMENT '结束时间',
+    `price_92`   int      NOT NULL COMMENT '92号汽油价格',
+    `price_95`   int      NOT NULL COMMENT '95号汽油价格',
+    `price_98`   int      NOT NULL COMMENT '98号汽油价格',
+    `price_00`   int      NOT NULL COMMENT '柴油价格',
     PRIMARY KEY (`id`),
     UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE = InnoDB
@@ -63,17 +63,16 @@ CREATE TABLE IF NOT EXISTS `gas_station_price_period`
 -- 加油站经营数据表
 CREATE TABLE IF NOT EXISTS `gas_station_sale_data`
 (
-    `id`             int unsigned    NOT NULL AUTO_INCREMENT COMMENT '自增主键',
-    `gas_station_id` varchar(45)     NOT NULL COMMENT '加油站ID',
-    `price`          double          NOT NULL COMMENT '价格',
-    `number`         double          NOT NULL COMMENT '销售数量KG',
-    `oil_type`       int             NOT NULL COMMENT '汽油类型',
-    `date`           datetime        NOT NULL COMMENT '业务发生日期',
-    `effective`      tinyint         NOT NULL DEFAULT '1' COMMENT '是否有效',
-    `batch`          int unsigned NOT NULL COMMENT '操作批次编号',
+    `id`             int unsigned NOT NULL AUTO_INCREMENT COMMENT '唯一id',
+    `gas_station_id` varchar(45)  NOT NULL COMMENT '系统内加油站ID',
+    `price`          double       NOT NULL COMMENT '价格',
+    `number`         double       NOT NULL COMMENT '数量',
+    `oil_type`       int          NOT NULL COMMENT '石油类型',
+    `date`           datetime     NOT NULL COMMENT '日期',
+    `effective`      tinyint      NOT NULL DEFAULT '1' COMMENT '是否被删除',
+    `batch`          int unsigned NOT NULL COMMENT '批次号',
     PRIMARY KEY (`id`, `gas_station_id`, `date`),
-    UNIQUE KEY `id_UNIQUE` (`id`),
-    INDEX `idx_batch` (`batch`)
+    UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 3
   DEFAULT CHARSET = utf8mb4

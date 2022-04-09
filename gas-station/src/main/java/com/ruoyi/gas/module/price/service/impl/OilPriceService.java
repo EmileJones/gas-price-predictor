@@ -97,7 +97,7 @@ public class OilPriceService implements ICalculatorService, IOilPriceService, IS
     }
 
     @Override
-    public List<OilSaleData> getHistorySaleDataByStationId(String gasStationId) {
+    public List<OilSaleData> getHistorySaleDataByGasStationId(String gasStationId) {
         List<OilSaleData> oilSaleData = saleDataMapper.selectHistorySaleData(gasStationId);
         return oilSaleData;
     }
@@ -188,10 +188,12 @@ public class OilPriceService implements ICalculatorService, IOilPriceService, IS
     }
 
     @Override
-    public int addOilSaleData(OilSaleData oilSaleData) {
+    public int addOilSaleDatas(List<OilSaleData> oilSaleDatas) {
         int i = saleDataMapper.selectLastBatch() + 1;
-        oilSaleData.setBatch(i);
-        return saleDataMapper.addSaleData(oilSaleData);
+        for (OilSaleData oilSaleData : oilSaleDatas){
+            oilSaleData.setBatch(i);
+        }
+        return oilSaleDatas.size();
     }
 
     @Override
