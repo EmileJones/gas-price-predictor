@@ -8,6 +8,7 @@ import com.ruoyi.gas.module.map.baidu.model.driving.Steps;
 import com.ruoyi.gas.module.map.baidu.model.place.Results;
 import com.ruoyi.gas.module.map.model.PathCost;
 import com.ruoyi.gas.module.map.model.PlaceInfo;
+import com.ruoyi.system.service.ISysDictTypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -21,10 +22,11 @@ public class BaiduMapService implements MapService {
     /** Log的类应该是 {@link MapService} 而不是自己的实现类 */
     private static final Logger log = LoggerFactory.getLogger(MapService.class);
     private final BaiduClient client;
+    private final ISysDictTypeService dictTypeService;
 
     @Override
     public List<PlaceInfo> listPlaceByAdcodeAndKeyword(String adcode, String keywords) {
-        String region = DictUtils.getDictLabel("region_adcode", adcode);
+        String region = getRegionFromAdcode(adcode);
         RegionSearchRequest request = new RegionSearchRequest();
         request.setQuery(keywords);
         request.setRegion(region);
@@ -56,6 +58,22 @@ public class BaiduMapService implements MapService {
         String[] pathDirection = getPathDirection(routes.getSteps());
         pathCost.setRouteDirection(pathDirection);
         return pathCost;
+    }
+
+    /**
+     * 根据地区的行政区划代码获取地区信息
+     * <p>因为缓存很有可能失效，失效后系统无法正常运行。
+     * 所以需要在获取缓存前，检测缓存是否存在</p>
+     * @param adcode 行政区划代码
+     * @return 行政地区名
+     */
+    private String getRegionFromAdcode(String adcode) {
+        String region = DictUtils.getDictLabel("region_adcode", adcode);
+        if (region == null) {
+            dictTypeService.loadingDictCache();
+            region = DictUtils.getDictLabel("region_adcode", adcode);
+        }
+        return region;
     }
 
     /**
@@ -136,7 +154,8 @@ public class BaiduMapService implements MapService {
         }
     }
 
-    public BaiduMapService(BaiduClient client) {
+    public BaiduMapService(BaiduClient client, ISysDictTypeService dictTypeService) {
         this.client = client;
+        this.dictTypeService = dictTypeService;
     }
 }
