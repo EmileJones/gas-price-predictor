@@ -15,12 +15,22 @@ public class DrivingRequest {
     private String origin = "";
 
     /**
+     * 路线策略
+     * 距离最短（只返回一条路线，不考虑限行和路况，距离最短且稳定，用于估价场景）
+     */
+    private final Integer tactics = 2;
+
+    /**
      * 目的地经纬度
      */
     private String destination = "";
 
     public String getAk() {
         return ak;
+    }
+
+    public Integer getTactics() {
+        return tactics;
     }
 
     public void setAk(String ak) {
@@ -48,6 +58,7 @@ public class DrivingRequest {
         return "?ak=" + ak +
                 "&origin=" + origin +
                 "&destination=" + destination +
+                "&tactics=" + tactics +
                 "&output=json";
     }
 }

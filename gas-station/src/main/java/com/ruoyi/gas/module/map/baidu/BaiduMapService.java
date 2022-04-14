@@ -104,6 +104,7 @@ public class BaiduMapService implements MapService {
                 list.add(placeInfo);
             }
         }
+
         return list;
     }
 
