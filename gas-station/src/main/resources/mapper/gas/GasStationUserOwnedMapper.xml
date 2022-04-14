@@ -31,7 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectGasStationUserOwnedVo"/>
         where id = #{id}
     </select>
-        
+
     <insert id="insertGasStationUserOwned" parameterType="GasStationUserOwned" useGeneratedKeys="true" keyProperty="id">
         insert into gas_station_user_owned
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -50,16 +50,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateGasStationUserOwned" parameterType="GasStationUserOwned">
+    <update id="updateGasStation" parameterType="GasStationUserOwned">
         update gas_station_user_owned
         <trim prefix="SET" suffixOverrides=",">
-            <if test="userId != null">user_id = #{userId},</if>
-            <if test="stationId != null and stationId != ''">station_id = #{stationId},</if>
             <if test="stationName != null and stationName != ''">station_name = #{stationName},</if>
             <if test="status != null">status = #{status},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
-        where id = #{id}
+        where id = #{id} or (user_id = #{userId} and station_id = #{stationId})
     </update>
 
     <delete id="deleteGasStationUserOwnedById" parameterType="Long">

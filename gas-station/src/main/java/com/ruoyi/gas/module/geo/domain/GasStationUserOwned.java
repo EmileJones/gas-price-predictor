@@ -40,6 +40,7 @@ public class GasStationUserOwned extends BaseEntity
         public static final int ENABLED = 1;
         public static final int DISABLED = 2;
         public static final int PENDING = 3;
+        public static final int DELETED = 4;
     }
 
     public void setId(Long id) 

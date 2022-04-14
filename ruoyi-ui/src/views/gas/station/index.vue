@@ -49,7 +49,7 @@
             :icon="scope.row.status == 2 ? 'el-icon-circle-close' : 'el-icon-circle-check'"
             @click="handleChangeStatus(scope.row)"
             v-hasPermi="['gas:station:edit']"
-          >{{scope.row.status == 2 ? '禁用' : '启用'}}</el-button>
+          >{{scope.row.status == 2 ? '启用' : '禁用'}}</el-button>
           <el-button
             size="mini"
             type="text"
@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import { listStation, addStation } from '@/api/gas/station'
+import { listStation, addStation, deleteStation } from '@/api/gas/station'
 import { listGasStationCandidate } from "@/api/gas/geo"
 
 export default {
@@ -186,7 +186,12 @@ export default {
      * 删除加油站
      */
     handleDelete(data) {
-      console.log('删除加油站：', data)
+      this.$modal.confirm('是否确认删除名称为"' + data.stationName + '"的数据项？').then(function() {
+        return deleteStation(data.stationId);
+      }).then(() => {
+        this.getList();
+        this.$modal.msgSuccess("删除成功");
+      }).catch(() => {});
     },
     /** 寻找最详细的行政区划单位代码 */
     regionChange (data){
@@ -208,7 +213,7 @@ export default {
         this.candidateGasStations = response.rows
         this.loading = false;
       })
-    }
+      }
   }
 }
 </script>

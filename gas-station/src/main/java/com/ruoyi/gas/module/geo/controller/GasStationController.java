@@ -73,9 +73,9 @@ public class GasStationController extends BaseController {
      * 删除加油站
      */
     @PreAuthorize("@ss.hasPermi('gas:station:remove')")
-    @PostMapping("/remove")
-    public AjaxResult removeStation() {
-        // TODO be going to impl
+    @PostMapping("/remove/{stationId}")
+    public AjaxResult removeStation(@PathVariable String stationId) {
+        gasStationService.removeStation(stationId);
         return AjaxResult.success();
     }
 

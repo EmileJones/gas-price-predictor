@@ -16,3 +16,11 @@ export function addStation(data) {
       data: data
     })
 }
+
+// 删除用户加油站
+export function deleteStation(stationId) {
+  return request({
+      url: `/gas/station/remove/${stationId}`,
+      method: 'post'
+    })
+}

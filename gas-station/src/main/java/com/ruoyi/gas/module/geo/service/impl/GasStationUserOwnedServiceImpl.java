@@ -39,6 +39,7 @@ public class GasStationUserOwnedServiceImpl implements IGasStationUserOwnedServi
             return new ArrayList<>();
         }
         return stationEntities.stream()
+                .filter(station -> !station.getStatus().equals(StationStatus.DELETED))
                 .map(entity -> {
                     UserStationVO vo = new UserStationVO();
                     BeanUtils.copyProperties(entity, vo);
@@ -58,7 +59,10 @@ public class GasStationUserOwnedServiceImpl implements IGasStationUserOwnedServi
         userStation.setStationName(stationName);
         userStation.setStatus(StationStatus.CREATED);
 
-        gasStationUserOwnedMapper.insertGasStationUserOwned(userStation);
+        int affectRow = gasStationUserOwnedMapper.updateGasStation(userStation);
+        if (affectRow == 0) {
+            gasStationUserOwnedMapper.insertGasStationUserOwned(userStation);
+        }
     }
 
     /**
@@ -97,40 +101,16 @@ public class GasStationUserOwnedServiceImpl implements IGasStationUserOwnedServi
         return gasStationUserOwnedMapper.insertGasStationUserOwned(gasStationUserOwned);
     }
 
-    /**
-     * 修改用户加油站
-     * 
-     * @param gasStationUserOwned 用户加油站
-     * @return 结果
-     */
     @Override
-    public int updateGasStationUserOwned(GasStationUserOwned gasStationUserOwned)
-    {
-        gasStationUserOwned.setUpdateTime(DateUtils.getNowDate());
-        return gasStationUserOwnedMapper.updateGasStationUserOwned(gasStationUserOwned);
-    }
+    public void deleteGasStation(Long userId, String stationId) {
+        GasStationUserOwned stationUserOwned = new GasStationUserOwned();
+        // Locate
+        stationUserOwned.setUserId(userId);
+        stationUserOwned.setStationId(stationId);
 
-    /**
-     * 批量删除用户加油站
-     * 
-     * @param ids 需要删除的用户加油站主键
-     * @return 结果
-     */
-    @Override
-    public int deleteGasStationUserOwnedByIds(Long[] ids)
-    {
-        return gasStationUserOwnedMapper.deleteGasStationUserOwnedByIds(ids);
-    }
+        // Delete
+        stationUserOwned.setStatus(StationStatus.DELETED);
 
-    /**
-     * 删除用户加油站信息
-     * 
-     * @param id 用户加油站主键
-     * @return 结果
-     */
-    @Override
-    public int deleteGasStationUserOwnedById(Long id)
-    {
-        return gasStationUserOwnedMapper.deleteGasStationUserOwnedById(id);
+        gasStationUserOwnedMapper.updateGasStation(stationUserOwned);
     }
 }

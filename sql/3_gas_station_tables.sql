@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS `gas_station_user_owned`
     `user_id`      BIGINT(19)   NOT NULL COMMENT '用户ID',
     `station_id`   VARCHAR(45)  NOT NULL COMMENT '加油站ID（系统内）' COLLATE 'utf8mb4_general_ci',
     `station_name` VARCHAR(512) NOT NULL COMMENT '加油站名称' COLLATE 'utf8mb4_general_ci',
-    `status`       TINYINT(3)   NOT NULL DEFAULT '0' COMMENT '加油站状态（0:创建,1:正常,2:禁用,3:审核中）',
+    `status`       TINYINT(3)   NOT NULL DEFAULT '0' COMMENT '加油站状态（0:创建,1:正常,2:禁用,3:审核中, 4:已删除）',
     `update_time`  DATETIME     NULL     DEFAULT NULL COMMENT '经营数据最新更新时间',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE INDEX `idx_user_station` (`user_id`, `station_id`) USING BTREE

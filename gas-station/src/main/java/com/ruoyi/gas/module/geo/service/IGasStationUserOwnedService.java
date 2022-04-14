@@ -29,6 +29,13 @@ public interface IGasStationUserOwnedService
     void createStationForUser(GasStationInfo station);
 
     /**
+     * 删除用户指定的加油站
+     * @param userId userId 用户ID
+     * @param stationId 加油站ID
+     */
+    void deleteGasStation(Long userId, String stationId);
+
+    /**
      * 查询用户加油站
      * 
      * @param id 用户加油站主键
@@ -52,27 +59,4 @@ public interface IGasStationUserOwnedService
      */
     public int insertGasStationUserOwned(GasStationUserOwned gasStationUserOwned);
 
-    /**
-     * 修改用户加油站
-     * 
-     * @param gasStationUserOwned 用户加油站
-     * @return 结果
-     */
-    public int updateGasStationUserOwned(GasStationUserOwned gasStationUserOwned);
-
-    /**
-     * 批量删除用户加油站
-     * 
-     * @param ids 需要删除的用户加油站主键集合
-     * @return 结果
-     */
-    public int deleteGasStationUserOwnedByIds(Long[] ids);
-
-    /**
-     * 删除用户加油站信息
-     * 
-     * @param id 用户加油站主键
-     * @return 结果
-     */
-    public int deleteGasStationUserOwnedById(Long id);
 }

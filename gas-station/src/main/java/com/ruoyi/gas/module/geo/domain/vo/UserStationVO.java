@@ -16,7 +16,7 @@ public class UserStationVO {
 
     private String stationName;
 
-    private Long status;
+    private Integer status;
 
     /** 加油站经营数据最新更新时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -38,11 +38,11 @@ public class UserStationVO {
         this.stationName = stationName;
     }
 
-    public Long getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Long status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

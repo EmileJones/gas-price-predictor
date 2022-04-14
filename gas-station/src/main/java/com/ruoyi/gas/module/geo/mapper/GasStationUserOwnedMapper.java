@@ -2,6 +2,7 @@ package com.ruoyi.gas.module.geo.mapper;
 
 import com.ruoyi.gas.module.geo.domain.GasStationUserOwned;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -44,15 +45,7 @@ public interface GasStationUserOwnedMapper
      * @param gasStationUserOwned 用户加油站
      * @return 结果
      */
-    public int updateGasStationUserOwned(GasStationUserOwned gasStationUserOwned);
-
-    /**
-     * 删除用户加油站
-     * 
-     * @param id 用户加油站主键
-     * @return 结果
-     */
-    public int deleteGasStationUserOwnedById(Long id);
+    public int updateGasStation(GasStationUserOwned gasStationUserOwned);
 
     /**
      * 批量删除用户加油站
@@ -61,4 +54,5 @@ public interface GasStationUserOwnedMapper
      * @return 结果
      */
     public int deleteGasStationUserOwnedByIds(Long[] ids);
+
 }

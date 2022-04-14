@@ -27,4 +27,10 @@ public interface GasStationService {
      * @param stationAddForm 表单数据
      */
     void addUserStation(GasStationAddForm stationAddForm);
+
+    /**
+     * 删除加油站
+     * @param stationId 用户ID
+     */
+    void removeStation(String stationId);
 }

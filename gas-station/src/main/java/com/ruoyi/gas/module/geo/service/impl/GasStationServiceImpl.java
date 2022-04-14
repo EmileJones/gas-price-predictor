@@ -1,5 +1,6 @@
 package com.ruoyi.gas.module.geo.service.impl;
 
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.gas.module.geo.domain.GasStationInfo;
 import com.ruoyi.gas.module.geo.domain.form.GasStationAddForm;
 import com.ruoyi.gas.module.geo.domain.vo.UserStationVO;
@@ -31,6 +32,12 @@ public class GasStationServiceImpl implements GasStationService {
         GasStationInfo station = infoService.getSystemStationByLocation(formLocation);
         Assert.notNull(station, "加油站位置异常");
         userOwnedService.createStationForUser(station);
+    }
+
+    @Override
+    public void removeStation(String stationId) {
+        Long userId = SecurityUtils.getUserId();
+        userOwnedService.deleteGasStation(userId, stationId);
     }
 
     public GasStationServiceImpl(IGasStationUserOwnedService userOwnedService,
