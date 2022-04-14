@@ -19,6 +19,8 @@ public class Results {
     private String area;
     private int detail;
     private String uid;
+    private Detail_info detail_info;
+
     public void setName(String name) {
          this.name = name;
      }
@@ -74,5 +76,12 @@ public class Results {
      public String getUid() {
          return uid;
      }
+
+    public Detail_info getDetail_info() {
+        return detail_info;
+    }
+    public void setDetail_info(Detail_info detail_info) {
+        this.detail_info = detail_info;
+    }
 
 }

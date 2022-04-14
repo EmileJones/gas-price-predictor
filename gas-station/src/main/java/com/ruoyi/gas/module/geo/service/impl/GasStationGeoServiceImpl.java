@@ -132,9 +132,9 @@ public class GasStationGeoServiceImpl implements IGasStationGeoService {
 
         Double trafficFactor = trafficLightsAlgorithm(pathCost.getTrafficLight());
         geo.setTrafficFactor(trafficFactor);
-        Double routeShapFactor = routeShapeFactorAlgorithm(pathCost.getRouteDirection());
-        geo.setRouteShapeFactor(routeShapFactor);
-        Double routeFactor = routeFactorAlgorithm(trafficFactor, routeShapFactor);
+        Double routeShapeFactor = routeShapeFactorAlgorithm(pathCost.getRouteDirection());
+        geo.setRouteShapeFactor(routeShapeFactor);
+        Double routeFactor = routeFactorAlgorithm(trafficFactor, routeShapeFactor);
         geo.setRouteFactor(routeFactor);
         return geo;
     }
