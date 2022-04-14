@@ -15,13 +15,16 @@ public class AroundSearchRequest {
     private Integer radius;
 
     /** 搜索地点的类型 */
-    private final String tag = "加油站";
+    private final String tag = "加油加气站$加油站";
 
     /** 只搜索某个行政区域内的目标 */
     private final Boolean city_limit = false;
 
-    /** 页面大小为20条 */
+    /** 页面大小最大为20条 */
     private final Integer page_size = 20;
+
+    /** 检索结果详细程度（1：基本信息，2：详细信息） */
+    private final Integer scope = 2;
 
     public String getLocation() {
         return location;
@@ -33,6 +36,10 @@ public class AroundSearchRequest {
 
     public Integer getRadius() {
         return radius;
+    }
+
+    public Integer getScope() {
+        return scope;
     }
 
     public void setRadius(Integer radius) {
@@ -64,9 +71,10 @@ public class AroundSearchRequest {
         return "?ak=" + ak + '&' +
                 "location=" + location + "&" +
                 "radius=" + radius + "&" +
-                "query=," + tag + '&' +
+                "query=" + tag + '&' +
                 "city_limit=" + city_limit + '&' +
                 "page_size=" + page_size + '&' +
+                "scope=" + scope + '&' +
                 "output=json";
     }
 }

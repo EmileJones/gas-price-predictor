@@ -5,6 +5,7 @@ import com.ruoyi.gas.module.map.MapService;
 import com.ruoyi.gas.module.map.baidu.model.*;
 import com.ruoyi.gas.module.map.baidu.model.driving.Routes;
 import com.ruoyi.gas.module.map.baidu.model.driving.Steps;
+import com.ruoyi.gas.module.map.baidu.model.place.Detail_info;
 import com.ruoyi.gas.module.map.baidu.model.place.Results;
 import com.ruoyi.gas.module.map.model.PathCost;
 import com.ruoyi.gas.module.map.model.PlaceInfo;
@@ -19,6 +20,8 @@ import java.util.List;
 @Service
 public class BaiduMapService implements MapService {
     public static final String REGION_CODE_DICT = "region_adcode";
+    public static final String TRANSPORT_FACILITY_TAG = "交通设施";
+    public static final String GAS_STATION_TAG = "加油加气站";
 
     private static final Logger log = LoggerFactory.getLogger(MapService.class);
     private final BaiduClient client;
@@ -86,6 +89,8 @@ public class BaiduMapService implements MapService {
     private List<PlaceInfo> constructPlaceInfoList(List<Results> results) {
         List<PlaceInfo> list = new ArrayList<>();
         for (Results result : results) {
+            Detail_info detail_info = result.getDetail_info();
+
             PlaceInfo placeInfo = new PlaceInfo();
             placeInfo.setPname(result.getProvince());
             placeInfo.setCityname(result.getCity());
@@ -93,9 +98,22 @@ public class BaiduMapService implements MapService {
             placeInfo.setAddress(result.getAddress());
             placeInfo.setName(result.getName());
             placeInfo.setLocation(result.getLocation().toString());
-            list.add(placeInfo);
+            placeInfo.setDirectDistance((long) detail_info.getDistance());
+
+            if (isGasStation(detail_info.getTag())) {
+                list.add(placeInfo);
+            }
         }
         return list;
+    }
+
+    /**
+     * 根据标签判断是否是加油站
+     * @param tag 标签
+     * @return 是否是加油站
+     */
+    private boolean isGasStation(String tag) {
+        return tag.contains(TRANSPORT_FACILITY_TAG) && tag.contains(GAS_STATION_TAG);
     }
 
     /**
