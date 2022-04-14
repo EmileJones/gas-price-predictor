@@ -18,8 +18,8 @@ import java.util.List;
 
 @Service
 public class BaiduMapService implements MapService {
+    public static final String REGION_CODE_DICT = "region_adcode";
 
-    /** Log的类应该是 {@link MapService} 而不是自己的实现类 */
     private static final Logger log = LoggerFactory.getLogger(MapService.class);
     private final BaiduClient client;
     private final ISysDictTypeService dictTypeService;
@@ -64,20 +64,22 @@ public class BaiduMapService implements MapService {
      * 根据地区的行政区划代码获取地区信息
      * <p>因为缓存很有可能失效，失效后系统无法正常运行。
      * 所以需要在获取缓存前，检测缓存是否存在</p>
+     *
      * @param adcode 行政区划代码
      * @return 行政地区名
      */
     private String getRegionFromAdcode(String adcode) {
-        String region = DictUtils.getDictLabel("region_adcode", adcode);
-        if (region == null) {
+        try {
+            return DictUtils.getDictLabel(REGION_CODE_DICT, adcode);
+        } catch (Exception e) {
             dictTypeService.loadingDictCache();
-            region = DictUtils.getDictLabel("region_adcode", adcode);
+            return DictUtils.getDictLabel(REGION_CODE_DICT, adcode);
         }
-        return region;
     }
 
     /**
      * 根据查询结果构造地区信息
+     *
      * @param results 查询结果集
      * @return 地区信息
      */
@@ -99,6 +101,7 @@ public class BaiduMapService implements MapService {
     /**
      * 根据高德地图返回的路线参数转换为方向变化数组
      * <p>例如，路线方向为，[东，东，西，西北]，最后得到的结果应该为，[东，西，西北]</p>
+     *
      * @param steps 路线每一步信息
      * @return 返回
      */
@@ -131,6 +134,7 @@ public class BaiduMapService implements MapService {
      * 7,8：西南
      * 9：西
      * 10,11：西北
+     *
      * @param direction 方向代码
      * @return 方向
      */
