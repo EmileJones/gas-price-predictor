@@ -22,6 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="userId != null "> and user_id = #{userId}</if>
             <if test="stationId != null  and stationId != ''"> and station_id = #{stationId}</if>
+            <if test="stationName != null  and stationName != ''"> and station_name = #{stationName}</if>
             <if test="status != null "> and status = #{status}</if>
         </where>
     </select>
@@ -36,12 +37,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="userId != null">user_id,</if>
             <if test="stationId != null and stationId != ''">station_id,</if>
+            <if test="stationName != null and stationName != ''">station_name,</if>
             <if test="status != null">status,</if>
             <if test="updateTime != null">update_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="userId != null">#{userId},</if>
             <if test="stationId != null and stationId != ''">#{stationId},</if>
+            <if test="stationName != null and stationName != ''">#{stationName},</if>
             <if test="status != null">#{status},</if>
             <if test="updateTime != null">#{updateTime},</if>
          </trim>
@@ -52,6 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="userId != null">user_id = #{userId},</if>
             <if test="stationId != null and stationId != ''">station_id = #{stationId},</if>
+            <if test="stationName != null and stationName != ''">station_name = #{stationName},</if>
             <if test="status != null">status = #{status},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>

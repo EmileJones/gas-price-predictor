@@ -10,11 +10,9 @@ import com.ruoyi.gas.module.geo.domain.vo.UserStationVO;
 import com.ruoyi.gas.module.geo.service.GasStationService;
 import com.ruoyi.gas.module.geo.service.GeoService;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -56,8 +54,8 @@ public class GasStationController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('gas:station:add')")
     @PostMapping("/add")
-    public AjaxResult addUserStation(GasStationAddForm stationAddForm) {
-        // TODO be going to impl
+    public AjaxResult addUserStation(@RequestBody GasStationAddForm stationAddForm) {
+        gasStationService.addUserStation(stationAddForm);
         return AjaxResult.success();
     }
 

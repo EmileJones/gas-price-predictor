@@ -1,15 +1,10 @@
 package com.ruoyi.gas.module.price.service;
 
-import com.ruoyi.gas.module.price.domain.OilSaleData;
-import com.ruoyi.gas.module.price.domain.Period;
 import com.ruoyi.gas.module.price.domain.dto.DataForCalculation;
 import com.ruoyi.gas.module.price.domain.framwork.OilType;
 import com.ruoyi.gas.module.price.exception.DataIsNotEnoughException;
-import org.apache.ibatis.annotations.Param;
 import org.joda.time.DateTime;
 
-import java.util.List;
-import java.util.Map;
 
 public interface ICalculatorService {
     /**

@@ -75,10 +75,10 @@ public class GasStationInfoServiceImpl implements IGasStationInfoService {
         GasStationInfo gasStationInfo = gasStationInfoMapper.selectOneByLocation(location);
         if (gasStationInfo == null || !gasStationInfo.getIsSystem()) {
             List<PlaceInfo> placeInfos = mapService.listPlaceAroundOrigin(location, GeoConstant.DEFAULT_RADIUS);
-            gasStationInfo = handlePlaceInfo(placeInfos.get(0), true);
+            gasStationInfo = handlePlaceInfo(findSystemStationAndRemoveIt(placeInfos), true);
             String systemStationId = gasStationInfo.getId();
-            for (int i = 1; i < placeInfos.size(); i++) {
-                String outSystemId = handlePlaceInfo(placeInfos.get(i), false).getId();
+            for (PlaceInfo placeInfo : placeInfos) {
+                String outSystemId = handlePlaceInfo(placeInfo, false).getId();
                 saveRelationBetweenSystemAndOutSystemStation(systemStationId, outSystemId);
             }
         }
@@ -95,6 +95,21 @@ public class GasStationInfoServiceImpl implements IGasStationInfoService {
                 .map(GasStationGeo::getOutSystemStationId)
                 .collect(Collectors.toList());
         return gasStationInfoMapper.selectByOutSystemIds(outSystemIds);
+    }
+
+    /**
+     * 获取当前系统的加油站,并且删除这个系统加油站
+     */
+    private PlaceInfo findSystemStationAndRemoveIt(List<PlaceInfo> placeInfos) {
+        PlaceInfo systemStation = placeInfos.get(0);
+        for (PlaceInfo placeInfo : placeInfos) {
+            if (systemStation.getDirectDistance() > placeInfo.getDirectDistance()) {
+                systemStation = placeInfo;
+            }
+        }
+
+        placeInfos.remove(systemStation);
+        return systemStation;
     }
 
     /**

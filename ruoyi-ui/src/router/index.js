@@ -161,6 +161,20 @@ export const dynamicRoutes = [
         meta: { title: '修改生成配置', activeMenu: '/tool/gen' }
       }
     ]
+  },
+  {
+    path: '/gas/station-data',
+    component: Layout,
+    hidden: true,
+    permissions: ['gas:station:list'],
+    children: [
+      {
+        path: 'index/:stationId(\\w+)',
+        component: () => import('@/views/gas/station/data'),
+        name: 'Data',
+        meta: { title: '加油站经营数据', activeMenu: '/station/data' }
+      }
+    ]
   }
 ]
 
