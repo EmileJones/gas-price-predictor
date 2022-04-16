@@ -11,17 +11,16 @@ public enum OilType {
     }
 
     public static OilType getOilByTypeName(String typeName){
-        switch (typeName){
-            case "92号汽油":
-                return Oil92;
-            case "95号汽油":
-                return Oil95;
-            case "98号汽油":
-                return Oil98;
-            case "柴油":
-                return Oil00;
-            default:
-                return null;
+        if (typeName.contains("92")) {
+            return Oil92;
+        } else if (typeName.contains("95")) {
+            return Oil95;
+        } else if (typeName.contains("98")) {
+            return Oil98;
+        } else if (typeName.contains(("柴油"))) {
+            return Oil00;
+        } else {
+            return null;
         }
     }
 

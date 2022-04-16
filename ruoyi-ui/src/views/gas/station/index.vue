@@ -20,7 +20,10 @@
           size="mini"
           @click="handleUpload"
           v-hasPermi="['gas:station:upload']"
-        >上传加油站数据</el-button>
+        >上传经营数据</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-link style="" type="primary" @click="handleExport">下载导入模板</el-link>
       </el-col>
     </el-row>
 
@@ -61,6 +64,23 @@
       </el-table-column>
     </el-table>
 
+    <!-- 上传对话框 -->
+    <el-dialog title="经营数据上传" :visible.sync="uploadOpen" width="500px" append-to-body>
+      <el-upload
+        ref="upload"
+        class="upload-demo"
+        :action="uploadUrl"
+        :headers="uploadHeaders"
+        :on-success="onUploadSuccess"
+        accept=".xls,.xlsx">
+        <el-button size="small" type="primary">点击上传</el-button>
+        <div slot="tip" class="el-upload__tip">只能上传xls/xlsx文件</div>
+      </el-upload>
+      <div slot="footer">
+        <el-button @click="close">取消</el-button>
+      </div>
+    </el-dialog>
+
     <!-- 添加或修改参数配置对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" label-width="80px">
@@ -89,8 +109,9 @@
 </template>
 
 <script>
-import { listStation, addStation, deleteStation, changeStationStatus } from '@/api/gas/station'
+import { listStation, addStation, deleteStation, changeStationStatus, uploadAction } from '@/api/gas/station'
 import { listGasStationCandidate } from "@/api/gas/geo"
+import { getToken } from '@/utils/auth'
 
 export default {
   data() {
@@ -117,6 +138,13 @@ export default {
         stationName: ""
       },
 
+      // 上传会话窗
+      uploadOpen: false,
+      // 上传地址
+      uploadUrl: "",
+      // 权限头
+      uploadHeaders: {Authorization: "Bearer " + getToken()},
+
       // 加油站查询信息候选数据
       candidateGasStations: [],
       // 查询候选加油站参数
@@ -128,6 +156,7 @@ export default {
   },
   created() {
     this.getList()
+    this.uploadUrl = uploadAction()
   },
   methods: {
     getList() {
@@ -170,9 +199,32 @@ export default {
       this.$router.push(`/gas/station-data/index/${stationId}`)
     },
 
+    /** 下载加油站导入模板 */
+    handleExport() {
+      this.download('gas/station/sale-data/template', {}, `加油站经营数据导入模板.xlsx`)
+    },
+
+    /**
+     * 上传经营数据
+     */
     // 上传经营数据按钮
     handleUpload() {
-
+      this.uploadOpen = true
+    },
+    // 关闭窗口
+    close() {
+      this.uploadOpen = false
+    },
+    // 上传成功
+    onUploadSuccess(response, file, fileList) {
+      if (response.code === 200) {
+        this.$modal.msgSuccess("文件上传成功")
+        this.uploadOpen = false
+      } else {
+        this.$modal.msgError(response.msg)
+      }
+      
+      this.$refs.upload.clearFiles()
     },
 
     /**

@@ -3,6 +3,7 @@ package com.ruoyi.gas.module.geo.service;
 import com.ruoyi.gas.module.geo.domain.GasStationInfo;
 import com.ruoyi.gas.module.geo.domain.form.GasStationAddForm;
 import com.ruoyi.gas.module.geo.domain.vo.UserStationVO;
+import com.ruoyi.gas.module.price.domain.excel.SaleDataExcel;
 
 import java.util.List;
 
@@ -41,4 +42,10 @@ public interface GasStationService {
      * @param status 加油站状态
      */
     void changeStationStatus(String stationId, Integer status);
+
+    /**
+     * 保存用户的加油站经营数据
+     * @param saleData 经营数据
+     */
+    void importSaleData(List<SaleDataExcel> saleData);
 }

@@ -189,6 +189,10 @@ public class OilPriceService implements ICalculatorService, IOilPriceService, IS
 
     @Override
     public int addOilSaleDatas(List<OilSaleData> oilSaleDatas) {
+        if (oilSaleDatas == null || oilSaleDatas.size() == 0) {
+            return 0;
+        }
+
         int i = saleDataMapper.selectLastBatch() + 1;
         for (OilSaleData oilSaleData : oilSaleDatas){
             oilSaleData.setBatch(i);

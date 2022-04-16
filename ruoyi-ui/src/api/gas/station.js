@@ -33,3 +33,9 @@ export function changeStationStatus(stationId, status) {
       method: 'post'
     })
 }
+
+// 上传加油站URL
+export function uploadAction() {
+  let baseUrl = process.env.VUE_APP_BASE_API
+  return `${baseUrl}/gas/station/import`
+}

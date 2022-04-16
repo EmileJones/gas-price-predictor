@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.gas.module.geo.domain.GasStationInfo;
@@ -68,7 +69,7 @@ public class GasStationUserOwnedServiceImpl implements IGasStationUserOwnedServi
     @Override
     public void changeStationStatus(Long userId, String stationId, Integer status) {
         GasStationUserOwned userStation = selectUserStationByUserIdAndStationId(userId, stationId);
-        if (userStation == null) throw new IllegalStateException("用户加油站不存在");
+        if (userStation == null) throw new ServiceException("用户加油站不存在");
 
         if (status == StationStatus.DISABLED) {
             userStation.setStatus(StationStatus.DISABLED);
@@ -94,42 +95,6 @@ public class GasStationUserOwnedServiceImpl implements IGasStationUserOwnedServi
         stationUserOwned.setStatus(StationStatus.DELETED);
 
         gasStationUserOwnedMapper.updateGasStation(stationUserOwned);
-    }
-
-    /**
-     * 查询用户加油站
-     * 
-     * @param id 用户加油站主键
-     * @return 用户加油站
-     */
-    @Override
-    public GasStationUserOwned selectGasStationUserOwnedById(Long id)
-    {
-        return gasStationUserOwnedMapper.selectGasStationUserOwnedById(id);
-    }
-
-    /**
-     * 查询用户加油站列表
-     * 
-     * @param gasStationUserOwned 用户加油站
-     * @return 用户加油站
-     */
-    @Override
-    public List<GasStationUserOwned> selectGasStationUserOwnedList(GasStationUserOwned gasStationUserOwned)
-    {
-        return gasStationUserOwnedMapper.selectGasStationUserOwnedList(gasStationUserOwned);
-    }
-
-    /**
-     * 新增用户加油站
-     * 
-     * @param gasStationUserOwned 用户加油站
-     * @return 结果
-     */
-    @Override
-    public int insertGasStationUserOwned(GasStationUserOwned gasStationUserOwned)
-    {
-        return gasStationUserOwnedMapper.insertGasStationUserOwned(gasStationUserOwned);
     }
 
     /**
