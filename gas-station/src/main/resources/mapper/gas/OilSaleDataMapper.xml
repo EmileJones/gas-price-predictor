@@ -79,7 +79,7 @@
         );
     </update>
 
-    <select id="selectLastBatch" parameterType="int">
+    <select id="selectLastBatch" parameterType="java.lang.Integer">
         select max(`batch`)
         from `gas_station_sale_data`;
     </select>

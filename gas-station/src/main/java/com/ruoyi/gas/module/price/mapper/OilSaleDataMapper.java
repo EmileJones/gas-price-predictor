@@ -74,5 +74,5 @@ public interface OilSaleDataMapper {
      * 获取最新的Batch编号
      * @return 最新的Batch编号
      */
-    int selectLastBatch();
+    Integer selectLastBatch();
 }

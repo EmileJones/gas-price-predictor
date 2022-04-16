@@ -192,10 +192,14 @@ public class OilPriceService implements ICalculatorService, IOilPriceService, IS
         if (oilSaleDatas == null || oilSaleDatas.size() == 0) {
             return 0;
         }
-
-        int i = saleDataMapper.selectLastBatch() + 1;
-        for (OilSaleData oilSaleData : oilSaleDatas){
-            oilSaleData.setBatch(i);
+        Integer lastBatch = saleDataMapper.selectLastBatch();
+        if (lastBatch == null) {
+            lastBatch = 1;
+        } else {
+            lastBatch += 1;
+        }
+        for (OilSaleData oilSaleData : oilSaleDatas) {
+            oilSaleData.setBatch(lastBatch);
         }
         return oilSaleDatas.size();
     }
