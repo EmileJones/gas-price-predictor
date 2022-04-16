@@ -23,6 +23,9 @@ public class RegionSearchRequest {
     /** 页面大小为20条 */
     private final Integer page_size = 20;
 
+    /** 检索结果详细程度（1：基本信息，2：详细信息） */
+    private final Integer scope = 2;
+
     public String getAk() {
         return ak;
     }
@@ -37,6 +40,10 @@ public class RegionSearchRequest {
 
     public void setQuery(String query) {
         this.query = query;
+    }
+
+    public Integer getScope() {
+        return scope;
     }
 
     public String getTag() {
@@ -65,7 +72,8 @@ public class RegionSearchRequest {
                 "query=" + query + "," + tag + '&' +
                 "region=" + region + '&' +
                 "city_limit=" + city_limit + '&' +
-                "page_size=" + page_size +
-                "&output=json";
+                "scope=" + scope + '&' +
+                "page_size=" + page_size + '&' +
+                "output=json";
     }
 }

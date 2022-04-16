@@ -32,6 +32,11 @@ public class PlaceInfo {
      */
     private String location;
 
+    /**
+     * 直线距离
+     */
+    private Long directDistance;
+
     public String getName() {
         return name;
     }
@@ -80,6 +85,14 @@ public class PlaceInfo {
         this.location = location;
     }
 
+    public Long getDirectDistance() {
+        return directDistance;
+    }
+
+    public void setDirectDistance(Long directDistance) {
+        this.directDistance = directDistance;
+    }
+
     @Override
     public String toString() {
         return "PlaceInfo{" +
@@ -89,6 +102,7 @@ public class PlaceInfo {
                 ", adname='" + adname + '\'' +
                 ", address='" + address + '\'' +
                 ", location='" + location + '\'' +
+                ", directDistance='" + directDistance + '\'' +
                 '}';
     }
 }

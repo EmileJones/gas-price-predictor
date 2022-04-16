@@ -9,7 +9,8 @@
         <result property="gasStationId" column="gas_station_id"/>
         <result property="oilType" column="oil_type"
                 typeHandler="com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler"/>
-        <result property="number" column="number"/>
+        <result property="LNumber" column="l_number"/>
+        <result property="KgNumber" column="kg_number"/>
         <result property="price" column="price"/>
         <result property="date" column="date"
                 typeHandler="com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler"/>
@@ -21,7 +22,8 @@
         <parameter property="gasStationId"/>
         <parameter property="oilType"
                    typeHandler="com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler"/>
-        <parameter property="number"/>
+        <parameter property="LNumber"/>
+        <parameter property="KgNumber"/>
         <parameter property="price"/>
         <parameter property="date"
                    typeHandler="com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler"/>
@@ -37,8 +39,8 @@
     </select>
 
     <insert id="addSaleData" parameterMap="OilSaleData">
-        insert into `gas_station_sale_data`(`gas_station_id`, `price`, `number`, `oil_type`, `date`)
-            value (#{gasStationId},#{price},#{number},#{oilType},#{date});
+        insert into `gas_station_sale_data`(`gas_station_id`, `price`, `l_number`, `kg_number`, `oil_type`, `date`)
+            value (#{gasStationId},#{price},#{LNumber},#{KgNumber},#{oilType},#{date});
     </insert>
 
     <update id="deleteSaleData">
@@ -58,7 +60,7 @@
     </select>
 
     <select id="selectTotalSalesVolume">
-        select sum(`number`)
+        select sum(`l_number`)
         from `gas_station_sale_data`
         where `gas_station_id` = #{gasStationId}
           and `effect` = true
@@ -73,8 +75,8 @@
         where `batch` = (select `a`.`max`
                          from (select max(`batch`) as `max`
                                from `gas_station_sale_data`
-                               where `effective` = TRUE ) as `a`
-                         );
+                               where `effective` = TRUE) as `a`
+        );
     </update>
 
     <select id="selectLastBatch" parameterType="int">
