@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import { listStation, addStation, deleteStation } from '@/api/gas/station'
+import { listStation, addStation, deleteStation, changeStationStatus } from '@/api/gas/station'
 import { listGasStationCandidate } from "@/api/gas/geo"
 
 export default {
@@ -178,8 +178,20 @@ export default {
     /**
      * 修改加油站状态
      */
-    handleDelete(data) {
-      console.log('删除加油站：', data)
+    handleChangeStatus(data) {
+      if (data.status === 2) {
+        // 0：标识开启加油站，具体状态修改由后端决定
+        changeStationStatus(data.stationId, 0).then(() => {
+          this.getList();
+          this.$modal.msgSuccess("状态修改成功")
+        }).catch(() => {})
+      } else {
+        // 2：禁用加油站
+        changeStationStatus(data.stationId, 2).then(() => {
+          this.getList();
+          this.$modal.msgSuccess("状态修改成功")
+        }).catch(() => {})
+      }
     },
 
     /**

@@ -63,9 +63,9 @@ public class GasStationController extends BaseController {
      * 修改加油站状态（启用/禁用）
      */
     @PreAuthorize("@ss.hasPermi('gas:station:edit')")
-    @PostMapping("/ban")
-    public AjaxResult changeStationStatus() {
-        // TODO be going to impl
+    @PostMapping("/{stationId}/status/{status}")
+    public AjaxResult changeStationStatus(@PathVariable String stationId, @PathVariable Integer status) {
+        gasStationService.changeStationStatus(stationId, status);
         return AjaxResult.success();
     }
 

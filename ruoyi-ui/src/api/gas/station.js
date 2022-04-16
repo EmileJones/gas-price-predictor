@@ -24,3 +24,12 @@ export function deleteStation(stationId) {
       method: 'post'
     })
 }
+
+
+// 修改用户加油站状态
+export function changeStationStatus(stationId, status) {
+  return request({
+      url: `/gas/station/${stationId}/status/${status}`,
+      method: 'post'
+    })
+}

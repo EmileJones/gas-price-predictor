@@ -65,6 +65,37 @@ public class GasStationUserOwnedServiceImpl implements IGasStationUserOwnedServi
         }
     }
 
+    @Override
+    public void changeStationStatus(Long userId, String stationId, Integer status) {
+        GasStationUserOwned userStation = selectUserStationByUserIdAndStationId(userId, stationId);
+        if (userStation == null) throw new IllegalStateException("用户加油站不存在");
+
+        if (status == StationStatus.DISABLED) {
+            userStation.setStatus(StationStatus.DISABLED);
+        } else {
+            if (userStation.getUpdateTime() == null) {
+                userStation.setStatus(StationStatus.CREATED);
+            } else {
+                userStation.setStatus(StationStatus.ENABLED);
+            }
+        }
+
+        gasStationUserOwnedMapper.updateGasStation(userStation);
+    }
+
+    @Override
+    public void deleteGasStation(Long userId, String stationId) {
+        GasStationUserOwned stationUserOwned = new GasStationUserOwned();
+        // Locate
+        stationUserOwned.setUserId(userId);
+        stationUserOwned.setStationId(stationId);
+
+        // Delete
+        stationUserOwned.setStatus(StationStatus.DELETED);
+
+        gasStationUserOwnedMapper.updateGasStation(stationUserOwned);
+    }
+
     /**
      * 查询用户加油站
      * 
@@ -101,16 +132,18 @@ public class GasStationUserOwnedServiceImpl implements IGasStationUserOwnedServi
         return gasStationUserOwnedMapper.insertGasStationUserOwned(gasStationUserOwned);
     }
 
-    @Override
-    public void deleteGasStation(Long userId, String stationId) {
-        GasStationUserOwned stationUserOwned = new GasStationUserOwned();
-        // Locate
-        stationUserOwned.setUserId(userId);
-        stationUserOwned.setStationId(stationId);
-
-        // Delete
-        stationUserOwned.setStatus(StationStatus.DELETED);
-
-        gasStationUserOwnedMapper.updateGasStation(stationUserOwned);
+    /**
+     * 根据用户ID和加油站ID获取加油站信息
+     */
+    private GasStationUserOwned selectUserStationByUserIdAndStationId(Long userId, String stationId) {
+        GasStationUserOwned condition = new GasStationUserOwned();
+        condition.setUserId(userId);
+        condition.setStationId(stationId);
+        List<GasStationUserOwned> userStations = gasStationUserOwnedMapper.selectGasStationUserOwnedList(condition);
+        if (userStations != null && userStations.size() != 0) {
+            return userStations.get(0);
+        }
+        return null;
     }
+
 }

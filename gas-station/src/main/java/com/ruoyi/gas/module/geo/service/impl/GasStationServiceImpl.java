@@ -40,6 +40,12 @@ public class GasStationServiceImpl implements GasStationService {
         userOwnedService.deleteGasStation(userId, stationId);
     }
 
+    @Override
+    public void changeStationStatus(String stationId, Integer status) {
+        Long userId = SecurityUtils.getUserId();
+        userOwnedService.changeStationStatus(userId, stationId, status);
+    }
+
     public GasStationServiceImpl(IGasStationUserOwnedService userOwnedService,
                                  IGasStationInfoService infoService,
                                  GeoService geoService) {

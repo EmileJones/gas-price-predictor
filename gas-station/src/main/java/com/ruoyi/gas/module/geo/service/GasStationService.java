@@ -33,4 +33,12 @@ public interface GasStationService {
      * @param stationId 用户ID
      */
     void removeStation(String stationId);
+
+    /**
+     * 修改加油站的状态
+     * <p>如果是禁用状态，那就禁用，如果不是禁用状态，那么根据具体情况修改状态</p>
+     * @param stationId 加油站ID
+     * @param status 加油站状态
+     */
+    void changeStationStatus(String stationId, Integer status);
 }

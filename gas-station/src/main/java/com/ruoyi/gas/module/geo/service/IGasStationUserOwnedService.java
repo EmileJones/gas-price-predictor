@@ -59,4 +59,12 @@ public interface IGasStationUserOwnedService
      */
     public int insertGasStationUserOwned(GasStationUserOwned gasStationUserOwned);
 
+    /**
+     * 修改加油站的状态
+     *
+     * @param userId 用户ID
+     * @param stationId 加油站ID
+     * @param status 加油站状态
+     */
+    void changeStationStatus(Long userId, String stationId, Integer status);
 }
