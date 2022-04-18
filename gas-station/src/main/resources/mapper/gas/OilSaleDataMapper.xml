@@ -55,14 +55,10 @@
     </select>
 
     <insert id="addSaleData" parameterMap="OilSaleData">
-        insert into `gas_station_sale_data`(`gas_station_id`, `price`, `l_number`, `kg_number`, `oil_type`, `date`)
-            value (#{gasStationId},#{price},#{LNumber},#{KgNumber},#{oilType},#{date});
-    </insert>
-    <insert id="insertBatch" parameterType="java.util.List">
-        insert into `gas_station_sale_data`(`gas_station_id`, `price`, `l_number`, `kg_number`, `oil_type`, `date`) values
-        <foreach collection="data" item="row" separator=",">
-            (#{row.gasStationId},#{row.price},#{row.LNumber},#{row.KgNumber},#{row.oilType},#{row.date})
-        </foreach>
+        insert into `gas_station_sale_data`(`gas_station_id`, `price`, `l_number`, `kg_number`, `oil_type`, `date`, `batch`)
+            value (#{gasStationId},#{price},#{LNumber},#{KgNumber},
+                   #{oilType,typeHandler=com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler},
+                   #{date,typeHandler=com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler}, #{batch});
     </insert>
 
     <update id="deleteSaleData">

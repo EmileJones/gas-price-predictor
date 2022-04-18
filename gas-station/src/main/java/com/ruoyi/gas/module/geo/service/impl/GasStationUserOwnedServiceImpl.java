@@ -1,7 +1,9 @@
 package com.ruoyi.gas.module.geo.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.ruoyi.common.exception.ServiceException;
@@ -15,6 +17,7 @@ import com.ruoyi.gas.module.geo.mapper.GasStationUserOwnedMapper;
 import com.ruoyi.gas.module.geo.service.IGasStationUserOwnedService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 /**
@@ -82,6 +85,21 @@ public class GasStationUserOwnedServiceImpl implements IGasStationUserOwnedServi
         }
 
         gasStationUserOwnedMapper.updateGasStation(userStation);
+    }
+
+    @Override
+    public void postImportSaleData(Set<String> stationIdSet) {
+        Long userId = SecurityUtils.getUserId();
+        for (String stationId : stationIdSet) {
+            GasStationUserOwned station = selectUserStationByUserIdAndStationId(userId, stationId);
+            if (station == null) continue;
+            if (station.getUpdateTime() == null && station.getStatus() != StationStatus.DISABLED) {
+                station.setStatus(StationStatus.ENABLED);
+            }
+            station.setUpdateTime(new Date());
+
+            gasStationUserOwnedMapper.updateGasStation(station);
+        }
     }
 
     @Override

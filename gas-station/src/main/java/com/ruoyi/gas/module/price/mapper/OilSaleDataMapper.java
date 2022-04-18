@@ -91,10 +91,4 @@ public interface OilSaleDataMapper {
      */
     Integer selectLastEffectiveBatch();
 
-    /**
-     * 批量插入数据
-     * @param oilSaleDatas
-     * @return
-     */
-    int insertBatch(@Param("data") List<OilSaleData> oilSaleDatas);
 }

@@ -185,9 +185,9 @@ public class OilPriceService implements ICalculatorService, IOilPriceService, IS
     }
 
     @Override
-    public int addOilSaleDatas(List<OilSaleData> oilSaleDatas) {
+    public Set<String> addOilSaleDatas(List<OilSaleData> oilSaleDatas) {
         if (oilSaleDatas == null || oilSaleDatas.size() == 0) {
-            return 0;
+            return new HashSet<>();
         }
         Integer lastBatch = saleDataMapper.selectLastBatch();
         if (lastBatch == null) {
@@ -195,10 +195,14 @@ public class OilPriceService implements ICalculatorService, IOilPriceService, IS
         } else {
             lastBatch += 1;
         }
+
+        Set<String> stationIdSet = new HashSet<>();
         for (OilSaleData oilSaleData : oilSaleDatas) {
             oilSaleData.setBatch(lastBatch);
+            saleDataMapper.addSaleData(oilSaleData);
+            stationIdSet.add(oilSaleData.getGasStationId());
         }
-        return saleDataMapper.insertBatch(oilSaleDatas);
+        return stationIdSet;
     }
 
     @Override

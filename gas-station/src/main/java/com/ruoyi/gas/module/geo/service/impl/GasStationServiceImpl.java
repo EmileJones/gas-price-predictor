@@ -18,6 +18,7 @@ import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,7 +69,9 @@ public class GasStationServiceImpl implements GasStationService {
                     return convertToOilSaleData(stationId, excel);
                 }).collect(Collectors.toList());
 
-        saleDataService.addOilSaleDatas(oilSaleData);
+        Set<String> stationIdSet = saleDataService.addOilSaleDatas(oilSaleData);
+
+        userOwnedService.postImportSaleData(stationIdSet);
     }
 
     private OilSaleData convertToOilSaleData(String stationId, SaleDataExcel excel) {

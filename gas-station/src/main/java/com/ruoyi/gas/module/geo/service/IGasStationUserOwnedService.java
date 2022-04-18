@@ -1,6 +1,7 @@
 package com.ruoyi.gas.module.geo.service;
 
 import java.util.List;
+import java.util.Set;
 
 import com.ruoyi.gas.module.geo.domain.GasStationInfo;
 import com.ruoyi.gas.module.geo.domain.GasStationUserOwned;
@@ -43,4 +44,11 @@ public interface IGasStationUserOwnedService
      * @param status 加油站状态
      */
     void changeStationStatus(Long userId, String stationId, Integer status);
+
+    /**
+     * 数据导入成功后需要做的事情
+     * <p>更新加油站状态</p>
+     * @param stationIdSet 导入成功的加油站ID
+     */
+    void postImportSaleData(Set<String> stationIdSet);
 }

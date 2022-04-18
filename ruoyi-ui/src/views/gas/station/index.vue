@@ -109,6 +109,7 @@
 </template>
 
 <script>
+import { Loading } from 'element-ui'
 import { listStation, addStation, deleteStation, changeStationStatus, uploadAction } from '@/api/gas/station'
 import { listGasStationCandidate } from "@/api/gas/geo"
 import { getToken } from '@/utils/auth'
@@ -224,6 +225,7 @@ export default {
         this.$modal.msgError(response.msg)
       }
       
+      this.getList()
       this.$refs.upload.clearFiles()
     },
 
