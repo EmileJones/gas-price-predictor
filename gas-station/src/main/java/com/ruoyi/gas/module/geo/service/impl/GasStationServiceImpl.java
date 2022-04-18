@@ -13,12 +13,14 @@ import com.ruoyi.gas.module.price.domain.excel.SaleDataExcel;
 import com.ruoyi.gas.module.price.domain.framwork.OilType;
 import com.ruoyi.gas.module.price.service.ISaleDataService;
 import org.joda.time.DateTime;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,9 +71,8 @@ public class GasStationServiceImpl implements GasStationService {
                     return convertToOilSaleData(stationId, excel);
                 }).collect(Collectors.toList());
 
-        Set<String> stationIdSet = saleDataService.addOilSaleDatas(oilSaleData);
-
-        userOwnedService.postImportSaleData(stationIdSet);
+        Future<Set<String>> stationIdSet = saleDataService.addOilSaleDatas(oilSaleData);
+        userOwnedService.postImportSaleData(userId, stationIdSet);
     }
 
     private OilSaleData convertToOilSaleData(String stationId, SaleDataExcel excel) {

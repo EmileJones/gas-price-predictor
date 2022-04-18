@@ -18,9 +18,12 @@ import com.ruoyi.gas.module.price.service.IPeriodService;
 import com.ruoyi.gas.module.price.service.ISaleDataService;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.Future;
 
 @Service
 public class OilPriceService implements ICalculatorService, IOilPriceService, ISaleDataService, IPeriodService {
@@ -185,9 +188,10 @@ public class OilPriceService implements ICalculatorService, IOilPriceService, IS
     }
 
     @Override
-    public Set<String> addOilSaleDatas(List<OilSaleData> oilSaleDatas) {
+    @Async
+    public Future<Set<String>> addOilSaleDatas(List<OilSaleData> oilSaleDatas) {
         if (oilSaleDatas == null || oilSaleDatas.size() == 0) {
-            return new HashSet<>();
+            return new AsyncResult<>(new HashSet<>());
         }
         Integer lastBatch = saleDataMapper.selectLastBatch();
         if (lastBatch == null) {
@@ -202,7 +206,7 @@ public class OilPriceService implements ICalculatorService, IOilPriceService, IS
             saleDataMapper.addSaleData(oilSaleData);
             stationIdSet.add(oilSaleData.getGasStationId());
         }
-        return stationIdSet;
+        return new AsyncResult<>(stationIdSet);
     }
 
     @Override

@@ -61,7 +61,7 @@ public class GasStationController extends BaseController {
         List<SaleDataExcel> saleData =
                 excelUtil.importExcel(PriceConstant.SALE_DATA_IMPORT_SHEET, file.getInputStream(), 0);
         gasStationService.importSaleData(saleData);
-        return AjaxResult.success();
+        return AjaxResult.success("数据更新中，请稍后查看");
     }
 
     /**

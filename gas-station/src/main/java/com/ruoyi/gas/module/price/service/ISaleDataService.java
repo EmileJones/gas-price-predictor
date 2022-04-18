@@ -4,6 +4,7 @@ import com.ruoyi.gas.module.price.domain.OilSaleData;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Future;
 
 public interface ISaleDataService {
     /**
@@ -21,7 +22,7 @@ public interface ISaleDataService {
      *
      * @param oilSaleData 销售记录
      */
-    Set<String> addOilSaleDatas(List<OilSaleData> oilSaleData);
+    Future<Set<String>> addOilSaleDatas(List<OilSaleData> oilSaleData);
 
     /**
      * 将最新一批的数据删除

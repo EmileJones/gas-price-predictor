@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 import com.ruoyi.common.exception.ServiceException;
@@ -88,8 +90,16 @@ public class GasStationUserOwnedServiceImpl implements IGasStationUserOwnedServi
     }
 
     @Override
-    public void postImportSaleData(Set<String> stationIdSet) {
-        Long userId = SecurityUtils.getUserId();
+    @Async
+    public void postImportSaleData(Long userId, Future<Set<String>> stationIdSetFuture) {
+        Set<String> stationIdSet = null;
+        try {
+            stationIdSet = stationIdSetFuture.get();
+        } catch (Exception e) {
+            // Do Nothing
+        }
+
+        if (stationIdSet == null || stationIdSet.size() == 0) return;
         for (String stationId : stationIdSet) {
             GasStationUserOwned station = selectUserStationByUserIdAndStationId(userId, stationId);
             if (station == null) continue;
