@@ -3,7 +3,7 @@ package com.ruoyi.gas.module.price.domain.framwork;
 public class OilPrice {
     private String gasStationId;
     private String outGasStationId;
-    private int periodId;
+    private Integer periodId;
 
     private OilType oilType;
     private Double price;
@@ -20,6 +20,6 @@ public class OilPrice {
     public Double getPrice() {return price;}
     public void setPrice(Double price) {this.price = price;}
 
-    public int getPeriodId() {return periodId;}
-    public void setPeriodId(int periodId) {this.periodId = periodId;}
+    public Integer getPeriodId() {return periodId;}
+    public void setPeriodId(Integer periodId) {this.periodId = periodId;}
 }

@@ -21,6 +21,14 @@ public interface OilSaleDataMapper {
     List<OilSaleData> selectHistorySaleData(String gasStationId);
 
     /**
+     * 获取符合条件的加油站信息
+     *
+     * @param oilSaleData 需要查询的字段
+     * @return 符合条件的结果
+     */
+    List<OilSaleData> selectSaleData(OilSaleData oilSaleData);
+
+    /**
      * 添加销售数据
      *
      * @param oilSalesData 数据
@@ -45,7 +53,7 @@ public interface OilSaleDataMapper {
      * @param endTime      结束时间
      * @return 总销量
      */
-    double selectTotalPrice(@Param("gasStationId") String gasStationId,
+    Double selectTotalPrice(@Param("gasStationId") String gasStationId,
                             @Param("oilType") OilType oilType,
                             @Param("startTime") DateTime startTime,
                             @Param("endTime") DateTime endTime);
@@ -59,8 +67,28 @@ public interface OilSaleDataMapper {
      * @param endTime      结束时间
      * @return 总收入
      */
-    double selectTotalSalesVolume(@Param("gasStationId") String gasStationId,
+    Double selectTotalSalesVolume(@Param("gasStationId") String gasStationId,
                                   @Param("oilType") OilType oilType,
                                   @Param("startTime") DateTime startTime,
                                   @Param("endTime") DateTime endTime);
+
+
+    /**
+     * 回滚最近一次的提交记录
+     * @return 修改成功的数据量
+     */
+    int rollBackLastBatch();
+
+    /**
+     * 获取最新的Batch编号，不管其是否被逻辑上的删除
+     * @return 最新的Batch编号
+     */
+    Integer selectLastBatch();
+
+    /**
+     *  获取最新的有效的Batch编号
+     * @return 最新的Batch编号
+     */
+    Integer selectLastEffectiveBatch();
+
 }

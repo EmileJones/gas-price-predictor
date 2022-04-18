@@ -13,16 +13,6 @@
         <result property="price" column="price"/>
     </resultMap>
 
-    <resultMap id="GuessPrice" type="com.ruoyi.gas.module.price.domain.GuessPrice">
-        <result property="gasStationId" column="gas_station_id"/>
-        <result property="outGasStationId" column="out_gas_station_id"/>
-        <result property="periodId" column="period_id"/>
-        <result property="price00" column="price_00"/>
-        <result property="price92" column="price_92"/>
-        <result property="price95" column="price_95"/>
-        <result property="price98" column="price_98"/>
-    </resultMap>
-
     <parameterMap id="OilPrice" type="com.ruoyi.gas.module.price.domain.framwork.OilPrice">
         <parameter property="gasStationId"/>
         <parameter property="outGasStationId"/>
@@ -41,7 +31,7 @@
         select `gas_station_id`,
                `out_gas_station_id`,
                `period_id`,
-               `price_${oilType}` as `price`,
+               `price_#{oilType}` as `price`,
                #{oilType}         as `oil_type`
         from `gas_station_oil_price`
         where `gas_station_id` = #{gasStationId}
@@ -49,8 +39,12 @@
           and `period_id` = #{periodId}
     </select>
 
-    <select id="selectHistoryPrice" resultMap="GuessPrice">
-        select *
+    <select id="selectHistoryPrice" resultMap="OilPrice">
+        select `gas_station_id`,
+               `out_gas_station_id`,
+               `period_id`,
+               `price_#{oilType}` as `price`,
+               #{oilType}         as `oil_type`
         from `gas_station_oil_price`
         where `gas_station_id` = #{gasStationId}
         order by `period_id` DESC;

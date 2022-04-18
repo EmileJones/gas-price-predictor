@@ -1,10 +1,10 @@
-package com.ruoyi.gas.module.price.domain.form;
+package com.ruoyi.gas.module.price.domain.dto;
 
-public class OutGasStationDataForCalculation {
+public class OpponentGasStationDataForCalculation {
     /**
      * 系统外加油站ID
      */
-    private String outGasStationId;
+    private String opponentGasStationId;
     /**
      * 目前价格
      */
@@ -23,12 +23,12 @@ public class OutGasStationDataForCalculation {
     private Double distance;
 
 
-    public String getOutGasStationId() {
-        return outGasStationId;
+    public String getOpponentGasStationId() {
+        return opponentGasStationId;
     }
 
-    public void setOutGasStationId(String outGasStationId) {
-        this.outGasStationId = outGasStationId;
+    public void setOpponentGasStationId(String opponentGasStationId) {
+        this.opponentGasStationId = opponentGasStationId;
     }
 
     public Double getPresentMoney() {

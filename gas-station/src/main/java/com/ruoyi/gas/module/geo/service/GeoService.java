@@ -1,6 +1,5 @@
 package com.ruoyi.gas.module.geo.service;
 
-import com.ruoyi.gas.module.geo.domain.GasStationInfo;
 import com.ruoyi.gas.module.geo.domain.form.GasStationGeoForm;
 import com.ruoyi.gas.module.geo.domain.vo.GasStationGeoVO;
 import com.ruoyi.gas.module.geo.domain.form.GasStationForm;
@@ -8,18 +7,13 @@ import com.ruoyi.gas.module.geo.domain.vo.GasStationCandidateVO;
 
 import java.util.List;
 
+import static com.ruoyi.gas.constant.GeoConstant.DEFAULT_RADIUS;
+
 /**
  * 地理信息模块 -- 主模块服务
  * @author KlenKiven
  */
 public interface GeoService {
-
-    /**
-     * 查询所有的用户拥有的加油站列表
-     * <p>这部分功能主要由：加油站信息子模块完成</p>
-     * @return 用户拥有的加油站列表
-     */
-    GasStationInfo listGasStationInfoByUserId();
 
     /**
      * 查询系统内加油站的距离信息
@@ -36,4 +30,15 @@ public interface GeoService {
      * @return 候选加油站列表
      */
     List<GasStationCandidateVO> listCandidateStations(GasStationForm form);
+
+    /**
+     * 加载加油站数据
+     * <p>加载加油站数据信息以及竞争对手加油站数据</p>
+     */
+    default void loadGasStation(String location) {
+        GasStationGeoForm gasStationGeoForm = new GasStationGeoForm();
+        gasStationGeoForm.setLocation(location);
+        gasStationGeoForm.setDistance(DEFAULT_RADIUS);
+        listStationGeo(gasStationGeoForm);
+    }
 }
