@@ -198,7 +198,7 @@ public class OilPriceService implements ICalculatorService, IOilPriceService, IS
         for (OilSaleData oilSaleData : oilSaleDatas) {
             oilSaleData.setBatch(lastBatch);
         }
-        return oilSaleDatas.size();
+        return saleDataMapper.insertBatch(oilSaleDatas);
     }
 
     @Override

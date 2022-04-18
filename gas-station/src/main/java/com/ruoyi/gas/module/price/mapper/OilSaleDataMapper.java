@@ -53,7 +53,7 @@ public interface OilSaleDataMapper {
      * @param endTime      结束时间
      * @return 总销量
      */
-    double selectTotalPrice(@Param("gasStationId") String gasStationId,
+    Double selectTotalPrice(@Param("gasStationId") String gasStationId,
                             @Param("oilType") OilType oilType,
                             @Param("startTime") DateTime startTime,
                             @Param("endTime") DateTime endTime);
@@ -67,7 +67,7 @@ public interface OilSaleDataMapper {
      * @param endTime      结束时间
      * @return 总收入
      */
-    double selectTotalSalesVolume(@Param("gasStationId") String gasStationId,
+    Double selectTotalSalesVolume(@Param("gasStationId") String gasStationId,
                                   @Param("oilType") OilType oilType,
                                   @Param("startTime") DateTime startTime,
                                   @Param("endTime") DateTime endTime);
@@ -90,4 +90,11 @@ public interface OilSaleDataMapper {
      * @return 最新的Batch编号
      */
     Integer selectLastEffectiveBatch();
+
+    /**
+     * 批量插入数据
+     * @param oilSaleDatas
+     * @return
+     */
+    int insertBatch(@Param("data") List<OilSaleData> oilSaleDatas);
 }
