@@ -24,7 +24,7 @@ public interface ISaleDataService {
 
     /**
      * 将最新一批的数据删除
-     * @return 删除的数据条数
+     * @return 删除的数据内容
      */
-    int rollBackLastBatch();
+    List<OilSaleData> rollBackLastBatch();
 }

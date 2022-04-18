@@ -38,6 +38,22 @@
         order by `id` DESC;
     </select>
 
+    <select id="selectSaleData" parameterMap="OilSaleData" resultMap="OilSaleData">
+        select *
+        from `gas_station_sale_data`
+        <where>
+            <if test="id != null">and id=#{id}</if>
+            <if test="gasStationId != null">and `gas_station_id` = #{gasStationId}</if>
+            <if test="oilType != null">and `oil_type` = #{oilType}</if>
+            <if test="LNumber != null">and l_number = #{LNumber}</if>
+            <if test="KgNumber != null">and kg_number = #{KgNumber}</if>
+            <if test="price != null">and price = #{price}</if>
+            <if test="date != null">and date = #{date}</if>
+            <if test="batch != null">and batch = #{batch}</if>
+            and `efffective` = TRUE;
+        </where>
+    </select>
+
     <insert id="addSaleData" parameterMap="OilSaleData">
         insert into `gas_station_sale_data`(`gas_station_id`, `price`, `l_number`, `kg_number`, `oil_type`, `date`)
             value (#{gasStationId},#{price},#{LNumber},#{KgNumber},#{oilType},#{date});
@@ -82,5 +98,11 @@
     <select id="selectLastBatch" parameterType="java.lang.Integer">
         select max(`batch`)
         from `gas_station_sale_data`;
+    </select>
+
+    <select id="selectLastEffectiveBatch" parameterType="java.lang.Integer">
+        select max(`batch`)
+        from `gas_station_sale_data`
+        where `effective` = TRUE;
     </select>
 </mapper>

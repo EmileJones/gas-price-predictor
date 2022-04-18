@@ -20,10 +20,7 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class OilPriceService implements ICalculatorService, IOilPriceService, ISaleDataService, IPeriodService {
@@ -205,8 +202,15 @@ public class OilPriceService implements ICalculatorService, IOilPriceService, IS
     }
 
     @Override
-    public int rollBackLastBatch() {
-        return saleDataMapper.rollBackLastBatch();
+    public List<OilSaleData> rollBackLastBatch() {
+        Integer lastBatch = saleDataMapper.selectLastEffectiveBatch();
+        if (lastBatch == null)
+            return new ArrayList<>();
+        List<OilSaleData> oilSaleData = saleDataMapper.selectSaleData(new OilSaleData() {{
+            setBatch(lastBatch);
+        }});
+        saleDataMapper.rollBackLastBatch();
+        return oilSaleData;
     }
 
     @Override
