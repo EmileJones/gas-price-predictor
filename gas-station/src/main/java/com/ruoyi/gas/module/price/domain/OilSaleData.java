@@ -10,6 +10,10 @@ public class OilSaleData {
      */
     private Integer id;
     /**
+     * 用户id
+     */
+    private Integer userId;
+    /**
      * 加油站id
      */
     private String gasStationId;
@@ -62,4 +66,7 @@ public class OilSaleData {
 
     public double getKgNumber() {return KgNumber;}
     public void setKgNumber(double kgNumber) {KgNumber = kgNumber;}
+
+    public Integer getUserId() {return userId;}
+    public void setUserId(Integer userId) {this.userId = userId;}
 }

@@ -6,6 +6,7 @@
 
     <resultMap id="OilSaleData" type="com.ruoyi.gas.module.price.domain.OilSaleData">
         <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
         <result property="gasStationId" column="gas_station_id"/>
         <result property="oilType" column="oil_type"
                 typeHandler="com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler"/>
@@ -19,6 +20,7 @@
 
     <parameterMap id="OilSaleData" type="com.ruoyi.gas.module.price.domain.OilSaleData">
         <parameter property="id"/>
+        <parameter property="userId"/>
         <parameter property="gasStationId"/>
         <parameter property="oilType"
                    typeHandler="com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler"/>
@@ -33,7 +35,7 @@
     <select id="selectHistorySaleData" resultMap="OilSaleData">
         select *
         from `gas_station_sale_data`
-        where `gas_station_id` = #{gasStationId}
+        where `user_id` = #{userId}
           and `effective` = true
         order by `id` DESC;
     </select>
@@ -43,6 +45,7 @@
         from `gas_station_sale_data`
         <where>
             <if test="id != null">and id=#{id}</if>
+            <if test="userId != null">and user_id=#{userId}</if>
             <if test="gasStationId != null">and `gas_station_id` = #{gasStationId}</if>
             <if test="oilType != null">and `oil_type` = #{oilType}</if>
             <if test="LNumber != null">and l_number = #{LNumber}</if>
@@ -55,10 +58,11 @@
     </select>
 
     <insert id="addSaleData" parameterMap="OilSaleData">
-        insert into `gas_station_sale_data`(`gas_station_id`, `price`, `l_number`, `kg_number`, `oil_type`, `date`, `batch`)
-            value (#{gasStationId},#{price},#{LNumber},#{KgNumber},
-                   #{oilType,typeHandler=com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler},
-                   #{date,typeHandler=com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler}, #{batch});
+        insert into `gas_station_sale_data`(`user_id`, `gas_station_id`, `price`, `l_number`, `kg_number`, `oil_type`,
+                                            `date`, `batch`)
+            value (#{userId},#{gasStationId},#{price},#{LNumber},#{KgNumber},
+            #{oilType,typeHandler=com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler},
+            #{date,typeHandler=com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler}, #{batch});
     </insert>
 
     <update id="deleteSaleData">

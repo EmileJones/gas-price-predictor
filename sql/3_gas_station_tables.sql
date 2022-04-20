@@ -64,6 +64,7 @@ CREATE TABLE IF NOT EXISTS `gas_station_price_period`
 CREATE TABLE IF NOT EXISTS `gas_station_sale_data`
 (
     `id`             int unsigned NOT NULL AUTO_INCREMENT COMMENT '唯一id',
+    `user_id`        int unsigned NOT NULL COMMENT '用户ID',
     `gas_station_id` varchar(45)  NOT NULL COMMENT '系统内加油站ID',
     `price`          double       NOT NULL COMMENT '价格',
     `l_number`       double       NOT NULL COMMENT '数量/升',
@@ -72,7 +73,7 @@ CREATE TABLE IF NOT EXISTS `gas_station_sale_data`
     `date`           datetime     NOT NULL COMMENT '日期',
     `effective`      tinyint      NOT NULL DEFAULT '1' COMMENT '是否被删除',
     `batch`          int unsigned NOT NULL COMMENT '批次号',
-    PRIMARY KEY (`id`, `gas_station_id`, `date`),
+    PRIMARY KEY (`id`, `user_id`, `date`),
     UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 3

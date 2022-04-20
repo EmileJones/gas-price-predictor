@@ -15,10 +15,10 @@ public interface OilSaleDataMapper {
     /**
      * 获取某个加油站的的历史销售记录(id降序)
      *
-     * @param gasStationId 加油站ID
+     * @param userId 用户ID
      * @return 某时间段内的历史销量
      */
-    List<OilSaleData> selectHistorySaleData(String gasStationId);
+    List<OilSaleData> selectHistorySaleData(int userId);
 
     /**
      * 获取符合条件的加油站信息

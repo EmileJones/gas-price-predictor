@@ -8,12 +8,12 @@ import java.util.concurrent.Future;
 
 public interface ISaleDataService {
     /**
-     * 获取某个加油站的某种汽油的历史销售记录
+     * 获取某个用户的历史销售记录
      *
-     * @param gasStationId 加油站ID
+     * @param userId 用户ID
      * @return 某时间段内的历史销量
      */
-    List<OilSaleData> getHistorySaleDataByGasStationId(String gasStationId);
+    List<OilSaleData> getHistorySaleDataByGasStationId(int userId);
 
     /**
      * 添加系统内加油站的销售记录 <br>

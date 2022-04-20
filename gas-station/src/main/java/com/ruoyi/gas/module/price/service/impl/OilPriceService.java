@@ -97,8 +97,8 @@ public class OilPriceService implements ICalculatorService, IOilPriceService, IS
     }
 
     @Override
-    public List<OilSaleData> getHistorySaleDataByGasStationId(String gasStationId) {
-        List<OilSaleData> oilSaleData = saleDataMapper.selectHistorySaleData(gasStationId);
+    public List<OilSaleData> getHistorySaleDataByGasStationId(int userId) {
+        List<OilSaleData> oilSaleData = saleDataMapper.selectHistorySaleData(userId);
         return oilSaleData;
     }
 
