@@ -61,7 +61,7 @@
 
     <el-table v-loading="loading" :data="periodList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="开始时间" align="center" prop="startTime" width="180">
+      <el-table-column label="调整时间" align="center" prop="startTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.startTime, '{y}-{m}-{d}') }}</span>
         </template>
