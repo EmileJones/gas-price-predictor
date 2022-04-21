@@ -1,9 +1,9 @@
 import service from "@/utils/request"
 
-function getSaleData(){
-  service(
-    {
-      url: "/"
-    }
-  )
+export function getSaleData(query) {
+  return service({
+    url: "/gas/price/saleData",
+    method: "get",
+    params: query
+  });
 }

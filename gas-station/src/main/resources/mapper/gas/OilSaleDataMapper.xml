@@ -36,23 +36,33 @@
         select *
         from `gas_station_sale_data`
         where `user_id` = #{userId}
+        and `effective` = true
+        order by `id` DESC
+        <if test="startIndex != null &amp;&amp; amount != null">
+            limit #{startIndex},#{amount}
+        </if>
+    </select>
+
+    <select id="selectHistorySaleDataAmount" resultType="java.lang.Long">
+        select count(*)
+        from `gas_station_sale_data`
+        where `user_id` = #{userId}
           and `effective` = true
-        order by `id` DESC;
     </select>
 
     <select id="selectSaleData" parameterMap="OilSaleData" resultMap="OilSaleData">
         select *
         from `gas_station_sale_data`
         <where>
-            <if test="id != null">and id=#{id}</if>
-            <if test="userId != null">and user_id=#{userId}</if>
+            <if test="id != null">and `id`=#{id}</if>
+            <if test="userId != null">and `user_id`=#{userId}</if>
             <if test="gasStationId != null">and `gas_station_id` = #{gasStationId}</if>
             <if test="oilType != null">and `oil_type` = #{oilType}</if>
             <if test="LNumber != null">and l_number = #{LNumber}</if>
-            <if test="KgNumber != null">and kg_number = #{KgNumber}</if>
-            <if test="price != null">and price = #{price}</if>
-            <if test="date != null">and date = #{date}</if>
-            <if test="batch != null">and batch = #{batch}</if>
+            <if test="KgNumber != null">and `kg_number` = #{KgNumber}</if>
+            <if test="price != null">and `price` = #{price}</if>
+            <if test="date != null">and `date` = #{date}</if>
+            <if test="batch != null">and `batch` = #{batch}</if>
             and `efffective` = TRUE;
         </where>
     </select>

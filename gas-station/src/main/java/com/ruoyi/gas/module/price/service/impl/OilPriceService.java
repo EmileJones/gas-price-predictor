@@ -6,6 +6,7 @@ import com.ruoyi.gas.module.price.domain.framwork.OilPrice;
 import com.ruoyi.gas.module.price.domain.framwork.OilType;
 import com.ruoyi.gas.module.price.domain.OilSaleData;
 import com.ruoyi.gas.module.price.domain.Period;
+import com.ruoyi.gas.module.price.domain.vo.OilSaleDataVO;
 import com.ruoyi.gas.module.price.exception.DataIsNotEnoughException;
 import com.ruoyi.gas.module.price.mapper.OilPriceMapper;
 import com.ruoyi.gas.module.price.mapper.OilSaleDataMapper;
@@ -97,9 +98,15 @@ public class OilPriceService implements ICalculatorService, IOilPriceService, IS
     }
 
     @Override
-    public List<OilSaleData> getHistorySaleDataByGasStationId(int userId) {
-        List<OilSaleData> oilSaleData = saleDataMapper.selectHistorySaleData(userId);
-        return oilSaleData;
+    public List<OilSaleDataVO> getHistorySaleDataByUserId(Long userId, Integer pageNum, Integer pageSize) {
+        Long startIndex = (long) ((pageNum-1)*pageSize);
+        List<OilSaleData> oilSaleData = saleDataMapper.selectHistorySaleData(userId, startIndex, pageSize);
+        return convertOilSaleDataList2OilSaleDataVOList(oilSaleData);
+    }
+
+    @Override
+    public long selectHistorySaleDataAmount(Long userId) {
+        return saleDataMapper.selectHistorySaleDataAmount(userId);
     }
 
     @Override
