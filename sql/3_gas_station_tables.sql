@@ -49,11 +49,13 @@ CREATE TABLE IF NOT EXISTS `gas_station_price_period`
 (
     `id`         int      NOT NULL AUTO_INCREMENT COMMENT '唯一ID',
     `start_time` datetime NOT NULL COMMENT '开始时间',
-    `end_time`   datetime DEFAULT NULL COMMENT '结束时间',
-    `price_92`   int      NOT NULL COMMENT '92号汽油价格',
-    `price_95`   int      NOT NULL COMMENT '95号汽油价格',
-    `price_98`   int      NOT NULL COMMENT '98号汽油价格',
-    `price_00`   int      NOT NULL COMMENT '柴油价格',
+    `end_time`   datetime     DEFAULT NULL COMMENT '结束时间',
+    `is_rise`    boolean  NOT NULL COMMENT '是否上调',
+    create_by    varchar(64)  default '' comment '创建者',
+    create_time  datetime comment '创建时间',
+    update_by    varchar(64)  default '' comment '更新者',
+    update_time  datetime comment '更新时间',
+    remark       varchar(500) default null comment '备注',
     PRIMARY KEY (`id`),
     UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE = InnoDB

@@ -1,18 +1,18 @@
 package com.ruoyi.gas.module.price.domain;
 
+import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.gas.module.price.domain.framwork.OilType;
 import org.joda.time.DateTime;
 
 import java.lang.reflect.Field;
 
-public class Period {
+public class Period extends BaseEntity {
     private int id;
     private DateTime startTime;
     private DateTime endTime;
-    private Double price92;
-    private Double price95;
-    private Double price98;
-    private Double price00;
+
+    /** 价格是否上调 */
+    private Boolean isRise;
 
     public int getId() {
         return id;
@@ -38,24 +38,12 @@ public class Period {
         this.endTime = endTime;
     }
 
-    public Double getPrice(OilType oilType) {
-        Double price = null;
-        try {
-            Field field = Period.class.getField("price" + oilType.getTypeNumber());
-            price = (Double) field.get(this);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return price;
+    public Boolean getRise() {
+        return isRise;
     }
 
-    public void setPrice(OilType oilType, Double price) {
-        try {
-            Field field = Period.class.getField("price" + oilType.getTypeNumber());
-            field.set(this, price);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
+    public void setRise(Boolean rise) {
+        isRise = rise;
     }
 
     public int getDValueOfDay() {

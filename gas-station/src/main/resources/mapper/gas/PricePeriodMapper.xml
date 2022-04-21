@@ -10,10 +10,11 @@
                 typeHandler="com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler"/>
         <result property="endTime" column="end_time"
                 typeHandler="com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler"/>
-        <result property="price00" column="price_00"/>
-        <result property="price92" column="price_92"/>
-        <result property="price95" column="price_95"/>
-        <result property="price98" column="price_98"/>
+        <result property="isRise"     column="is_rise" />
+        <result property="createBy"   column="create_by"   />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy"   column="update_by"   />
+        <result property="updateTime" column="update_time" />
     </resultMap>
 
     <parameterMap id="Period" type="com.ruoyi.gas.module.price.domain.Period">
@@ -22,27 +23,34 @@
                 typeHandler="com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler"/>
         <parameter property="endTime"
                 typeHandler="com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler"/>
-        <parameter property="price00"/>
-        <parameter property="price92"/>
-        <parameter property="price95"/>
-        <parameter property="price98"/>
+        <parameter property="isRise" />
+        <parameter property="createBy"  />
+        <parameter property="createTime" />
+        <parameter property="updateBy" />
+        <parameter property="updateTime" />
     </parameterMap>
 
     <select id="selectLastPeriod" resultMap="Period">
         select *
         from `gas_station_price_period`
-        order by `id` DESC limit 0,#{periodNumber};
+        order by `id` DESC limit 0,#{periodNumber}
     </select>
 
-    <select id="selectPeriod">
+    <select id="selectPeriod" resultMap="Period">
         select *
         from `gas_station_price_period`
         where `id` = #{id};
     </select>
 
+    <select id="selectPeriodList" resultMap="Period">
+        select *
+        from `gas_station_price_period`
+        where #{startTime} &lt;= start_time and end_time &lt;= #{endTime}
+    </select>
+
     <insert id="addPeriod">
-        insert into `gas_station_price_period`(`start_time`, `end_time`, `price_00`, `price_92`, `price_95`, `price_98`)
-            value (#{startTime},#{endTime},#{price00},#{price92},#{price95},#{price98});
+        insert into `gas_station_price_period`(`start_time`, `end_time`, `is_rise`, create_by, create_time, remark)
+            value (#{startTime},#{endTime},#{isRise},#{createBy},sysdate(),#{remark})
     </insert>
 
     <delete id="deletePeriod">
@@ -53,12 +61,14 @@
 
     <update id="updatePeriod" parameterMap="Period">
         update `gas_station_price_period`
-        set `start_time` = #{startTime},
-            `end_time`   = #{endTime},
-            `price_00`   = #{price00},
-            `price_92`   = #{price92},
-            `price_95`   = #{price95},
-            `price_98`   = #{price98}
-        where `id` = #{id};
+        <set>
+            <if test="startTime != null">`start_time` = #{startTime},</if>
+            <if test="endTime != null">`end_time` = #{endTime},</if>
+            <if test="isRise != null">`is_rise` = #{isRise},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where `id` = #{id}
     </update>
 </mapper>
