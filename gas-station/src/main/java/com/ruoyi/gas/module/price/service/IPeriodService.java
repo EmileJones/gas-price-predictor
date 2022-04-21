@@ -1,6 +1,7 @@
 package com.ruoyi.gas.module.price.service;
 
 import com.ruoyi.gas.module.price.domain.Period;
+import com.ruoyi.gas.module.price.domain.form.PeriodForm;
 
 import java.util.List;
 
@@ -11,9 +12,9 @@ public interface IPeriodService {
      * endTime为null则代此周期是最新周期，结束时间是当前时间，直到添加下一个周期为止 <br>
      * id是数据库自增的，不用填
      *
-     * @param period 周期信息
+     * @param form 周期信息
      */
-    int addPeriod(Period period);
+    int addPeriod(PeriodForm form);
 
     /**
      * 获取历史周期信息（降序排列）
@@ -21,12 +22,30 @@ public interface IPeriodService {
      * @param periodNumber 需要获得的历史数据数量
      * @return 周期信息
      */
-    List<Period> getHistoryPeriod(int periodNumber);
+    List<PeriodVO> getHistoryPeriod(int periodNumber);
+
+    /**
+     *
+     */
+    PeriodVO getPeriodById(Integer id);
+
+    /**
+     * 查询所有周期数据
+     * @param form 表单条件
+     * @return 周期数据
+     */
+    List<PeriodVO> getPeriodList(PeriodForm form);
 
     /**
      * 修改周期数据
      * @param period 周期数据
      * @return 修改成功的数目
      */
-    int updatePeriod(Period period);
+    int updatePeriod(PeriodForm period);
+
+    /**
+     * 删除指定ID的周期
+     * @param ids 删除ID列表
+     */
+    void removePeriod(Integer[] ids);
 }

@@ -50,14 +50,14 @@ CREATE TABLE IF NOT EXISTS `gas_station_price_period`
     `id`         int      NOT NULL AUTO_INCREMENT COMMENT '唯一ID',
     `start_time` datetime NOT NULL COMMENT '开始时间',
     `end_time`   datetime     DEFAULT NULL COMMENT '结束时间',
-    `is_rise`    boolean  NOT NULL COMMENT '是否上调',
+    `rise`    boolean  NOT NULL COMMENT '是否上调',
     create_by    varchar(64)  default '' comment '创建者',
     create_time  datetime comment '创建时间',
     update_by    varchar(64)  default '' comment '更新者',
     update_time  datetime comment '更新时间',
     remark       varchar(500) default null comment '备注',
     PRIMARY KEY (`id`),
-    UNIQUE KEY `id_UNIQUE` (`id`)
+    UNIQUE (`start_time` DESC)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT '加油站周期表';

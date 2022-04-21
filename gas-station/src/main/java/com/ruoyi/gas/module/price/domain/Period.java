@@ -7,18 +7,18 @@ import org.joda.time.DateTime;
 import java.lang.reflect.Field;
 
 public class Period extends BaseEntity {
-    private int id;
+    private Integer id;
     private DateTime startTime;
     private DateTime endTime;
 
     /** 价格是否上调 */
-    private Boolean isRise;
+    private Boolean rise;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -39,11 +39,11 @@ public class Period extends BaseEntity {
     }
 
     public Boolean getRise() {
-        return isRise;
+        return rise;
     }
 
     public void setRise(Boolean rise) {
-        isRise = rise;
+        this.rise = rise;
     }
 
     public int getDValueOfDay() {

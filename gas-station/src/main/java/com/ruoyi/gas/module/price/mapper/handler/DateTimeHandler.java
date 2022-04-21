@@ -19,12 +19,14 @@ public class DateTimeHandler implements TypeHandler<DateTime> {
     @Override
     public DateTime getResult(ResultSet resultSet, String s) throws SQLException {
         Date date = resultSet.getDate(s);
+        if (date == null) return null;
         return new DateTime(date.getTime());
     }
 
     @Override
     public DateTime getResult(ResultSet resultSet, int i) throws SQLException {
         Date date = resultSet.getDate(i);
+        if (date == null) return null;
         return new DateTime(date.getTime());
     }
 

@@ -32,6 +32,20 @@ public interface PricePeriodMapper {
     List<Period> selectPeriodList(@Param("startTime") Date startTime, @Param("endTime") Date endTime);
 
     /**
+     * 查询这个时间点的上一个周期
+     * @param startTime 开始时间
+     * @return 上一个周期
+     */
+    Period selectPreviousPeriod(@Param("startTime") Date startTime);
+
+    /**
+     * 查询这个时间点的下一个周期
+     * @param startTime 开始时间
+     * @return 下一个周期
+     */
+    Period selectNextPeriod(@Param("startTime") Date startTime);
+
+    /**
      * 添加周期信息
      * @param period   周期信息（id不需要填）
      * @return 是否成功
