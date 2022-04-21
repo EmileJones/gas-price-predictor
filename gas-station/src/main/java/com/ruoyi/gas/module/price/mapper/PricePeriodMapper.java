@@ -2,7 +2,9 @@ package com.ruoyi.gas.module.price.mapper;
 
 import com.ruoyi.gas.module.price.domain.Period;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -20,6 +22,28 @@ public interface PricePeriodMapper {
      * @return  周期信息
      */
     Period selectPeriod(int id);
+
+    /**
+     * 查询时间范围内的周期
+     * @param startTime 开始时间
+     * @param endTime 结束时间
+     * @return 周期列表
+     */
+    List<Period> selectPeriodList(@Param("startTime") Date startTime, @Param("endTime") Date endTime);
+
+    /**
+     * 查询这个时间点的上一个周期
+     * @param startTime 开始时间
+     * @return 上一个周期
+     */
+    Period selectPreviousPeriod(@Param("startTime") Date startTime);
+
+    /**
+     * 查询这个时间点的下一个周期
+     * @param startTime 开始时间
+     * @return 下一个周期
+     */
+    Period selectNextPeriod(@Param("startTime") Date startTime);
 
     /**
      * 添加周期信息
@@ -41,4 +65,5 @@ public interface PricePeriodMapper {
      * @return 是否成功
      */
     int updatePeriod(Period period);
+
 }

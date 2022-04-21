@@ -10,10 +10,11 @@
                 typeHandler="com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler"/>
         <result property="endTime" column="end_time"
                 typeHandler="com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler"/>
-        <result property="price00" column="price_00"/>
-        <result property="price92" column="price_92"/>
-        <result property="price95" column="price_95"/>
-        <result property="price98" column="price_98"/>
+        <result property="rise"     column="rise" />
+        <result property="createBy"   column="create_by"   />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy"   column="update_by"   />
+        <result property="updateTime" column="update_time" />
     </resultMap>
 
     <parameterMap id="Period" type="com.ruoyi.gas.module.price.domain.Period">
@@ -22,27 +23,55 @@
                 typeHandler="com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler"/>
         <parameter property="endTime"
                 typeHandler="com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler"/>
-        <parameter property="price00"/>
-        <parameter property="price92"/>
-        <parameter property="price95"/>
-        <parameter property="price98"/>
+        <parameter property="rise" />
+        <parameter property="createBy"  />
+        <parameter property="createTime" />
+        <parameter property="updateBy" />
+        <parameter property="updateTime" />
     </parameterMap>
 
     <select id="selectLastPeriod" resultMap="Period">
         select *
         from `gas_station_price_period`
-        order by `id` DESC limit 0,#{periodNumber};
+        order by `start_time` DESC limit 0,#{periodNumber}
     </select>
 
-    <select id="selectPeriod">
+    <select id="selectPeriod" resultMap="Period">
         select *
         from `gas_station_price_period`
-        where `id` = #{id};
+        where `id` = #{id}
+    </select>
+
+    <select id="selectPeriodList" resultMap="Period">
+        select *
+        from `gas_station_price_period`
+        where
+            <if test="startTime != null">#{startTime} &lt;= start_time and</if>
+            <if test="endTime != null">start_time &lt;= #{endTime} and </if>
+            1=1
+        order by start_time DESC
+    </select>
+    <select id="selectPreviousPeriod" resultMap="Period">
+        select *
+        from `gas_station_price_period`
+        where <if test="startTime != null">start_time &lt; #{startTime}</if>
+        order by start_time DESC
+        limit 1
+    </select>
+    <select id="selectNextPeriod" resultMap="Period">
+        select *
+        from `gas_station_price_period`
+        where <if test="startTime != null">start_time &gt; #{startTime}</if>
+        order by start_time
+        limit 1
     </select>
 
     <insert id="addPeriod">
-        insert into `gas_station_price_period`(`start_time`, `end_time`, `price_00`, `price_92`, `price_95`, `price_98`)
-            value (#{startTime},#{endTime},#{price00},#{price92},#{price95},#{price98});
+        insert into `gas_station_price_period`(`start_time`, `end_time`, `rise`, create_by, create_time, remark)
+            value
+            (#{startTime,typeHandler=com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler},
+             #{endTime,typeHandler=com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler},
+            #{rise},#{createBy},sysdate(),#{remark})
     </insert>
 
     <delete id="deletePeriod">
@@ -53,12 +82,13 @@
 
     <update id="updatePeriod" parameterMap="Period">
         update `gas_station_price_period`
-        set `start_time` = #{startTime},
-            `end_time`   = #{endTime},
-            `price_00`   = #{price00},
-            `price_92`   = #{price92},
-            `price_95`   = #{price95},
-            `price_98`   = #{price98}
-        where `id` = #{id};
+        set
+            `start_time` = #{startTime,typeHandler=com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler},
+            `end_time` = #{endTime,typeHandler=com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler},
+            `rise` = #{rise},
+            remark = #{remark},
+            update_by = #{updateBy},
+            update_time = sysdate()
+        where `id` = #{id}
     </update>
 </mapper>

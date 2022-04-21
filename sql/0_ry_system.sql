@@ -255,22 +255,30 @@ insert into sys_menu values('1057', '生成删除', '115', '3', '#', '', '', 1, 
 insert into sys_menu values('1058', '导入代码', '115', '2', '#', '', '', 1, 0, 'F', '0', '0', 'tool:gen:import',            '#', 'admin', sysdate(), '', null, '');
 insert into sys_menu values('1059', '预览代码', '115', '4', '#', '', '', 1, 0, 'F', '0', '0', 'tool:gen:preview',           '#', 'admin', sysdate(), '', null, '');
 insert into sys_menu values('1060', '生成代码', '115', '5', '#', '', '', 1, 0, 'F', '0', '0', 'tool:gen:code',              '#', 'admin', sysdate(), '', null, '');
--- 加油站地理信息查询
+
+-- 加油站自助服务
 INSERT INTO `sys_menu` VALUES (2000, '加油站自助服务', 0, 0, 'gas', NULL, NULL, 1, 0, 'M', '0', '0', '', 'table', 'admin', '2022-01-20 20:09:10', 'admin', '2022-01-22 09:27:39', '');
-INSERT INTO `sys_menu` VALUES (2002, '加油站地理信息', 2000, 1, 'geo', 'gas/geo/index', NULL, 1, 0, 'C', '0', '0', 'gas:geo:list', 'documentation', 'admin', '2022-01-21 21:37:51', 'admin', '2022-04-03 10:50:28', '加油站地理信息菜单');
+-- 我的加油站功能
+INSERT INTO `sys_menu` VALUES (2008, '我的加油站', 2000, 0, 'station', 'gas/station/index', NULL, 1, 0, 'C', '0', '0', 'gas:station:list', 'user', 'admin', '2022-04-03 10:50:02', 'admin', '2022-04-03 10:57:55', '');
+INSERT INTO `sys_menu` VALUES (2009, '新增', 2008, 2, '#', NULL, NULL, 1, 0, 'F', '0', '0', 'gas:station:add', '#', 'admin', '2022-04-03 10:51:04', 'admin', '2022-04-03 10:53:12', '');
+INSERT INTO `sys_menu` VALUES (2010, '修改', 2008, 1, '#', NULL, NULL, 1, 0, 'F', '0', '0', 'gas:station:edit', '#', 'admin', '2022-04-03 10:52:27', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2011, '查询', 2008, 0, '#', NULL, NULL, 1, 0, 'F', '0', '0', 'gas:station:query', '#', 'admin', '2022-04-03 10:53:04', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2012, '删除', 2008, 3, '#', NULL, NULL, 1, 0, 'F', '0', '0', 'gas:station:remove', '#', 'admin', '2022-04-03 10:53:35', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2013, '上传', 2008, 4, '#', NULL, NULL, 1, 0, 'F', '0', '0', 'gas:station:upload', '#', 'admin', '2022-04-03 10:54:12', 'admin', '2022-04-03 10:54:21', '');
+-- 地理信息查询
+INSERT INTO `sys_menu` VALUES (2002, '地理信息', 2000, 1, 'geo', 'gas/geo/index', NULL, 1, 0, 'C', '0', '0', 'gas:geo:list', 'documentation', 'admin', '2022-01-21 21:37:51', 'admin', '2022-04-03 10:50:28', '加油站地理信息菜单');
 INSERT INTO `sys_menu` VALUES (2003, '加油站地理信息查询', 2002, 1, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:geo:query', '#', 'admin', '2022-01-21 21:37:51', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2004, '加油站地理信息新增', 2002, 2, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:geo:add', '#', 'admin', '2022-01-21 21:37:51', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2005, '加油站地理信息修改', 2002, 3, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:geo:edit', '#', 'admin', '2022-01-21 21:37:51', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2006, '加油站地理信息删除', 2002, 4, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:geo:remove', '#', 'admin', '2022-01-21 21:37:51', '', NULL, '');
 INSERT INTO `sys_menu` VALUES (2007, '加油站地理信息导出', 2002, 5, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:geo:export', '#', 'admin', '2022-01-21 21:37:51', '', NULL, '');
--- 我的加油站功能
-INSERT INTO `sys_menu` VALUES (2008, '我的加油站', 2000, 0, 'station', 'gas/station/index', NULL, 1, 0, 'C', '0', '0', 'gas:station:list', 'user', 'admin', '2022-04-03 10:50:02', 'admin', '2022-04-03 10:57:55', '');
-INSERT INTO `sys_menu` VALUES (2009, '新增加油站', 2008, 2, '#', NULL, NULL, 1, 0, 'F', '0', '0', 'gas:station:add', '#', 'admin', '2022-04-03 10:51:04', 'admin', '2022-04-03 10:53:12', '');
-INSERT INTO `sys_menu` VALUES (2010, '加油站信息修改', 2008, 1, '#', NULL, NULL, 1, 0, 'F', '0', '0', 'gas:station:edit', '#', 'admin', '2022-04-03 10:52:27', '', NULL, '');
-INSERT INTO `sys_menu` VALUES (2011, '加油站信息查询', 2008, 0, '#', NULL, NULL, 1, 0, 'F', '0', '0', 'gas:station:query', '#', 'admin', '2022-04-03 10:53:04', '', NULL, '');
-INSERT INTO `sys_menu` VALUES (2012, '加油站信息删除', 2008, 3, '#', NULL, NULL, 1, 0, 'F', '0', '0', 'gas:station:remove', '#', 'admin', '2022-04-03 10:53:35', '', NULL, '');
-INSERT INTO `sys_menu` VALUES (2013, '加油站数据上传', 2008, 4, '#', NULL, NULL, 1, 0, 'F', '0', '0', 'gas:station:upload', '#', 'admin', '2022-04-03 10:54:12', 'admin', '2022-04-03 10:54:21', '');
-
+-- 加油站周期管理
+INSERT INTO `sys_menu`  VALUES (2014, '变价周期', 2000, 2, 'period', 'gas/period/index', NULL, 1, 0, 'C', '0', '0', 'gas:period:list', 'date', 'admin', '2022-04-21 11:16:40', '', NULL, '加油站周期菜单');
+INSERT INTO `sys_menu`  VALUES (2015, '周期查询', 2014, 1, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:period:query', '#', 'admin', '2022-04-21 11:16:41', '', NULL, '');
+INSERT INTO `sys_menu`  VALUES (2016, '周期新增', 2014, 2, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:period:add', '#', 'admin', '2022-04-21 11:16:42', '', NULL, '');
+INSERT INTO `sys_menu`  VALUES (2017, '周期修改', 2014, 3, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:period:edit', '#', 'admin', '2022-04-21 11:16:43', '', NULL, '');
+INSERT INTO `sys_menu`  VALUES (2018, '周期删除', 2014, 4, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:period:remove', '#', 'admin', '2022-04-21 11:16:43', '', NULL, '');
+INSERT INTO `sys_menu`  VALUES (2019, '周期导出', 2014, 5, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:period:export', '#', 'admin', '2022-04-21 11:16:43', '', NULL, '');
 -- ----------------------------
 -- 6、用户和角色关联表  用户N-1角色
 -- ----------------------------

@@ -13,7 +13,6 @@ import com.ruoyi.gas.module.price.domain.excel.SaleDataExcel;
 import com.ruoyi.gas.module.price.domain.framwork.OilType;
 import com.ruoyi.gas.module.price.service.ISaleDataService;
 import org.joda.time.DateTime;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -68,17 +67,18 @@ public class GasStationServiceImpl implements GasStationService {
                 .filter(excel -> stationNameAndIdMap.containsKey(excel.getStationName()))
                 .map(excel -> {
                     String stationId = stationNameAndIdMap.get(excel.getStationName());
-                    return convertToOilSaleData(stationId, excel);
+                    return convertToOilSaleData(userId, stationId, excel);
                 }).collect(Collectors.toList());
 
         Future<Set<String>> stationIdSet = saleDataService.addOilSaleDatas(oilSaleData);
         userOwnedService.postImportSaleData(userId, stationIdSet);
     }
 
-    private OilSaleData convertToOilSaleData(String stationId, SaleDataExcel excel) {
+    private OilSaleData convertToOilSaleData(Long userId, String stationId, SaleDataExcel excel) {
         OilSaleData oilSaleData = new OilSaleData();
         DateTime businessDate = new DateTime(excel.getBusinessDate());
 
+        oilSaleData.setUserId(userId);
         oilSaleData.setGasStationId(stationId);
         oilSaleData.setDate(businessDate);
         oilSaleData.setOilType(OilType.getOilByTypeName(excel.getMaterialName()));

@@ -49,13 +49,15 @@ CREATE TABLE IF NOT EXISTS `gas_station_price_period`
 (
     `id`         int      NOT NULL AUTO_INCREMENT COMMENT '唯一ID',
     `start_time` datetime NOT NULL COMMENT '开始时间',
-    `end_time`   datetime DEFAULT NULL COMMENT '结束时间',
-    `price_92`   int      NOT NULL COMMENT '92号汽油价格',
-    `price_95`   int      NOT NULL COMMENT '95号汽油价格',
-    `price_98`   int      NOT NULL COMMENT '98号汽油价格',
-    `price_00`   int      NOT NULL COMMENT '柴油价格',
+    `end_time`   datetime     DEFAULT NULL COMMENT '结束时间',
+    `rise`    boolean  NOT NULL COMMENT '是否上调',
+    create_by    varchar(64)  default '' comment '创建者',
+    create_time  datetime comment '创建时间',
+    update_by    varchar(64)  default '' comment '更新者',
+    update_time  datetime comment '更新时间',
+    remark       varchar(500) default null comment '备注',
     PRIMARY KEY (`id`),
-    UNIQUE KEY `id_UNIQUE` (`id`)
+    UNIQUE (`start_time` DESC)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT '加油站周期表';
@@ -64,6 +66,7 @@ CREATE TABLE IF NOT EXISTS `gas_station_price_period`
 CREATE TABLE IF NOT EXISTS `gas_station_sale_data`
 (
     `id`             int unsigned NOT NULL AUTO_INCREMENT COMMENT '唯一id',
+    `user_id`        int unsigned NOT NULL COMMENT '用户ID',
     `gas_station_id` varchar(45)  NOT NULL COMMENT '系统内加油站ID',
     `price`          double       NOT NULL COMMENT '价格',
     `l_number`       double       NOT NULL COMMENT '数量/升',
@@ -72,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `gas_station_sale_data`
     `date`           datetime     NOT NULL COMMENT '日期',
     `effective`      tinyint      NOT NULL DEFAULT '1' COMMENT '是否被删除',
     `batch`          int unsigned NOT NULL COMMENT '批次号',
-    PRIMARY KEY (`id`, `gas_station_id`, `date`),
+    PRIMARY KEY (`id`, `user_id`, `date`),
     UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 3

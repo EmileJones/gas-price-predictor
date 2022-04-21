@@ -13,12 +13,21 @@ import java.util.List;
 public interface OilSaleDataMapper {
 
     /**
-     * 获取某个加油站的的历史销售记录(id降序)
+     * 获取某个用户的的历史销售记录(id降序)
      *
-     * @param gasStationId 加油站ID
+     * @param userId 用户ID
      * @return 某时间段内的历史销量
      */
-    List<OilSaleData> selectHistorySaleData(String gasStationId);
+    List<OilSaleData> selectHistorySaleData(@Param("userId")Long userId,
+                                            @Param("startIndex")Long startIndex,
+                                            @Param("amount")Integer amount);
+
+    /**
+     * 获取某个用户的收据的数量
+     * @param userId 用户ID
+     * @return 收据数量
+     */
+    long selectHistorySaleDataAmount(Long userId);
 
     /**
      * 获取符合条件的加油站信息
@@ -75,18 +84,21 @@ public interface OilSaleDataMapper {
 
     /**
      * 回滚最近一次的提交记录
+     *
      * @return 修改成功的数据量
      */
     int rollBackLastBatch();
 
     /**
      * 获取最新的Batch编号，不管其是否被逻辑上的删除
+     *
      * @return 最新的Batch编号
      */
     Integer selectLastBatch();
 
     /**
-     *  获取最新的有效的Batch编号
+     * 获取最新的有效的Batch编号
+     *
      * @return 最新的Batch编号
      */
     Integer selectLastEffectiveBatch();
