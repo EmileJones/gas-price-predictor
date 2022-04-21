@@ -1,11 +1,11 @@
-package com.ruoyi.gas.module.price.domain;
+package com.ruoyi.gas.module.price.domain.vo;
 
 import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.gas.module.price.domain.framwork.OilType;
-import org.joda.time.DateTime;
 
+import java.util.Date;
 
-public class OilSaleData extends BaseEntity {
+public class OilSaleDataVO extends BaseEntity {
     /**
      * 唯一标识符
      */
@@ -25,19 +25,19 @@ public class OilSaleData extends BaseEntity {
     /**
      * 销售数量L
      */
-    private double LNumber;
+    private Double lNumber;
     /**
      * 销售数量Kg
      */
-    private double KgNumber;
+    private Double kgNumber;
     /**
      * 销售金额
      */
-    private double price;
+    private Double price;
     /**
      * 时间
      */
-    private DateTime date;
+    private String date;
 
     /**
      * 批号(用于回滚)
@@ -47,8 +47,8 @@ public class OilSaleData extends BaseEntity {
     public Integer getId() {return id;}
     public void setId(Integer id) {this.id = id;}
 
-    public double getPrice() {return price;}
-    public void setPrice(double price) {this.price = price;}
+    public Double getPrice() {return price;}
+    public void setPrice(Double price) {this.price = price;}
 
     public OilType getOilType() {return oilType;}
     public void setOilType(OilType oilType) {this.oilType = oilType;}
@@ -56,19 +56,20 @@ public class OilSaleData extends BaseEntity {
     public String getGasStationId() {return gasStationId;}
     public void setGasStationId(String gasStationId) {this.gasStationId = gasStationId;}
 
-    public DateTime getDate() {return date;}
-    public void setDate(DateTime date) {this.date = date;}
+    public String getDate() {return date;}
+    public void setDate(String date) {this.date = date;}
 
-    public double getLNumber() {return LNumber;}
-    public void setLNumber(double LNumber) {this.LNumber = LNumber;}
 
     public Integer getBatch() {return batch;}
     public void setBatch(Integer batch) {this.batch = batch;}
 
-    public double getKgNumber() {return KgNumber;}
-    public void setKgNumber(double kgNumber) {KgNumber = kgNumber;}
 
     public Long getUserId() {return userId;}
     public void setUserId(Long userId) {this.userId = userId;}
 
+    public void setlNumber(Double lNumber) {this.lNumber = lNumber;}
+    public Double getlNumber() {return lNumber;}
+
+    public Double getKgNumber() {return kgNumber;}
+    public void setKgNumber(Double kgNumber) {this.kgNumber = kgNumber;}
 }

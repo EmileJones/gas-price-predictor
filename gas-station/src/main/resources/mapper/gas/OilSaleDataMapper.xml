@@ -6,6 +6,7 @@
 
     <resultMap id="OilSaleData" type="com.ruoyi.gas.module.price.domain.OilSaleData">
         <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
         <result property="gasStationId" column="gas_station_id"/>
         <result property="oilType" column="oil_type"
                 typeHandler="com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler"/>
@@ -19,6 +20,7 @@
 
     <parameterMap id="OilSaleData" type="com.ruoyi.gas.module.price.domain.OilSaleData">
         <parameter property="id"/>
+        <parameter property="userId"/>
         <parameter property="gasStationId"/>
         <parameter property="oilType"
                    typeHandler="com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler"/>
@@ -33,14 +35,44 @@
     <select id="selectHistorySaleData" resultMap="OilSaleData">
         select *
         from `gas_station_sale_data`
-        where `gas_station_id` = #{gasStationId}
+        where `user_id` = #{userId}
+        and `effective` = true
+        order by `id` DESC
+        <if test="startIndex != null &amp;&amp; amount != null">
+            limit #{startIndex},#{amount}
+        </if>
+    </select>
+
+    <select id="selectHistorySaleDataAmount" resultType="java.lang.Long">
+        select count(*)
+        from `gas_station_sale_data`
+        where `user_id` = #{userId}
           and `effective` = true
-        order by `id` DESC;
+    </select>
+
+    <select id="selectSaleData" parameterMap="OilSaleData" resultMap="OilSaleData">
+        select *
+        from `gas_station_sale_data`
+        <where>
+            <if test="id != null">and `id`=#{id}</if>
+            <if test="userId != null">and `user_id`=#{userId}</if>
+            <if test="gasStationId != null">and `gas_station_id` = #{gasStationId}</if>
+            <if test="oilType != null">and `oil_type` = #{oilType}</if>
+            <if test="LNumber != null">and l_number = #{LNumber}</if>
+            <if test="KgNumber != null">and `kg_number` = #{KgNumber}</if>
+            <if test="price != null">and `price` = #{price}</if>
+            <if test="date != null">and `date` = #{date}</if>
+            <if test="batch != null">and `batch` = #{batch}</if>
+            and `efffective` = TRUE;
+        </where>
     </select>
 
     <insert id="addSaleData" parameterMap="OilSaleData">
-        insert into `gas_station_sale_data`(`gas_station_id`, `price`, `l_number`, `kg_number`, `oil_type`, `date`)
-            value (#{gasStationId},#{price},#{LNumber},#{KgNumber},#{oilType},#{date});
+        insert into `gas_station_sale_data`(`user_id`, `gas_station_id`, `price`, `l_number`, `kg_number`, `oil_type`,
+                                            `date`, `batch`)
+            value (#{userId},#{gasStationId},#{price},#{LNumber},#{KgNumber},
+            #{oilType,typeHandler=com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler},
+            #{date,typeHandler=com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler}, #{batch});
     </insert>
 
     <update id="deleteSaleData">
@@ -49,21 +81,21 @@
         where `id` = #{id};
     </update>
 
-    <select id="selectTotalPrice">
+    <select id="selectTotalPrice" resultType="java.lang.Double">
         select sum(`price`)
         from `gas_station_sale_data`
         where `gas_station_id` = #{gasStationId}
-          and `effect` = true
+          and `effective` = true
           and `oil_type` = #{oilType}
           and `date` &gt;= #{startTime}
           and `date` $lt #{endTime};
     </select>
 
-    <select id="selectTotalSalesVolume">
+    <select id="selectTotalSalesVolume" resultType="java.lang.Double">
         select sum(`l_number`)
         from `gas_station_sale_data`
         where `gas_station_id` = #{gasStationId}
-          and `effect` = true
+          and `effective` = true
           and `oil_type` = #{oilType}
           and `date` &gt;= #{startTime}
           and `date` $lt #{endTime};
@@ -79,8 +111,14 @@
         );
     </update>
 
-    <select id="selectLastBatch" parameterType="int">
+    <select id="selectLastBatch" resultType="java.lang.Integer">
         select max(`batch`)
         from `gas_station_sale_data`;
+    </select>
+
+    <select id="selectLastEffectiveBatch" resultType="java.lang.Integer">
+        select max(`batch`)
+        from `gas_station_sale_data`
+        where `effective` = TRUE;
     </select>
 </mapper>

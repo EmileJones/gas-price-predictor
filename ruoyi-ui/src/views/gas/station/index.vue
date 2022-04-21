@@ -109,6 +109,7 @@
 </template>
 
 <script>
+import { Loading } from 'element-ui'
 import { listStation, addStation, deleteStation, changeStationStatus, uploadAction } from '@/api/gas/station'
 import { listGasStationCandidate } from "@/api/gas/geo"
 import { getToken } from '@/utils/auth'
@@ -218,12 +219,13 @@ export default {
     // 上传成功
     onUploadSuccess(response, file, fileList) {
       if (response.code === 200) {
-        this.$modal.msgSuccess("文件上传成功")
+        this.$modal.msgSuccess(response.msg)
         this.uploadOpen = false
       } else {
         this.$modal.msgError(response.msg)
       }
       
+      this.getList()
       this.$refs.upload.clearFiles()
     },
 

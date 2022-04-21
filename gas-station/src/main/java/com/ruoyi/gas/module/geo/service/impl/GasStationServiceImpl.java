@@ -18,6 +18,8 @@ import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,16 +67,18 @@ public class GasStationServiceImpl implements GasStationService {
                 .filter(excel -> stationNameAndIdMap.containsKey(excel.getStationName()))
                 .map(excel -> {
                     String stationId = stationNameAndIdMap.get(excel.getStationName());
-                    return convertToOilSaleData(stationId, excel);
+                    return convertToOilSaleData(userId, stationId, excel);
                 }).collect(Collectors.toList());
 
-        saleDataService.addOilSaleDatas(oilSaleData);
+        Future<Set<String>> stationIdSet = saleDataService.addOilSaleDatas(oilSaleData);
+        userOwnedService.postImportSaleData(userId, stationIdSet);
     }
 
-    private OilSaleData convertToOilSaleData(String stationId, SaleDataExcel excel) {
+    private OilSaleData convertToOilSaleData(Long userId, String stationId, SaleDataExcel excel) {
         OilSaleData oilSaleData = new OilSaleData();
         DateTime businessDate = new DateTime(excel.getBusinessDate());
 
+        oilSaleData.setUserId(userId);
         oilSaleData.setGasStationId(stationId);
         oilSaleData.setDate(businessDate);
         oilSaleData.setOilType(OilType.getOilByTypeName(excel.getMaterialName()));

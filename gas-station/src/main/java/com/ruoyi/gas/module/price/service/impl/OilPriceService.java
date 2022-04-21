@@ -8,6 +8,7 @@ import com.ruoyi.gas.module.price.domain.framwork.OilPrice;
 import com.ruoyi.gas.module.price.domain.framwork.OilType;
 import com.ruoyi.gas.module.price.domain.OilSaleData;
 import com.ruoyi.gas.module.price.domain.Period;
+import com.ruoyi.gas.module.price.domain.vo.OilSaleDataVO;
 import com.ruoyi.gas.module.price.exception.DataIsNotEnoughException;
 import com.ruoyi.gas.module.price.mapper.OilPriceMapper;
 import com.ruoyi.gas.module.price.mapper.OilSaleDataMapper;
@@ -20,12 +21,16 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.ruoyi.gas.module.price.util.DateUtil.toDateTime;
+import java.util.*;
+import java.util.concurrent.Future;
 
 @Service
 public class OilPriceService implements ICalculatorService, IOilPriceService, ISaleDataService, IPeriodService {
@@ -99,9 +104,15 @@ public class OilPriceService implements ICalculatorService, IOilPriceService, IS
     }
 
     @Override
-    public List<OilSaleData> getHistorySaleDataByGasStationId(String gasStationId) {
-        List<OilSaleData> oilSaleData = saleDataMapper.selectHistorySaleData(gasStationId);
-        return oilSaleData;
+    public List<OilSaleDataVO> getHistorySaleDataByUserId(Long userId, Integer pageNum, Integer pageSize) {
+        Long startIndex = (long) ((pageNum-1)*pageSize);
+        List<OilSaleData> oilSaleData = saleDataMapper.selectHistorySaleData(userId, startIndex, pageSize);
+        return convertOilSaleDataList2OilSaleDataVOList(oilSaleData);
+    }
+
+    @Override
+    public long selectHistorySaleDataAmount(Long userId) {
+        return saleDataMapper.selectHistorySaleDataAmount(userId);
     }
 
     @Override
@@ -280,21 +291,37 @@ public class OilPriceService implements ICalculatorService, IOilPriceService, IS
     }
 
     @Override
-    public int addOilSaleDatas(List<OilSaleData> oilSaleDatas) {
+    @Async
+    public Future<Set<String>> addOilSaleDatas(List<OilSaleData> oilSaleDatas) {
         if (oilSaleDatas == null || oilSaleDatas.size() == 0) {
-            return 0;
+            return new AsyncResult<>(new HashSet<>());
+        }
+        Integer lastBatch = saleDataMapper.selectLastBatch();
+        if (lastBatch == null) {
+            lastBatch = 1;
+        } else {
+            lastBatch += 1;
         }
 
-        int i = saleDataMapper.selectLastBatch() + 1;
-        for (OilSaleData oilSaleData : oilSaleDatas){
-            oilSaleData.setBatch(i);
+        Set<String> stationIdSet = new HashSet<>();
+        for (OilSaleData oilSaleData : oilSaleDatas) {
+            oilSaleData.setBatch(lastBatch);
+            saleDataMapper.addSaleData(oilSaleData);
+            stationIdSet.add(oilSaleData.getGasStationId());
         }
-        return oilSaleDatas.size();
+        return new AsyncResult<>(stationIdSet);
     }
 
     @Override
-    public int rollBackLastBatch() {
-        return saleDataMapper.rollBackLastBatch();
+    public List<OilSaleData> rollBackLastBatch() {
+        Integer lastBatch = saleDataMapper.selectLastEffectiveBatch();
+        if (lastBatch == null)
+            return new ArrayList<>();
+        List<OilSaleData> oilSaleData = saleDataMapper.selectSaleData(new OilSaleData() {{
+            setBatch(lastBatch);
+        }});
+        saleDataMapper.rollBackLastBatch();
+        return oilSaleData;
     }
 
 }
