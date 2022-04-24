@@ -20,7 +20,6 @@ import java.util.List;
 /**
  * 高德地图API封装客户端
  * <p>下面的API已经全部自动根据配置文件注入amapKey参数。</p>
- * <p>根据客户要求，使用BaiduMap</p>
  * @author klenkiven
  */
 public class AmapClient {

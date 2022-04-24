@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
 public class BaiduMapService implements MapService {
     public static final String REGION_CODE_DICT = "region_adcode";
     public static final String TRANSPORT_FACILITY_TAG = "交通设施";
