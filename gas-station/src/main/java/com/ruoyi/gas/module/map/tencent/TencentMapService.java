@@ -9,6 +9,7 @@ import com.ruoyi.gas.module.map.tencent.model.driving.Routes;
 import com.ruoyi.gas.module.map.tencent.model.driving.Steps;
 import com.ruoyi.gas.module.map.tencent.model.search.Ad_info;
 import com.ruoyi.gas.module.map.tencent.model.search.Data;
+import com.ruoyi.gas.utils.RateLimiter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,12 @@ public class TencentMapService implements MapService {
     private final Logger log = LoggerFactory.getLogger(MapService.class);
     private final TencentClient client;
 
+    private final RateLimiter limiter = new RateLimiter(5);
+
     @Override
     public List<PlaceInfo> listPlaceByAdcodeAndKeyword(String adcode, String keywords) {
+        limiter.limit();
+
         keywords = URLUtil.encode(keywords, "UTF-8");
         RegionSearchRequest request = new RegionSearchRequest();
         request.setAdcode(adcode);
@@ -34,6 +39,8 @@ public class TencentMapService implements MapService {
 
     @Override
     public List<PlaceInfo> listPlaceAroundOrigin(String location, Integer radius) {
+        limiter.limit();
+
         NearbySearchRequest request = new NearbySearchRequest();
         request.setLocation(location);
         request.setRadius(radius);
@@ -44,6 +51,8 @@ public class TencentMapService implements MapService {
 
     @Override
     public PathCost getPathCost(String origin, String destination) {
+        limiter.limit();
+
         DrivingRequest request = new DrivingRequest();
         request.setFrom(origin);
         request.setTo(destination);
@@ -65,7 +74,7 @@ public class TencentMapService implements MapService {
             log.error("搜索结果可能发生错误");
             return list;
         }
-        
+
         for (Data data : resultData) {
             PlaceInfo placeInfo = new PlaceInfo();
             placeInfo.setName(data.getTitle());
@@ -98,6 +107,9 @@ public class TencentMapService implements MapService {
                 continue;
             }
             String currentDirection = step.getDir_desc();
+            if ("".equals(currentDirection)) {
+                continue;
+            }
             if ("".equals(prevDirection)) {
                 routeDirection.add(currentDirection);
             } else if (!prevDirection.equals(currentDirection)) {
