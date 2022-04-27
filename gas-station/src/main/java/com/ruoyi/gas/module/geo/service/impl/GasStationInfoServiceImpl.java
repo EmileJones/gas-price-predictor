@@ -126,6 +126,7 @@ public class GasStationInfoServiceImpl implements IGasStationInfoService {
         gasStationInfo.setLocation(placeInfo.getLocation());
         gasStationInfo.setCity(placeInfo.getCityname());
         gasStationInfo.setName(placeInfo.getName());
+        gasStationInfo.setAddress(placeInfo.getAddress());
         gasStationInfo.setIsSystem(isSystem);
         gasStationInfo.setId(generateId(placeInfo.getPname(), placeInfo.getCityname(), isSystem));
         gasStationInfoMapper.insertGasStationInfo(gasStationInfo);

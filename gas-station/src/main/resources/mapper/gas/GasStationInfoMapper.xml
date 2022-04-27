@@ -10,11 +10,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="location"    column="location"    />
         <result property="province"    column="province"    />
         <result property="city"    column="city"    />
+        <result property="address" column="address" />
         <result property="isSystem"    column="isSystem"    />
     </resultMap>
 
     <sql id="selectGasStationInfoVo">
-        select id, name, location, province, city, isSystem from gas_station_info
+        select id, name, location, province, city, address, isSystem from gas_station_info
     </sql>
 
     <select id="selectCount" resultType="int" parameterType="GasStationInfo">
@@ -25,6 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="location != null  and location != ''"> and location = #{location}</if>
             <if test="province != null  and province != ''"> and province = #{province}</if>
             <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
             <if test="isSystem != null"> and isSystem = #{isSystem}</if>
         </where>
     </select>
@@ -37,6 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="location != null  and location != ''"> and location = #{location}</if>
             <if test="province != null  and province != ''"> and province = #{province}</if>
             <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
             <if test="isSystem != null"> and isSystem = #{isSystem}</if>
         </where>
     </select>
@@ -54,6 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="location != null and location != ''">location,</if>
             <if test="province != null and province != ''">province,</if>
             <if test="city != null and city != ''">city,</if>
+            <if test="address != null and address != ''">address,</if>
             <if test="isSystem != null">isSystem,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -62,6 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="location != null and location != ''">#{location},</if>
             <if test="province != null and province != ''">#{province},</if>
             <if test="city != null and city != ''">#{city},</if>
+            <if test="address != null and address != ''">#{address},</if>
             <if test="isSystem != null">#{isSystem},</if>
          </trim>
     </insert>
@@ -73,6 +78,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="location != null and location != ''">location = #{location},</if>
             <if test="province != null and province != ''">province = #{province},</if>
             <if test="city != null and city != ''">city = #{city},</if>
+            <if test="address != null and address != ''">address = #{address},</if>
             <if test="isSystem != null">city = #{isSystem},</if>
         </trim>
         where id = #{id}
