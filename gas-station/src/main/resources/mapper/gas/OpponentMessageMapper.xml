@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.gas.module.price.mapper.OpponentMessageMapper">
+
+    <resultMap id="OpponentMessage" type="com.ruoyi.gas.module.price.domain.OpponentMessage">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="outGasStationId" column="out_gas_station_id"/>
+        <result property="outGasStationName" column="out_gas_station_name"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+    <insert id="addOpponentMessage">
+        insert into `gas_station_opponent_message`(`user_id`,`out_gas_station_id`,`out_gas_station_name`,`status`)
+        values
+        <foreach collection="opponentMessages" item="obj" separator=",">
+            (#{obj.userId},#{obj.outGasStationId},#{obj.outGasStationName},#{obj.status})
+        </foreach>
+    </insert>
+
+    <select id="selectOpponentMessage" resultMap="OpponentMessage">
+        select *
+        from `gas_station_opponent_message`
+        <where>
+            <if test="id != null">`id` = #{id}</if>
+            <if test="userId != null">`user_id` = #{userId}</if>
+            <if test="outGasStationId != null">`out_gas_station_id` = #{outGasStationId}</if>
+            <if test="outGasStationName != null">`out_gas_station_name` = #{outGasStationName}</if>
+            `status` = #{status}
+        </where>
+    </select>
+
+    <update id="updateOpponentMessage">
+        update `gas_station_opponent_message`
+        <set>
+            <if test="userId != null">`user_id` = #{userId}</if>
+            <if test="outGasStationId != null">`out_gas_station_id` = #{outGasStationId}</if>
+            <if test="outGasStationName != null">`out_gas_station_name` = #{outGasStationName}</if>
+            <if test="status != null">`status` = #{status}</if>
+        </set>
+        where id=#{id}
+    </update>
+</mapper>

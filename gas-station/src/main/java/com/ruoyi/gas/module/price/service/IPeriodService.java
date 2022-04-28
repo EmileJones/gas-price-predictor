@@ -2,7 +2,11 @@ package com.ruoyi.gas.module.price.service;
 
 import com.ruoyi.gas.module.price.domain.Period;
 import com.ruoyi.gas.module.price.domain.form.PeriodForm;
+import com.ruoyi.gas.module.price.domain.vo.PeriodVO;
+import com.ruoyi.gas.module.price.util.DateUtil;
+import org.joda.time.DateTime;
 
+import java.util.Date;
 import java.util.List;
 
 public interface IPeriodService {
@@ -31,6 +35,7 @@ public interface IPeriodService {
 
     /**
      * 查询所有周期数据
+     *
      * @param form 表单条件
      * @return 周期数据
      */
@@ -38,6 +43,7 @@ public interface IPeriodService {
 
     /**
      * 修改周期数据
+     *
      * @param period 周期数据
      * @return 修改成功的数目
      */
@@ -45,7 +51,33 @@ public interface IPeriodService {
 
     /**
      * 删除指定ID的周期
+     *
      * @param ids 删除ID列表
      */
     void removePeriod(Integer[] ids);
+
+    default PeriodVO convertPeriodEntityToVO(Period period) {
+        PeriodVO vo = new PeriodVO();
+        vo.setId(period.getId());
+        vo.setRise(period.getRise());
+        vo.setRemark(period.getRemark());
+
+        Date startTime = DateUtil.toDate(period.getStartTime());
+        Date endTime = DateUtil.toDate(period.getEndTime());
+        vo.setStartTime(startTime);
+        return vo;
+    }
+
+    default Period convertFormToPeriod(PeriodForm form) {
+        Period period = new Period();
+        period.setId(form.getId());
+        DateTime startTime = DateUtil.toDateTime(form.getStartTime());
+        period.setStartTime(startTime);
+
+        DateTime endTime = DateUtil.toDateTime(form.getEndTime());
+        period.setEndTime(endTime);
+        period.setRise(form.getRise());
+        period.setRemark(form.getRemark());
+        return period;
+    }
 }

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.gas.module.price.mapper.OpponentPriceMapper">
+
+    <resultMap id="OpponentPrice" type="com.ruoyi.gas.module.price.domain.OpponentPrice">
+        <result property="userId" column="user_id"/>
+        <result property="gasStationId" column="gas_station_id"/>
+        <result property="outGasStationId" column="out_gas_station_id"/>
+        <result property="timeStamp" column="time_stamp"/>
+        <result property="price92" column="price_92"/>
+        <result property="price95" column="price_95"/>
+        <result property="price98" column="price_98"/>
+        <result property="price00" column="price_00"/>
+    </resultMap>
+
+    <select id="addOpponentPrice" resultMap="OpponentPrice">
+        select *
+        from `gas_station_opponent_price`
+        <where>
+            <if test="opponentPrice.userId != null">`user_id` = #{opponentPrice.userId}</if>
+            <if test="opponentPrice.gasStationId != null">`gas_station_id` = #{opponentPrice.gasStationId}</if>
+            <if test="opponentPrice.outGasStationId != null">`out_gas_station_id` = #{opponentPrice.outGasStationId}
+            </if>
+            <if test="opponentPrice.timeStamp != null">`time_stamp` = #{opponentPrice.timeStamp}</if>
+            <if test="opponentPrice.price92 != null">`price_92` = #{opponentPrice.price92}</if>
+            <if test="opponentPrice.price95 != null">`price_95` = #{opponentPrice.price95}</if>
+            <if test="opponentPrice.price98 != null">`price_98` = #{opponentPrice.price98}</if>
+            <if test="opponentPrice.price00 != null">`price_00` = #{opponentPrice.price00}</if>
+        </where>
+        <if test="startIndex != null &amp;&amp; amount != null">
+            limit #{startIndex},#{amount}
+        </if>
+        <if test="orderField != null &amp;&amp; Desc != null">
+            order by #{orderField}
+            <choose>
+                <when test="Desc">Desc</when>
+                <otherwise>ASC</otherwise>
+            </choose>
+        </if>
+    </select>
+
+    <insert id="addOpponentPrice">
+        insert into `gas_station_opponent_price`(`user_id`, `gas_station_id`, `out_gas_station_id`, `time_stamp`,
+        `price_92`, `price_95`, `price_98`, `price_00`)
+        values
+        <foreach collection="opponentPrices" separator="," item="item">
+            (#{item.userId},#{item.gasStationId},#{item.outGasStationId},#{item.timeStamp},#{item.price92},#{item.price95},#{item.price98},#{item.price00})
+        </foreach>
+    </insert>
+
+    <delete id="deleteOpponentPrice">
+        delete from `gas_station_opponent_price`
+        <where>
+            <if test="userId != null">`user_id` = #{userId}</if>
+            <if test="gasStationId != null">`gas_station_id` = #{gasStationId}</if>
+            <if test="outGasStationId != null">`out_gas_station_id` = #{outGasStationId}</if>
+            <if test="timeStamp != null">`time_stamp` = #{timeStamp}</if>
+            <if test="price92 != null">`price_92` = #{price92}</if>
+            <if test="price95 != null">`price_95` = #{price95}</if>
+            <if test="price98 != null">`price_98` = #{price98}</if>
+            <if test="price00 != null">`price_00` = #{price00}</if>
+        </where>
+    </delete>
+
+    <select id="selectAmountOfData">
+        select count(*)
+        from `gas_station_opponent_price`
+        <where>
+            <if test="userId != null">`user_id` = #{userId}</if>
+            <if test="gasStationId != null">`gas_station_id` = #{gasStationId}</if>
+            <if test="outGasStationId != null">`out_gas_station_id` = #{outGasStationId}</if>
+            <if test="timeStamp != null">`time_stamp` = #{timeStamp}</if>
+            <if test="price92 != null">`price_92` = #{price92}</if>
+            <if test="price95 != null">`price_95` = #{price95}</if>
+            <if test="price98 != null">`price_98` = #{price98}</if>
+            <if test="price00 != null">`price_00` = #{price00}</if>
+        </where>
+    </select>
+</mapper>

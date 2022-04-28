@@ -7,7 +7,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.gas.module.price.domain.form.PeriodForm;
 import com.ruoyi.gas.module.price.service.IPeriodService;
-import com.ruoyi.gas.module.price.service.PeriodVO;
+import com.ruoyi.gas.module.price.domain.vo.PeriodVO;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 

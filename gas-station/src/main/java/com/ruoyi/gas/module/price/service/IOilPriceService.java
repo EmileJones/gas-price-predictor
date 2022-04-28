@@ -3,6 +3,7 @@ package com.ruoyi.gas.module.price.service;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
 public interface IOilPriceService {
 
     /**

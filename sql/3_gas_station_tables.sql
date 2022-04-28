@@ -49,8 +49,7 @@ CREATE TABLE IF NOT EXISTS `gas_station_price_period`
 (
     `id`         int      NOT NULL AUTO_INCREMENT COMMENT '唯一ID',
     `start_time` datetime NOT NULL COMMENT '开始时间',
-    `end_time`   datetime     DEFAULT NULL COMMENT '结束时间',
-    `rise`    boolean  NOT NULL COMMENT '是否上调',
+    `rise`       boolean  NOT NULL COMMENT '是否上调',
     create_by    varchar(64)  default '' comment '创建者',
     create_time  datetime comment '创建时间',
     update_by    varchar(64)  default '' comment '更新者',
@@ -97,3 +96,37 @@ CREATE TABLE IF NOT EXISTS `gas_station_user_owned`
     COMMENT ='用户加油站表'
     COLLATE = 'utf8mb4_general_ci'
     ENGINE = InnoDB;
+
+-- 竞争对手价格表
+CREATE TABLE IF NOT EXISTS `gas_station_opponent_price`
+(
+    `id`                 BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '唯一标识',
+    `user_id`            BIGINT          NOT NULL COMMENT '用户id',
+    `gas_station_id`     VARCHAR(45)     NOT NULL COMMENT '系统内加油站id',
+    `out_gas_station_id` VARCHAR(45)     NOT NULL COMMENT '系统外加油站id',
+    `time_stamp`         DATETIME        NOT NULL COMMENT '时间戳',
+    `price_92`           DECIMAL         NULL DEFAULT 0 COMMENT '92号汽油价格',
+    `price_95`           DECIMAL         NULL DEFAULT 0 COMMENT '95号汽油价格',
+    `price_98`           DECIMAL         NULL DEFAULT 0 COMMENT '98号汽油价格',
+    `price_00`           DECIMAL         NULL DEFAULT 0 COMMENT '柴油价格',
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE
+)
+    ENGINE = InnoDB
+    DEFAULT CHARACTER SET = utf8
+    COMMENT = '竞争对手价格表';
+
+-- 对手加油站信息
+CREATE TABLE IF NOT EXISTS `gas_station_opponent_message`
+(
+    `id`                 BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '唯一标识',
+    `user_id`            BIGINT UNSIGNED NOT NULL COMMENT '用户id',
+    `out_gas_station_id` VARCHAR(45)     NOT NULL COMMENT '系统外加油站id',
+    `gas_station_name`   VARCHAR(45)     NOT NULL COMMENT '系统外加油站名称',
+    `status`             INT UNSIGNED    NOT NULL DEFAULT 1 COMMENT '状态',
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE
+)
+    ENGINE = InnoDB
+    DEFAULT CHARACTER SET = utf8
+    COMMENT = '竞争对手加油站信息表';

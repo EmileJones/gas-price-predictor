@@ -1,4 +1,4 @@
-package com.ruoyi.gas.module.price.service;
+package com.ruoyi.gas.module.price.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -17,9 +17,6 @@ public class PeriodVO {
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date startTime;
-
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date endTime;
 
     /** 备注 */
     private String remark;
@@ -46,14 +43,6 @@ public class PeriodVO {
 
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
-    }
-
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
     }
 
     public String getRemark() {

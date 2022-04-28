@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+@Deprecated
 @Mapper
 public interface OilPriceMapper {
     /**
