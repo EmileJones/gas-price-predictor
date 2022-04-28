@@ -34,6 +34,10 @@ public class GasStationInfo extends BaseEntity
     @Excel(name = "加油站所在市")
     private String city;
 
+    /** 加油站地址信息 */
+    @Excel(name = "加油站地址")
+    private String address;
+
     private Boolean isSystem;
 
     public void setId(String id) 
@@ -88,6 +92,14 @@ public class GasStationInfo extends BaseEntity
         this.isSystem = isSystem;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -96,6 +108,7 @@ public class GasStationInfo extends BaseEntity
             .append("location", getLocation())
             .append("province", getProvince())
             .append("city", getCity())
+            .append("address", getAddress())
             .append("isSystem", getIsSystem())
             .toString();
     }

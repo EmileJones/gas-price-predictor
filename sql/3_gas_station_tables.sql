@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS `gas_station_info`
     `location` varchar(64)  NOT NULL COMMENT '加油站位置',
     `province` varchar(4)   NOT NULL COMMENT '加油站所在省',
     `city`     varchar(32)  NOT NULL COMMENT '加油站所在市',
+    `address`  varchar(1024)NOT NULL COMMENT '加油站地址',
     `isSystem` tinyint      NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
