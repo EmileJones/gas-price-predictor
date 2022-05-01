@@ -4,6 +4,9 @@ import com.ruoyi.gas.module.price.domain.OpponentPrice;
 
 import java.util.List;
 
+/**
+ * 提供关于 竞争对手价格数据 的类
+ */
 public interface IOpponentPriceService {
     /**
      * 添加对手数据

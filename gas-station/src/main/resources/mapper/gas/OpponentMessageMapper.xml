@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.gas.module.price.mapper.OpponentMessageMapper">
+<mapper namespace="com.ruoyi.gas.module.geo.mapper.OpponentMessageMapper">
 
-    <resultMap id="OpponentMessage" type="com.ruoyi.gas.module.price.domain.OpponentMessage">
+    <resultMap id="OpponentMessage" type="com.ruoyi.gas.module.geo.domain.OpponentMessage">
         <result property="id" column="id"/>
         <result property="userId" column="user_id"/>
         <result property="outGasStationId" column="out_gas_station_id"/>
@@ -12,7 +12,7 @@
         <result property="status" column="status"/>
     </resultMap>
 
-    <insert id="addOpponentMessage">
+    <insert id="insertOpponentMessage" useGeneratedKeys="true">
         insert into `gas_station_opponent_message`(`user_id`,`out_gas_station_id`,`out_gas_station_name`,`status`)
         values
         <foreach collection="opponentMessages" item="obj" separator=",">

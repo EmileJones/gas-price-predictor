@@ -18,13 +18,13 @@ CREATE TABLE IF NOT EXISTS `gas_station_geo`
 -- 加油站信息表
 CREATE TABLE IF NOT EXISTS `gas_station_info`
 (
-    `id`       varchar(45)  NOT NULL COMMENT '唯一ID',
-    `name`     varchar(512) NOT NULL COMMENT '加油站名称',
-    `location` varchar(64)  NOT NULL COMMENT '加油站位置',
-    `province` varchar(4)   NOT NULL COMMENT '加油站所在省',
-    `city`     varchar(32)  NOT NULL COMMENT '加油站所在市',
-    `address`  varchar(1024)NOT NULL COMMENT '加油站地址',
-    `isSystem` tinyint      NOT NULL,
+    `id`       varchar(45)   NOT NULL COMMENT '唯一ID',
+    `name`     varchar(512)  NOT NULL COMMENT '加油站名称',
+    `location` varchar(64)   NOT NULL COMMENT '加油站位置',
+    `province` varchar(4)    NOT NULL COMMENT '加油站所在省',
+    `city`     varchar(32)   NOT NULL COMMENT '加油站所在市',
+    `address`  varchar(1024) NOT NULL COMMENT '加油站地址',
+    `isSystem` tinyint       NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -120,14 +120,29 @@ CREATE TABLE IF NOT EXISTS `gas_station_opponent_price`
 -- 对手加油站信息
 CREATE TABLE IF NOT EXISTS `gas_station_opponent_message`
 (
-    `id`                 BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '唯一标识',
-    `user_id`            BIGINT UNSIGNED NOT NULL COMMENT '用户id',
-    `out_gas_station_id` VARCHAR(45)     NOT NULL COMMENT '系统外加油站id',
-    `gas_station_name`   VARCHAR(45)     NOT NULL COMMENT '系统外加油站名称',
-    `status`             INT UNSIGNED    NOT NULL DEFAULT 1 COMMENT '状态',
+    `id`                   BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '唯一标识',
+    `user_id`              BIGINT UNSIGNED NOT NULL COMMENT '用户id',
+    `gas_station_id`       VARCHAR(45)     NOT NULL COMMENT '系统内加油站id',
+    `out_gas_station_id`   VARCHAR(45)     NOT NULL COMMENT '系统外加油站id',
+    `out_gas_station_name` VARCHAR(45)     NOT NULL COMMENT '系统外加油站名称',
+    `status`               INT UNSIGNED    NOT NULL DEFAULT 1 COMMENT '状态',
     PRIMARY KEY (`id`),
     UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE
 )
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8
     COMMENT = '竞争对手加油站信息表';
+
+CREATE TABLE `gas_station_user_period`
+(
+    `id`             BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '数据唯一标识',
+    `user_id`        BIGINT UNSIGNED NOT NULL COMMENT '用户ID',
+    `gas_station_id` VARCHAR(45)     NOT NULL COMMENT '系统内加油站ID',
+    `time_stamp`     DATETIME        NOT NULL COMMENT '时间戳',
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE
+)
+    ENGINE = InnoDB
+    DEFAULT CHARACTER SET = utf8
+    COMMENT = '用户自己定义的周期表';
+

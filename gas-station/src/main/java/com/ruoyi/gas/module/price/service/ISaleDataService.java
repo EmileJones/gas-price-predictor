@@ -2,13 +2,14 @@ package com.ruoyi.gas.module.price.service;
 
 import com.ruoyi.gas.module.price.domain.OilSaleData;
 import com.ruoyi.gas.module.price.domain.vo.OilSaleDataVO;
-import org.apache.ibatis.annotations.Param;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Future;
 
+/**
+ * 提供关于 加油站销售数据 的类
+ */
 public interface ISaleDataService {
     /**
      * 获取某个用户的历史销售记录
@@ -41,25 +42,4 @@ public interface ISaleDataService {
      */
     List<OilSaleData> rollBackLastBatch();
 
-    default List<OilSaleDataVO> convertOilSaleDataList2OilSaleDataVOList(List<OilSaleData> data) {
-        LinkedList<OilSaleDataVO> oilSaleDataVOS = new LinkedList<>();
-        for (OilSaleData oilSaleData : data) {
-            oilSaleDataVOS.add(convertOilSaleData2OilSaleDataVO(oilSaleData));
-        }
-        return oilSaleDataVOS;
-    }
-
-    default OilSaleDataVO convertOilSaleData2OilSaleDataVO(OilSaleData source) {
-        OilSaleDataVO data = new OilSaleDataVO();
-        data.setId(source.getId());
-        data.setUserId(source.getUserId());
-        data.setGasStationId(source.getGasStationId());
-        data.setOilType(source.getOilType());
-        data.setlNumber(source.getLNumber());
-        data.setKgNumber(source.getKgNumber());
-        data.setPrice(source.getPrice());
-        data.setDate(source.getDate().toString("yyyy年MM月dd日"));
-        data.setBatch(source.getBatch());
-        return data;
-    }
 }

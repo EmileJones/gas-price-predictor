@@ -5,7 +5,9 @@ import com.ruoyi.gas.module.price.domain.framwork.OilType;
 import com.ruoyi.gas.module.price.exception.DataIsNotEnoughException;
 import org.joda.time.DateTime;
 
-
+/**
+ * 用于计算 最终价格 的类
+ */
 public interface ICalculatorService {
     /**
      * 计算日均销量
