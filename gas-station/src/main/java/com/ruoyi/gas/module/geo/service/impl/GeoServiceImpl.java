@@ -9,7 +9,6 @@ import com.ruoyi.gas.module.geo.domain.vo.GasStationCandidateVO;
 import com.ruoyi.gas.module.geo.domain.vo.GasStationGeoVO;
 import com.ruoyi.gas.module.geo.service.IGasStationGeoService;
 import com.ruoyi.gas.module.geo.service.IGasStationInfoService;
-import com.ruoyi.gas.module.geo.service.IGasStationUserOwnedService;
 import com.ruoyi.gas.module.map.MapService;
 import com.ruoyi.gas.module.map.model.PlaceInfo;
 import org.springframework.stereotype.Service;

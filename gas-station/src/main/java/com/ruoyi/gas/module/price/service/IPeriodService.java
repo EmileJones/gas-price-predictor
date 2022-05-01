@@ -31,7 +31,9 @@ public interface IPeriodService {
     List<PeriodVO> getHistoryPeriod(int periodNumber);
 
     /**
-     *
+     * 通过id获取数据
+     * @param id 数据唯一标识
+     * @return 周期信息
      */
     PeriodVO getPeriodById(Integer id);
 
@@ -65,7 +67,7 @@ public interface IPeriodService {
         vo.setRemark(period.getRemark());
 
         Date startTime = DateUtil.toDate(period.getStartTime());
-        Date endTime = DateUtil.toDate(period.getEndTime());
+//        Date endTime = DateUtil.toDate(period.getEndTime());
         vo.setStartTime(startTime);
         return vo;
     }

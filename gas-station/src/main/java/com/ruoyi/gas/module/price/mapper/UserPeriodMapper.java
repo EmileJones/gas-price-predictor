@@ -8,6 +8,11 @@ import java.util.List;
 
 @Mapper
 public interface UserPeriodMapper {
+    String ID = "id";
+    String USER_ID = "user_id";
+    String GAS_STATION_ID = "gas_station_id";
+    String TIME_STAMP = "time_stamp";
+
     /**
      * 查询符合条件的数据
      * @param condition 条件

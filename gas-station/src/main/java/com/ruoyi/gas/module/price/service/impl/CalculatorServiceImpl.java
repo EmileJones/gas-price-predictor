@@ -61,8 +61,6 @@ public class CalculatorServiceImpl implements ICalculatorService {
                             .append(outGasStationData.getOpponentGasStationId())
                             .append("]在[")
                             .append(period.getStartTime())
-                            .append("~")
-                            .append(period.getEndTime())
                             .append("]周期的")
                             .append(data.getOilType().getTypeName())
                             .append("估计价格");
