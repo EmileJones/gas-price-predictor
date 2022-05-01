@@ -1,10 +1,12 @@
 package com.ruoyi.gas.module.price.mapper;
 
 import com.ruoyi.gas.module.price.domain.UserPeriod;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+@Mapper
 public interface UserPeriodMapper {
     /**
      * 查询符合条件的数据
