@@ -3,7 +3,7 @@
     <button @click="pullSaleData(1)">点我获取数据</button>
 
     <el-table v-loading="loading" :data="saleDatas">
-      <el-table-column label="加油站名称" align="center" prop="gasStationId"/>
+      <el-table-column label="加油站名称" align="center" prop="gasStationName"/>
       <el-table-column label="物料名称" align="center" prop="oilType"/>
       <el-table-column label="业务发生时间" align="center" prop="date"/>
       <el-table-column label="销售数量/KG" align="center" prop="kgNumber"/>

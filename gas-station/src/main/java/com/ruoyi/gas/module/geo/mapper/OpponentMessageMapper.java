@@ -1,16 +1,18 @@
-package com.ruoyi.gas.module.price.mapper;
+package com.ruoyi.gas.module.geo.mapper;
 
-import com.ruoyi.gas.module.price.domain.OpponentMessage;
+import com.ruoyi.gas.module.geo.domain.OpponentMessage;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
+@Mapper
 public interface OpponentMessageMapper {
     /**
      * 添加对手加油站信息
      * @param opponentMessages 对手加油站信息
      * @return 返回添加成功的数据数
      */
-    int addOpponentMessage(List<OpponentMessage> opponentMessages);
+    int insertOpponentMessage(List<OpponentMessage> opponentMessages);
 
     /**
      * 查询对手加油站信息

@@ -4,11 +4,13 @@ import com.ruoyi.gas.module.price.domain.Period;
 import com.ruoyi.gas.module.price.domain.form.PeriodForm;
 import com.ruoyi.gas.module.price.domain.vo.PeriodVO;
 import com.ruoyi.gas.module.price.util.DateUtil;
-import org.joda.time.DateTime;
 
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 提供关于 大周期信息 的类
+ */
 public interface IPeriodService {
     /**
      * 添加周期信息 <br>
@@ -68,16 +70,4 @@ public interface IPeriodService {
         return vo;
     }
 
-    default Period convertFormToPeriod(PeriodForm form) {
-        Period period = new Period();
-        period.setId(form.getId());
-        DateTime startTime = DateUtil.toDateTime(form.getStartTime());
-        period.setStartTime(startTime);
-
-        DateTime endTime = DateUtil.toDateTime(form.getEndTime());
-        period.setEndTime(endTime);
-        period.setRise(form.getRise());
-        period.setRemark(form.getRemark());
-        return period;
-    }
 }

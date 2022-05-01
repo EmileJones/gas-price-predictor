@@ -96,4 +96,18 @@ public class PeriodServiceImpl implements IPeriodService {
             throw new ServiceException("请勿提交重复的周期");
         }
     }
+
+
+    private Period convertFormToPeriod(PeriodForm form) {
+        Period period = new Period();
+        period.setId(form.getId());
+        DateTime startTime = DateUtil.toDateTime(form.getStartTime());
+        period.setStartTime(startTime);
+
+        DateTime endTime = DateUtil.toDateTime(form.getEndTime());
+        period.setEndTime(endTime);
+        period.setRise(form.getRise());
+        period.setRemark(form.getRemark());
+        return period;
+    }
 }

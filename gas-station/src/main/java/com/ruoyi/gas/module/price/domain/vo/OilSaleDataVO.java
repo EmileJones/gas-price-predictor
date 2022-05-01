@@ -19,9 +19,13 @@ public class OilSaleDataVO extends BaseEntity {
      */
     private String gasStationId;
     /**
+     * 加油站名称
+     */
+    private String gasStationName;
+    /**
      * 石油种类
      */
-    private OilType oilType;
+    private String oilType;
     /**
      * 销售数量L
      */
@@ -50,8 +54,8 @@ public class OilSaleDataVO extends BaseEntity {
     public Double getPrice() {return price;}
     public void setPrice(Double price) {this.price = price;}
 
-    public OilType getOilType() {return oilType;}
-    public void setOilType(OilType oilType) {this.oilType = oilType;}
+    public String getOilType() {return oilType;}
+    public void setOilType(String oilType) {this.oilType = oilType;}
 
     public String getGasStationId() {return gasStationId;}
     public void setGasStationId(String gasStationId) {this.gasStationId = gasStationId;}
@@ -59,6 +63,8 @@ public class OilSaleDataVO extends BaseEntity {
     public String getDate() {return date;}
     public void setDate(String date) {this.date = date;}
 
+    public String getGasStationName() {return gasStationName;}
+    public void setGasStationName(String gasStationName) {this.gasStationName = gasStationName;}
 
     public Integer getBatch() {return batch;}
     public void setBatch(Integer batch) {this.batch = batch;}

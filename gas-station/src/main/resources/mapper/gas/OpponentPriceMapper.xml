@@ -15,7 +15,7 @@
         <result property="price00" column="price_00"/>
     </resultMap>
 
-    <select id="addOpponentPrice" resultMap="OpponentPrice">
+    <select id="selectOpponentPrices" resultMap="OpponentPrice">
         select *
         from `gas_station_opponent_price`
         <where>
@@ -32,10 +32,10 @@
         <if test="startIndex != null &amp;&amp; amount != null">
             limit #{startIndex},#{amount}
         </if>
-        <if test="orderField != null &amp;&amp; Desc != null">
+        <if test="orderField != null &amp;&amp; isDesc != null">
             order by #{orderField}
             <choose>
-                <when test="Desc">Desc</when>
+                <when test="isDesc == true">Desc</when>
                 <otherwise>ASC</otherwise>
             </choose>
         </if>

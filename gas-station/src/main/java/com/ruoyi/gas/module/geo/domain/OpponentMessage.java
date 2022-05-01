@@ -1,31 +1,31 @@
-package com.ruoyi.gas.module.price.domain;
+package com.ruoyi.gas.module.geo.domain;
 
 public class OpponentMessage {
-    private static final int INVALID_FLAG = 0;
-    private static final int EFFECTIVE_FLAG = 1;
+    public static final int INVALID_FLAG = 0;
+    public static final int EFFECTIVE_FLAG = 1;
 
     /**
      * 数据唯一标识
      */
     private Long id;
-
     /**
      * 用户ID
      */
     private Long userId;
-
+    /**
+     * 系统内加油站ID
+     */
+    private String gasStationId;
     /**
      * 系统外加油站ID
      */
     private String outGasStationId;
-
     /**
-     * 系统外加油站别名
+     * 系统外加油站名称
      */
     private String outGasStationName;
-
     /**
-     * 此信息状态
+     * 此条信息的状态
      */
     private int status = EFFECTIVE_FLAG;
 
@@ -43,6 +43,14 @@ public class OpponentMessage {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getGasStationId() {
+        return gasStationId;
+    }
+
+    public void setGasStationId(String gasStationId) {
+        this.gasStationId = gasStationId;
     }
 
     public String getOutGasStationId() {

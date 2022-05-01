@@ -14,28 +14,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * 加油站历史数据
+ */
 @RestController
 @RequestMapping("/gas/price")
 public class SaleDataController extends BaseController {
-//    @Autowired
-//    private ICalculatorService calculatorService;
-//
-//    @Autowired
-//    private IOilPriceService oilPriceService;
-//
-//    @Autowired
-//    private IPeriodService periodService;
 
     @Autowired
     private ISaleDataService saleDataService;
 
     @PreAuthorize("@ss.hasPermi('gas:price:list')")
     @GetMapping("/saleData")
-    public TableDataInfo getSaleData(@RequestParam("pageNum") Integer pageNum,@RequestParam("pageSize") Integer pageSize) {
+    public TableDataInfo getSaleData(@RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize) {
         Long userId = SecurityUtils.getLoginUser()
                 .getUser()
                 .getUserId();
-        List<OilSaleDataVO> historySaleData = saleDataService.getHistorySaleDataByUserId(userId,pageNum,pageSize);
+        List<OilSaleDataVO> historySaleData = saleDataService.getHistorySaleDataByUserId(userId, pageNum, pageSize);
         TableDataInfo dataTable = getDataTable(historySaleData);
         dataTable.setTotal(saleDataService.selectHistorySaleDataAmount(userId));
         return dataTable;

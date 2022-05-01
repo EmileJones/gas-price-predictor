@@ -1,5 +1,7 @@
 package com.ruoyi.gas.module.price.service.impl;
 
+import com.ruoyi.gas.module.geo.domain.GasStationInfo;
+import com.ruoyi.gas.module.geo.service.IGasStationInfoService;
 import com.ruoyi.gas.module.price.domain.OilSaleData;
 import com.ruoyi.gas.module.price.domain.vo.OilSaleDataVO;
 import com.ruoyi.gas.module.price.mapper.OilSaleDataMapper;
@@ -9,22 +11,27 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Future;
 
 @Service
 public class SaleDataServiceImpl implements ISaleDataService {
     @Autowired
     OilSaleDataMapper saleDataMapper;
+    @Autowired
+    IGasStationInfoService gasStationInfoService;
 
     @Override
     public List<OilSaleDataVO> getHistorySaleDataByUserId(Long userId, Integer pageNum, Integer pageSize) {
         Long startIndex = (long) ((pageNum - 1) * pageSize);
         List<OilSaleData> oilSaleData = saleDataMapper.selectHistorySaleData(userId, startIndex, pageSize);
-        return convertOilSaleDataList2OilSaleDataVOList(oilSaleData);
+        List<OilSaleDataVO> oilSaleDataVOS = convertOilSaleDataList2OilSaleDataVOList(oilSaleData);
+        // 根据id查询加油站名称
+        oilSaleDataVOS.stream().forEach(temp -> {
+            GasStationInfo gasStationInfo = gasStationInfoService.selectGasStationInfoById(temp.getGasStationId());
+            temp.setGasStationName(gasStationInfo.getName());
+        });
+        return oilSaleDataVOS;
     }
 
     @Override
@@ -64,5 +71,27 @@ public class SaleDataServiceImpl implements ISaleDataService {
         }});
         saleDataMapper.rollBackLastBatch();
         return oilSaleData;
+    }
+
+    private List<OilSaleDataVO> convertOilSaleDataList2OilSaleDataVOList(List<OilSaleData> data) {
+        LinkedList<OilSaleDataVO> oilSaleDataVOS = new LinkedList<>();
+        for (OilSaleData oilSaleData : data) {
+            oilSaleDataVOS.add(convertOilSaleData2OilSaleDataVO(oilSaleData));
+        }
+        return oilSaleDataVOS;
+    }
+
+    private OilSaleDataVO convertOilSaleData2OilSaleDataVO(OilSaleData source) {
+        OilSaleDataVO data = new OilSaleDataVO();
+        data.setId(source.getId());
+        data.setUserId(source.getUserId());
+        data.setGasStationId(source.getGasStationId());
+        data.setOilType(source.getOilType().getTypeName());
+        data.setlNumber(source.getLNumber());
+        data.setKgNumber(source.getKgNumber());
+        data.setPrice(source.getPrice());
+        data.setDate(source.getDate().toString("yyyy年MM月dd日"));
+        data.setBatch(source.getBatch());
+        return data;
     }
 }

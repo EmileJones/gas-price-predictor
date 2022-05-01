@@ -67,7 +67,17 @@ public interface IGasStationInfoService {
      */
     public int updateGasStation(GasStationInfo gasStationInfo);
 
+    /**
+     * 通过经纬度获取加油站信息
+     * @param location 经纬度
+     * @return 加油站信息
+     */
     public GasStationInfo getSystemStationByLocation(String location);
 
+    /**
+     * 通过系统内加油站id获取系统外加油站id
+     * @param systemId  系统内加油站id
+     * @return  系统外加油站id信息
+     */
     public List<GasStationInfo> listOutSystemStationBySystemStationId(String systemId);
 }
