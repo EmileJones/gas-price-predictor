@@ -6,6 +6,10 @@ import java.util.List;
 
 public class DataForCalculation {
     /**
+     * 用户ID
+     */
+    private Long userId;
+    /**
      * 用户加油站ID
      */
     private String gasStationId;
@@ -89,5 +93,13 @@ public class DataForCalculation {
 
     public void setGasStationId(String gasStationId) {
         this.gasStationId = gasStationId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }
