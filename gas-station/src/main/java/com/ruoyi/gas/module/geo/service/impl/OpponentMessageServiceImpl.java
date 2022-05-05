@@ -77,6 +77,19 @@ public class OpponentMessageServiceImpl implements IOpponentMessageService {
         return updateData;
     }
 
+    @Override
+    public OpponentMessage getOpponentMessageByStationId(Long userId, String gasStationId, String outGasStationId) {
+        OpponentMessage condition = new OpponentMessage();
+        condition.setUserId(userId);
+        condition.setGasStationId(gasStationId);
+        condition.setOutGasStationId(outGasStationId);
+        List<OpponentMessage> opponentMessages = opponentMessageMapper.selectOpponentMessage(condition);
+        if (opponentMessages.size() == 1){
+            return opponentMessages.get(0);
+        }
+        return null;
+    }
+
 
     private List<OpponentMessageVO> convertOpponentMessage2OpponentMessageVO(List<OpponentMessage> opponentMessages) {
         return opponentMessages.stream()

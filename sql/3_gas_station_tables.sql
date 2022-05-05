@@ -103,6 +103,8 @@ CREATE TABLE IF NOT EXISTS `gas_station_opponent_price`
 (
     `id`                 BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '唯一标识',
     `user_period_id`     BIGINT          NOT NULL COMMENT '用户周期id',
+    `user_id`            BIGINT          NOT NULL COMMENT '用户id',
+    `gas_station_id`     VARCHAR(45)     NOT NULL COMMENT '系统内加油站id',
     `out_gas_station_id` VARCHAR(45)     NOT NULL COMMENT '系统外加油站id',
     `price_92`           DECIMAL         NULL DEFAULT 0 COMMENT '92号汽油价格',
     `price_95`           DECIMAL         NULL DEFAULT 0 COMMENT '95号汽油价格',

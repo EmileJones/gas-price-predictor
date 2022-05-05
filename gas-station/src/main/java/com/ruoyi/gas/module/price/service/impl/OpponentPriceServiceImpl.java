@@ -1,17 +1,32 @@
 package com.ruoyi.gas.module.price.service.impl;
 
+import com.ruoyi.gas.module.geo.domain.OpponentMessage;
+import com.ruoyi.gas.module.geo.domain.vo.OpponentMessageVO;
+import com.ruoyi.gas.module.geo.service.IGasStationInfoService;
+import com.ruoyi.gas.module.geo.service.IOpponentMessageService;
 import com.ruoyi.gas.module.price.domain.OpponentPrice;
+import com.ruoyi.gas.module.price.domain.UserPeriod;
+import com.ruoyi.gas.module.price.domain.dto.ExportExcelDTO;
 import com.ruoyi.gas.module.price.mapper.OpponentPriceMapper;
 import com.ruoyi.gas.module.price.service.IOpponentPriceService;
+import com.ruoyi.gas.module.price.service.IUserPeriodService;
+import com.ruoyi.gas.module.price.util.ExcelWriteUtil;
+import com.ruoyi.gas.module.price.util.OpponentPriceExcelUtil;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.io.InputStream;
+import java.util.*;
 
 @Service
 public class OpponentPriceServiceImpl implements IOpponentPriceService {
     @Autowired
     private OpponentPriceMapper opponentPriceMapper;
+    @Autowired
+    private IOpponentMessageService opponentMessageService;
+    @Autowired
+    public IUserPeriodService userPeriodService;
 
     @Override
     public int addOpponentPrice(List<OpponentPrice> opponentPrice) {
@@ -36,5 +51,54 @@ public class OpponentPriceServiceImpl implements IOpponentPriceService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Workbook getExcelToImportData(Long userId, String gasStationId, int periodNumber) {
+        Map<Date, List<ExportExcelDTO>> map = new HashMap<>();
+        List<UserPeriod> userPeriods = userPeriodService.getUserPeriods(userId, gasStationId, 0l, (long) periodNumber);
+        OpponentPrice condition = new OpponentPrice();
+        condition.setUserId(userId);
+        condition.setGasStationId(gasStationId);
+        for (UserPeriod userPeriod : userPeriods){
+            condition.setUserPeriodId(userPeriod.getUserId());
+            List<OpponentPrice> opponentPrices = opponentPriceMapper.selectOpponentPrices(condition,null,null,null,null);
+            List<ExportExcelDTO> exportExcelDTOS = convertOpponentPrice2ExportExcelDTO(opponentPrices);
+            map.put(userPeriod.getTimeStamp(), exportExcelDTOS);
+        }
+        Workbook workbook = OpponentPriceExcelUtil.generateExcel(map);
+        return workbook;
+    }
+
+    private List<ExportExcelDTO> convertOpponentPrice2ExportExcelDTO(List<OpponentPrice> opponentPriceList) {
+        LinkedList<ExportExcelDTO> exportExcelDTOS = new LinkedList<>();
+        // 将对手加油站的信息全部查出放入内存中
+        Map<String, String> nameMap = new HashMap<>();
+        List<OpponentMessageVO> opponentMessageVOs = opponentMessageService.getOpponentMessage(opponentPriceList.get(0).getUserId(),
+                opponentPriceList.get(0).getGasStationId());
+        opponentMessageVOs.stream().forEach(opponentMessageVO -> {
+            nameMap.put(opponentMessageVO.getOutGasStationId(), opponentMessageVO.getOutGasStationName());
+        });
+        // 转换
+        for (OpponentPrice opponentPrice : opponentPriceList) {
+            ExportExcelDTO dto = new ExportExcelDTO();
+            dto.setOutGasStationId(opponentPrice.getOutGasStationId());
+            String name = null;
+            if (nameMap.containsKey(opponentPrice.getOutGasStationId())) {
+                name = nameMap.get(opponentPrice.getOutGasStationId());
+            } else {
+                OpponentMessage opponentMessage = opponentMessageService.getOpponentMessageByStationId(opponentPrice.getUserId(),
+                        opponentPrice.getGasStationId(),
+                        opponentPrice.getOutGasStationId());
+                name = opponentMessage != null ? opponentMessage.getOutGasStationName() : "";
+            }
+            dto.setOutGasStationName(name);
+            dto.setPrice00(opponentPrice.getPrice00().doubleValue());
+            dto.setPrice92(opponentPrice.getPrice92().doubleValue());
+            dto.setPrice95(opponentPrice.getPrice95().doubleValue());
+            dto.setPrice98(opponentPrice.getPrice98().doubleValue());
+            exportExcelDTOS.add(dto);
+        }
+        return exportExcelDTOS;
     }
 }
