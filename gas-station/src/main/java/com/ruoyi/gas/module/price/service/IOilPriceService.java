@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.Map;
 
 @Deprecated
+/**
+ * 系统外价格模块，已废弃
+ * 请使用 IOpponentPriceService
+ */
 public interface IOilPriceService {
 
     /**

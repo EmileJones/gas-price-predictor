@@ -1,11 +1,9 @@
 package com.ruoyi.gas.module.price.service.impl;
 
 import com.ruoyi.gas.module.price.domain.OpponentPrice;
-import com.ruoyi.gas.module.price.domain.Period;
 import com.ruoyi.gas.module.price.domain.UserPeriod;
 import com.ruoyi.gas.module.price.domain.dto.DataForCalculation;
 import com.ruoyi.gas.module.price.domain.dto.OpponentGasStationDataForCalculation;
-import com.ruoyi.gas.module.price.domain.framwork.OilPrice;
 import com.ruoyi.gas.module.price.domain.framwork.OilType;
 import com.ruoyi.gas.module.price.exception.DataIsNotEnoughException;
 import com.ruoyi.gas.module.price.mapper.*;
@@ -55,7 +53,10 @@ public class CalculatorServiceImpl implements ICalculatorService {
             // 封装系统外加油站每个周期的价格
             for (int j = 0; j < data.getPeriodNumber(); j++) {
                 UserPeriod userPeriod = periods.get(j);
-                OpponentPrice opponentPrice = getOpponentPrice(data.getUserId(), outGasStationData.getOpponentGasStationId());
+                OpponentPrice opponentPrice = getOpponentPrice(data.getUserId(),
+                        userPeriod.getId(),
+                        data.getGasStationId(),
+                        outGasStationData.getOpponentGasStationId());
                 BigDecimal price = opponentPrice.getPrice(data.getOilType());
                 neededData.setOutMoney(i, j, price.doubleValue());
             }
@@ -125,30 +126,37 @@ public class CalculatorServiceImpl implements ICalculatorService {
     /**
      * 获取某个周期的竞争对手的价格
      *
-     * @param userPeriodId 周期ID
-     * @param outStationId 系统外加油站ID
+     * @param userId          用户ID
+     * @param userPeriodId    周期ID
+     * @param gasStationId    系统内加油站ID
+     * @param outGasStationId 系统外加油站ID
      * @return 竞争对手价格(若没有输入则返回全为0的数据)
      */
-    private OpponentPrice getOpponentPrice(Long userPeriodId, String outStationId) {
+    private OpponentPrice getOpponentPrice(Long userId, Long userPeriodId, String gasStationId, String outGasStationId) {
         OpponentPrice condition = new OpponentPrice();
         condition.setUserPeriodId(userPeriodId);
-        condition.setOutGasStationId(outStationId);
+        condition.setOutGasStationId(outGasStationId);
         List<OpponentPrice> result = opponentPriceMapper.selectOpponentPrices(condition, null, null, null, null);
         if (result.size() == 1) {
             return result.get(0);
         }
-        return createOpponentPriceAndSaveInDataBase(userPeriodId, outStationId);
+        return createOpponentPriceAndSaveInDataBase(userId, userPeriodId, gasStationId, outGasStationId);
     }
 
     /**
      * 创建一个数据全为0的OpponentPrice,并存入数据库中
-     * @param userPeriodId 用户周期ID
+     *
+     * @param userId          用户ID
+     * @param userPeriodId    周期ID
+     * @param gasStationId    系统内加油站ID
      * @param outGasStationId 系统外加油站ID
      * @return OpponentPrice对象
      */
-    private OpponentPrice createOpponentPriceAndSaveInDataBase(Long userPeriodId, String outGasStationId) {
+    private OpponentPrice createOpponentPriceAndSaveInDataBase(Long userId, Long userPeriodId, String gasStationId, String outGasStationId) {
         OpponentPrice opponentPrice = new OpponentPrice();
+        opponentPrice.setUserId(userId);
         opponentPrice.setUserPeriodId(userPeriodId);
+        opponentPrice.setGasStationId(gasStationId);
         opponentPrice.setOutGasStationId(outGasStationId);
         opponentPrice.setPrice00(new BigDecimal(0));
         opponentPrice.setPrice92(new BigDecimal(0));
@@ -162,8 +170,9 @@ public class CalculatorServiceImpl implements ICalculatorService {
 
     /**
      * 计算时间差
+     *
      * @param start 开始时间
-     * @param end 结束时间
+     * @param end   结束时间
      * @return 时间差/天
      */
     private double calculateDifferenceDay(DateTime start, DateTime end) {

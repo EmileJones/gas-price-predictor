@@ -18,7 +18,14 @@ public class OpponentPrice extends BaseEntity {
      * 用户周期ID
      */
     private Long userPeriodId;
-
+    /**
+     * 用户ID
+     */
+    private Long userId;
+    /**
+     * 系统内加油站ID
+     */
+    private String gasStationId;
     /**
      * 系统外加油站id
      */
@@ -88,13 +95,30 @@ public class OpponentPrice extends BaseEntity {
         this.userPeriodId = userPeriodId;
     }
 
-    public BigDecimal getPrice(OilType oilType){
+
+    public String getGasStationId() {
+        return gasStationId;
+    }
+
+    public void setGasStationId(String gasStationId) {
+        this.gasStationId = gasStationId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public BigDecimal getPrice(OilType oilType) {
         BigDecimal result = null;
         try {
             Method declaredMethod = this.getClass().getDeclaredMethod("getPrice" + oilType.getTypeNumber());
             Object invoke = declaredMethod.invoke(this);
             result = (BigDecimal) invoke;
-        } catch (NoSuchMethodException | IllegalAccessException |InvocationTargetException e) {
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             result = new BigDecimal(0);
         }
         return result;

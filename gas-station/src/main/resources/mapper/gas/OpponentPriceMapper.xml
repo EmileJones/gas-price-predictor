@@ -7,6 +7,8 @@
     <resultMap id="OpponentPrice" type="com.ruoyi.gas.module.price.domain.OpponentPrice">
         <result property="id" column="id"/>
         <result property="userPeriodId" column="user_period_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="gasStationId" column="gas_station_id"/>
         <result property="outGasStationId" column="out_gas_station_id"/>
         <result property="price92" column="price_92"/>
         <result property="price95" column="price_95"/>
@@ -20,6 +22,8 @@
         <where>
             <if test="opponentPrice.id != null">`id` = #{opponentPrice.id}</if>
             <if test="opponentPrice.userPeriodId != null">`user_period_id` = #{opponentPrice.userPeriodId}</if>
+            <if test="opponentPrice.userId != null">`user_id` = #{userId}</if>
+            <if test="opponentPrice.gasStationId != null">`gas_station_id` = #{gasStationId}</if>
             <if test="opponentPrice.outGasStationId != null">`out_gas_station_id` = #{opponentPrice.outGasStationId}
             </if>
             <if test="opponentPrice.price92 != null">`price_92` = #{opponentPrice.price92}</if>
@@ -40,10 +44,11 @@
     </select>
 
     <insert id="addOpponentPrice">
-        insert into `gas_station_opponent_price`(`user_period_id`, `out_gas_station_id`, `price_92`, `price_95`, `price_98`, `price_00`)
+        insert into `gas_station_opponent_price`(`user_period_id`, `user_id`, `gas_station_id`, `out_gas_station_id`,
+        `price_92`, `price_95`, `price_98`, `price_00`)
         values
         <foreach collection="opponentPrices" separator="," item="item">
-            (#{item.userPeriodId},#{item.outGasStationId},#{item.price92},#{item.price95},#{item.price98},#{item.price00})
+            (#{item.userPeriodId},#{item.userId},#{item.gasStationId},#{item.outGasStationId},#{item.price92},#{item.price95},#{item.price98},#{item.price00})
         </foreach>
     </insert>
 
@@ -52,6 +57,8 @@
         <where>
             <if test="opponentPrice.id != null">`id` = #{opponentPrice.id}</if>
             <if test="opponentPrice.userPeriodId != null">`user_period_id` = #{opponentPrice.userPeriodId}</if>
+            <if test="opponentPrice.userId != null">`user_id` = #{userId}</if>
+            <if test="opponentPrice.gasStationId != null">`gas_station_id` = #{gasStationId}</if>
             <if test="opponentPrice.outGasStationId != null">`out_gas_station_id` = #{opponentPrice.outGasStationId}
             </if>
             <if test="opponentPrice.price92 != null">`price_92` = #{opponentPrice.price92}</if>
@@ -67,6 +74,8 @@
         <where>
             <if test="opponentPrice.id != null">`id` = #{opponentPrice.id}</if>
             <if test="opponentPrice.userPeriodId != null">`user_period_id` = #{opponentPrice.userPeriodId}</if>
+            <if test="opponentPrice.userId != null">`user_id` = #{userId}</if>
+            <if test="opponentPrice.gasStationId != null">`gas_station_id` = #{gasStationId}</if>
             <if test="opponentPrice.outGasStationId != null">`out_gas_station_id` = #{opponentPrice.outGasStationId}
             </if>
             <if test="opponentPrice.price92 != null">`price_92` = #{opponentPrice.price92}</if>
