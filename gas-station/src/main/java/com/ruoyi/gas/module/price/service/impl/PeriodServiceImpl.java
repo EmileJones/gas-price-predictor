@@ -4,6 +4,7 @@ import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.gas.module.price.domain.form.PeriodForm;
 import com.ruoyi.gas.module.price.domain.Period;
 import com.ruoyi.gas.module.price.domain.vo.PeriodVO;
+import com.ruoyi.gas.module.price.framework.AddPeriodEventSource;
 import com.ruoyi.gas.module.price.mapper.PricePeriodMapper;
 import com.ruoyi.gas.module.price.service.*;
 import com.ruoyi.gas.module.price.util.DateUtil;
@@ -15,13 +16,11 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.ruoyi.gas.module.price.util.DateUtil.toDateTime;
-
 @Service
-public class PeriodServiceImpl implements IPeriodService {
+public class PeriodServiceImpl extends AddPeriodEventSource implements IPeriodService {
 
     @Autowired
-    PricePeriodMapper periodMapper;
+    private PricePeriodMapper periodMapper;
 
     @Override
     public List<PeriodVO> getPeriodList(PeriodForm form) {
@@ -62,11 +61,11 @@ public class PeriodServiceImpl implements IPeriodService {
         for (Integer id : ids) {
             Period period = periodMapper.selectPeriod(id);
             Date startTime = DateUtil.toDate(period.getStartTime());
-            Period previousPeriod = periodMapper.selectPreviousPeriod(startTime);
-            if (previousPeriod != null) {
-                previousPeriod.setEndTime(period.getEndTime());
-                periodMapper.updatePeriod(previousPeriod);
-            }
+//            Period previousPeriod = periodMapper.selectPreviousPeriod(startTime);
+//            if (previousPeriod != null) {
+//                previousPeriod.setEndTime(period.getEndTime());
+//                periodMapper.updatePeriod(previousPeriod);
+//            }
             periodMapper.deletePeriod(id);
         }
     }
@@ -75,20 +74,24 @@ public class PeriodServiceImpl implements IPeriodService {
     public int addPeriod(PeriodForm form) {
         // 1. 设置上一周期的结束时间为当前周期的开始时间
         Period period = convertFormToPeriod(form);
-        Period previousPeriod = periodMapper.selectPreviousPeriod(form.getStartTime());
-        if (previousPeriod != null) {
-            DateTime startTime = toDateTime(form.getStartTime());
-            previousPeriod.setEndTime(startTime);
-            periodMapper.updatePeriod(previousPeriod);
-        }
+//        Period previousPeriod = periodMapper.selectPreviousPeriod(form.getStartTime());
+//        if (previousPeriod != null) {
+//            DateTime startTime = toDateTime(form.getStartTime());
+//            previousPeriod.setEndTime(startTime);
+//            periodMapper.updatePeriod(previousPeriod);
+//        }
 
         // 2. 获取下一周期的开始时间为当前周期的结束时间
-        Period nextPeriod = periodMapper.selectNextPeriod(form.getStartTime());
-        DateTime endTime = null;
-        if (nextPeriod != null) {
-            endTime = nextPeriod.getStartTime();
-        }
-        period.setEndTime(endTime);
+//        Period nextPeriod = periodMapper.selectNextPeriod(form.getStartTime());
+//        DateTime endTime = null;
+//        if (nextPeriod != null) {
+//            endTime = nextPeriod.getStartTime();
+//        }
+//        period.setEndTime(endTime);
+
+        // 3. 将所有的用户周期表中加入周期数据
+        setPeriod(period);
+        notifyAllObserver();
 
         try {
             return periodMapper.addPeriod(period);
@@ -105,7 +108,8 @@ public class PeriodServiceImpl implements IPeriodService {
         period.setStartTime(startTime);
 
         DateTime endTime = DateUtil.toDateTime(form.getEndTime());
-        period.setEndTime(endTime);
+
+//        period.setEndTime(endTime);
         period.setRise(form.getRise());
         period.setRemark(form.getRemark());
         return period;

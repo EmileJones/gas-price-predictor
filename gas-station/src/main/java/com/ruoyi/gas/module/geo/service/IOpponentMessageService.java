@@ -2,12 +2,15 @@ package com.ruoyi.gas.module.geo.service;
 
 import com.ruoyi.gas.module.geo.domain.OpponentMessage;
 import com.ruoyi.gas.module.geo.domain.vo.OpponentMessageVO;
+import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 
 /**
  * 提供关于 对手信息 的类
  */
+
 public interface IOpponentMessageService {
     /**
      * 返回该用户的此加油站的所有对手信息
@@ -35,4 +38,13 @@ public interface IOpponentMessageService {
      * @return 新增的对手加油站的信息
      */
     List<OpponentMessage> refreshOpponentMessage(Long userId, String gasStationId);
+
+    /**
+     * 通过系统外加油站ID获取对手信息
+     * @param userId 用户ID
+     * @param gasStationId 加油站ID
+     * @param outGasStationId 系统外加油站ID
+     * @return 加油站信息
+     */
+    OpponentMessage getOpponentMessageByStationId(Long userId, String gasStationId, String outGasStationId);
 }

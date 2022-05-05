@@ -1,9 +1,11 @@
 package com.ruoyi.gas.module.price.domain;
 
 import com.ruoyi.common.core.domain.BaseEntity;
+import com.ruoyi.gas.module.price.domain.framwork.OilType;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.util.Date;
 
 public class OpponentPrice extends BaseEntity {
 
@@ -13,24 +15,21 @@ public class OpponentPrice extends BaseEntity {
     private Long id;
 
     /**
-     * 用户id
+     * 用户周期ID
+     */
+    private Long userPeriodId;
+    /**
+     * 用户ID
      */
     private Long userId;
-
     /**
-     * 系统内加油站id
+     * 系统内加油站ID
      */
     private String gasStationId;
-
     /**
      * 系统外加油站id
      */
     private String outGasStationId;
-
-    /**
-     * 时间戳
-     */
-    private Date timeStamp;
 
     /**
      * 石油价钱
@@ -48,36 +47,12 @@ public class OpponentPrice extends BaseEntity {
         this.id = id;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getGasStationId() {
-        return gasStationId;
-    }
-
-    public void setGasStationId(String gasStationId) {
-        this.gasStationId = gasStationId;
-    }
-
     public String getOutGasStationId() {
         return outGasStationId;
     }
 
     public void setOutGasStationId(String outGasStationId) {
         this.outGasStationId = outGasStationId;
-    }
-
-    public Date getTimeStamp() {
-        return timeStamp;
-    }
-
-    public void setTimeStamp(Date timeStamp) {
-        this.timeStamp = timeStamp;
     }
 
     public BigDecimal getPrice92() {
@@ -110,5 +85,42 @@ public class OpponentPrice extends BaseEntity {
 
     public void setPrice00(BigDecimal price00) {
         this.price00 = price00;
+    }
+
+    public Long getUserPeriodId() {
+        return userPeriodId;
+    }
+
+    public void setUserPeriodId(Long userPeriodId) {
+        this.userPeriodId = userPeriodId;
+    }
+
+
+    public String getGasStationId() {
+        return gasStationId;
+    }
+
+    public void setGasStationId(String gasStationId) {
+        this.gasStationId = gasStationId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public BigDecimal getPrice(OilType oilType) {
+        BigDecimal result = null;
+        try {
+            Method declaredMethod = this.getClass().getDeclaredMethod("getPrice" + oilType.getTypeNumber());
+            Object invoke = declaredMethod.invoke(this);
+            result = (BigDecimal) invoke;
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            result = new BigDecimal(0);
+        }
+        return result;
     }
 }

@@ -1,7 +1,9 @@
 package com.ruoyi.gas.module.price.service;
 
 import com.ruoyi.gas.module.price.domain.OpponentPrice;
+import org.apache.poi.ss.usermodel.Workbook;
 
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -31,4 +33,13 @@ public interface IOpponentPriceService {
      * false 删除失败
      */
     boolean deleteOpponentPrice(Long id);
+
+    /**
+     * 获取导入数据的Excel表
+     * @param userId 用户ID
+     * @param gasStationId 加油站ID
+     * @param periodNumber 需要加载的周期数
+     * @return Excel表的工作簿
+     */
+    Workbook getExcelToImportData(Long userId, String gasStationId, int periodNumber);
 }

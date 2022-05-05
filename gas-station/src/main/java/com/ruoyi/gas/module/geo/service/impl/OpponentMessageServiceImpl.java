@@ -6,10 +6,12 @@ import com.ruoyi.gas.module.geo.domain.vo.OpponentMessageVO;
 import com.ruoyi.gas.module.geo.mapper.OpponentMessageMapper;
 import com.ruoyi.gas.module.geo.service.IOpponentMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Service
 public class OpponentMessageServiceImpl implements IOpponentMessageService {
     @Autowired
     OpponentMessageMapper opponentMessageMapper;
@@ -77,6 +79,19 @@ public class OpponentMessageServiceImpl implements IOpponentMessageService {
         return updateData;
     }
 
+
+    @Override
+    public OpponentMessage getOpponentMessageByStationId(Long userId, String gasStationId, String outGasStationId) {
+        OpponentMessage condition = new OpponentMessage();
+        condition.setUserId(userId);
+        condition.setGasStationId(gasStationId);
+        condition.setOutGasStationId(outGasStationId);
+        List<OpponentMessage> opponentMessages = opponentMessageMapper.selectOpponentMessage(condition);
+        if (opponentMessages.size() == 1){
+            return opponentMessages.get(0);
+        }
+        return null;
+    }
 
     private List<OpponentMessageVO> convertOpponentMessage2OpponentMessageVO(List<OpponentMessage> opponentMessages) {
         return opponentMessages.stream()
