@@ -2,7 +2,6 @@ package com.ruoyi.gas.module.price.service.impl;
 
 import com.ruoyi.gas.module.geo.domain.OpponentMessage;
 import com.ruoyi.gas.module.geo.domain.vo.OpponentMessageVO;
-import com.ruoyi.gas.module.geo.service.IGasStationInfoService;
 import com.ruoyi.gas.module.geo.service.IOpponentMessageService;
 import com.ruoyi.gas.module.price.domain.OpponentPrice;
 import com.ruoyi.gas.module.price.domain.UserPeriod;
@@ -10,13 +9,14 @@ import com.ruoyi.gas.module.price.domain.dto.ExportExcelDTO;
 import com.ruoyi.gas.module.price.mapper.OpponentPriceMapper;
 import com.ruoyi.gas.module.price.service.IOpponentPriceService;
 import com.ruoyi.gas.module.price.service.IUserPeriodService;
-import com.ruoyi.gas.module.price.util.ExcelWriteUtil;
 import com.ruoyi.gas.module.price.util.OpponentPriceExcelUtil;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.InputStream;
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -68,6 +68,48 @@ public class OpponentPriceServiceImpl implements IOpponentPriceService {
         }
         Workbook workbook = OpponentPriceExcelUtil.generateExcel(map);
         return workbook;
+    }
+
+    @Override
+    public void importOpponentData(MultipartFile file, Long userId, String gasStationId) {
+        Map<Date, List<ExportExcelDTO>> dateListMap = OpponentPriceExcelUtil.importExcel(file);
+
+        List<OpponentPrice> opponentPrices = convertExportData2OpponentPrice(userId, gasStationId, dateListMap);
+
+        addOpponentPrice(opponentPrices);
+    }
+
+    private List<OpponentPrice> convertExportData2OpponentPrice(Long userId,
+                                                                String gasStationId,
+                                                                Map<Date, List<ExportExcelDTO>> dateListMap) {
+        Map<String, String> nameIdMap = new HashMap<>();
+        List<OpponentMessageVO> opponentMessage = opponentMessageService.getOpponentMessage(userId, gasStationId);
+        opponentMessage.forEach(opponentMessageVO -> {
+            nameIdMap.put(opponentMessageVO.getOutGasStationName(), opponentMessageVO.getOutGasStationId());
+        });
+
+
+        List<OpponentPrice> opponentPrices = new ArrayList<>();
+        for (Map.Entry<Date, List<ExportExcelDTO>> entry : dateListMap.entrySet()) {
+            Date date = entry.getKey();
+            Long userPeriodId = userPeriodService.getUserPeriodId(userId, gasStationId, date);
+            for (ExportExcelDTO exportExcelDTO : entry.getValue()) {
+                OpponentPrice opponentPrice = new OpponentPrice();
+                opponentPrice.setUserId(userId);
+                opponentPrice.setGasStationId(gasStationId);
+                opponentPrice.setUserPeriodId(userPeriodId);
+                String outGasStationName = exportExcelDTO.getOutGasStationName();
+                opponentPrice.setOutGasStationId(nameIdMap.get(outGasStationName));
+
+                opponentPrice.setPrice92(BigDecimal.valueOf(exportExcelDTO.getPrice92()));
+                opponentPrice.setPrice95(BigDecimal.valueOf(exportExcelDTO.getPrice95()));
+                opponentPrice.setPrice98(BigDecimal.valueOf(exportExcelDTO.getPrice98()));
+                opponentPrice.setPrice00(BigDecimal.valueOf(exportExcelDTO.getPrice00()));
+                opponentPrices.add(opponentPrice);
+            }
+        }
+
+        return opponentPrices;
     }
 
     private List<ExportExcelDTO> convertOpponentPrice2ExportExcelDTO(List<OpponentPrice> opponentPriceList,

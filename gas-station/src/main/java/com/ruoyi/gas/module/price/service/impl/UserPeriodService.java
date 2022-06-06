@@ -12,6 +12,7 @@ import com.ruoyi.system.mapper.SysUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -42,6 +43,18 @@ public class UserPeriodService implements IUserPeriodService, Observer<AddPeriod
         UserPeriod condition = new UserPeriod();
         condition.setId(id);
         return userPeriodMapper.deleteUserPeriod(condition);
+    }
+
+    @Override
+    public Long getUserPeriodId(Long userId, String gasStationId, Date date) {
+        UserPeriod condition = new UserPeriod();
+        condition.setUserId(userId);
+        condition.setGasStationId(gasStationId);
+        condition.setTimeStamp(date);
+        List<UserPeriod> userPeriods = userPeriodMapper
+                .selectUserPeriod(condition, null, null, null, null);
+
+        return userPeriods == null || userPeriods.size() == 0? null : userPeriods.get(0).getId();
     }
 
     @Override

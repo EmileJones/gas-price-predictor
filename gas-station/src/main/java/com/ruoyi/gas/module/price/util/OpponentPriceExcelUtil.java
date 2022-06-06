@@ -1,14 +1,28 @@
 package com.ruoyi.gas.module.price.util;
 
+import com.ruoyi.common.exception.ServiceException;
+import com.ruoyi.gas.module.price.domain.OpponentPrice;
 import com.ruoyi.gas.module.price.domain.dto.ExportExcelDTO;
 import com.ruoyi.gas.module.price.domain.framwork.OilType;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class OpponentPriceExcelUtil {
+    private static final Logger log = LoggerFactory.getLogger(OpponentPriceExcelUtil.class);
 
     public static Workbook generateExcel(Map<Date, List<ExportExcelDTO>> data) {
         Workbook workbook = new XSSFWorkbook();
@@ -19,6 +33,33 @@ public class OpponentPriceExcelUtil {
             writeData(workbook, dateStr, data.get(date));
         }
         return workbook;
+    }
+
+    public static Map<Date, List<ExportExcelDTO>> importExcel(MultipartFile file) {
+        Map<Date, List<ExportExcelDTO>> data = new HashMap<>();
+        try (InputStream inputStream = file.getInputStream()) {
+            Workbook sheets = WorkbookFactory.create(inputStream);
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            for (Sheet sheet : sheets) {
+                Date period = formatter.parse(sheet.getSheetName());
+                List<ExportExcelDTO> periodData = new ArrayList<>();
+                for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                    Row row = sheet.getRow(i);
+                    ExportExcelDTO dto = new ExportExcelDTO();
+                    dto.setOutGasStationName(row.getCell(0).getStringCellValue());
+                    dto.setPrice92(row.getCell(1).getNumericCellValue());
+                    dto.setPrice95(row.getCell(2).getNumericCellValue());
+                    dto.setPrice98(row.getCell(3).getNumericCellValue());
+                    dto.setPrice00(row.getCell(4).getNumericCellValue());
+                    periodData.add(dto);
+                }
+                data.put(period, periodData);
+            }
+        } catch (IOException | ParseException e) {
+            log.error("竞争对手数据导入错误");
+            throw new ServiceException("竞争对手数据导入错误");
+        }
+        return data;
     }
 
     private static void writeTitleIn0Row(Workbook workbook, String sheetName) {

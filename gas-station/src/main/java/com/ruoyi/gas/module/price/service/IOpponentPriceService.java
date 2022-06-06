@@ -2,8 +2,9 @@ package com.ruoyi.gas.module.price.service;
 
 import com.ruoyi.gas.module.price.domain.OpponentPrice;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.InputStream;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -42,4 +43,12 @@ public interface IOpponentPriceService {
      * @return Excel表的工作簿
      */
     Workbook getExcelToImportData(Long userId, String gasStationId, int periodNumber);
+
+    /**
+     * 导入经营对手的数据
+     * @param userId 用户ID
+     * @param gasStationId 加油站ID
+     * @param file 上传文件
+     */
+    void importOpponentData(MultipartFile file, Long userId, String gasStationId);
 }
