@@ -98,7 +98,7 @@ public class OpponentMessageServiceImpl implements IOpponentMessageService {
                 .map(opponentMessage -> {
                     OpponentMessageVO opponentMessageVO = new OpponentMessageVO();
                     opponentMessageVO.setId(opponentMessage.getId());
-                    opponentMessageVO.setOutGasStationName(opponentMessage.getOutGasStationId());
+                    opponentMessageVO.setOutGasStationId(opponentMessage.getOutGasStationId());
                     opponentMessageVO.setOutGasStationName(opponentMessage.getOutGasStationName());
                     GasStationInfo gasStationInfo = gasStationInfoService.selectGasStationInfoById(opponentMessage.getOutGasStationId());
                     opponentMessageVO.setAddress(gasStationInfo.getAddress());

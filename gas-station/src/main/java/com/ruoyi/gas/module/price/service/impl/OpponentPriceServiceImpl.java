@@ -81,13 +81,15 @@ public class OpponentPriceServiceImpl implements IOpponentPriceService {
         opponentMessageVOs.forEach(opponentMessageVO -> {
             nameMap.put(opponentMessageVO.getOutGasStationId(), opponentMessageVO.getOutGasStationName());
         });
-        // 转换
+
+        // 转换 并且删除 已记录的加油站
         for (OpponentPrice opponentPrice : opponentPriceList) {
             ExportExcelDTO dto = new ExportExcelDTO();
             dto.setOutGasStationId(opponentPrice.getOutGasStationId());
             String name = null;
             if (nameMap.containsKey(opponentPrice.getOutGasStationId())) {
                 name = nameMap.get(opponentPrice.getOutGasStationId());
+                nameMap.remove(opponentPrice.getOutGasStationId());
             } else {
                 OpponentMessage opponentMessage = opponentMessageService.getOpponentMessageByStationId(opponentPrice.getUserId(),
                         opponentPrice.getGasStationId(),
@@ -101,6 +103,19 @@ public class OpponentPriceServiceImpl implements IOpponentPriceService {
             dto.setPrice98(opponentPrice.getPrice98().doubleValue());
             exportExcelDTOS.add(dto);
         }
+
+        // NameMap Remains
+        for (Map.Entry<String, String> entry : nameMap.entrySet()) {
+            ExportExcelDTO dto = new ExportExcelDTO();
+            dto.setOutGasStationId(entry.getKey());
+            dto.setOutGasStationName(entry.getValue());
+            dto.setPrice00(0.0);
+            dto.setPrice92(0.0);
+            dto.setPrice95(0.0);
+            dto.setPrice98(0.0);
+            exportExcelDTOS.add(dto);
+        }
+
         return exportExcelDTOS;
     }
 }

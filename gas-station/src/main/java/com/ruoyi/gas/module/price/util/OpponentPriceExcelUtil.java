@@ -43,7 +43,7 @@ public class OpponentPriceExcelUtil {
                 ExcelWriteUtil.setTextAlign(workbook, sheetName, i, j, HorizontalAlignment.RIGHT, VerticalAlignment.CENTER);
                 j++;
             }
-            ExcelWriteUtil.writeString(workbook, sheetName, i, 0, dto.getOutGasStationId());
+            ExcelWriteUtil.writeString(workbook, sheetName, i, 0, dto.getOutGasStationName());
             i++;
         }
     }

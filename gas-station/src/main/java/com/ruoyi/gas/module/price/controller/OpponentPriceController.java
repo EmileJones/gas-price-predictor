@@ -25,6 +25,7 @@ public class OpponentPriceController {
 //        Long userId = SecurityUtils.getUserId();
         Long userId = 1L;
 
+        response.addHeader("Content-Composition", "attatchment;filename=export.xls");
         Workbook list = opponentPriceService.getExcelToImportData(userId, stationId, 16);
         try (ServletOutputStream servletOutputStream = response.getOutputStream()) {
             list.write(servletOutputStream);
