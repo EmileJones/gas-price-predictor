@@ -4,12 +4,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.gas.module.price.mapper.PricePeriodMapper">
 
-    <resultMap id="Period" type="com.ruoyi.gas.module.price.domain.Period">
+    <resultMap id="periodMap" type="com.ruoyi.gas.module.price.domain.Period">
         <result property="id" column="id"/>
         <result property="startTime" column="start_time"
                 typeHandler="com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler"/>
-<!--        <result property="endTime" column="end_time"-->
-<!--                typeHandler="com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler"/>-->
         <result property="rise"     column="rise" />
         <result property="createBy"   column="create_by"   />
         <result property="createTime" column="create_time" />
@@ -17,35 +15,34 @@
         <result property="updateTime" column="update_time" />
     </resultMap>
 
-    <select id="selectLastPeriod" resultMap="Period">
+    <select id="selectLastPeriod" resultMap="periodMap">
         select *
         from `gas_station_price_period`
         order by `start_time` DESC limit 0,#{periodNumber}
     </select>
 
-    <select id="selectPeriod" resultMap="Period">
+    <select id="selectPeriod" resultMap="periodMap">
         select *
         from `gas_station_price_period`
         where `id` = #{id}
     </select>
 
-    <select id="selectPeriodList" resultMap="Period">
+    <select id="selectPeriodList" resultMap="periodMap">
         select *
         from `gas_station_price_period`
         <where>
             <if test="startTime != null">#{startTime} &lt;= start_time and</if>
---             <if test="endTime != null">`start_time` &lt;= #{endTime} and </if>
         </where>
         order by start_time DESC
     </select>
-    <select id="selectPreviousPeriod" resultMap="Period">
+    <select id="selectPreviousPeriod" resultMap="periodMap">
         select *
         from `gas_station_price_period`
         where <if test="startTime != null">start_time &lt; #{startTime}</if>
         order by start_time DESC
         limit 1
     </select>
-    <select id="selectNextPeriod" resultMap="Period">
+    <select id="selectNextPeriod" resultMap="periodMap">
         select *
         from `gas_station_price_period`
         where <if test="startTime != null">start_time &gt; #{startTime}</if>
@@ -54,11 +51,9 @@
     </select>
 
     <insert id="addPeriod">
---         insert into `gas_station_price_period`(`start_time`, `end_time`, `rise`, create_by, create_time, remark)
         insert into `gas_station_price_period`(`start_time`, `rise`, create_by, create_time, remark)
             value
             (#{startTime,typeHandler=com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler},
---              #{endTime,typeHandler=com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler},
             #{rise},#{createBy},sysdate(),#{remark})
     </insert>
 
@@ -68,11 +63,10 @@
         where `id` = #{id};
     </delete>
 
-    <update id="updatePeriod" parameterMap="Period">
+    <update id="updatePeriod" parameterType="com.ruoyi.gas.module.price.domain.Period">
         update `gas_station_price_period`
         set
             `start_time` = #{startTime,typeHandler=com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler},
---             `end_time` = #{endTime,typeHandler=com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler},
             `rise` = #{rise},
             remark = #{remark},
             update_by = #{updateBy},

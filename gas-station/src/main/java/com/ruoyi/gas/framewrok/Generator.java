@@ -18,6 +18,7 @@ public abstract class Generator {
     }
 
     public void notifyAllObserver() {
+        if (observers == null || observers.size() == 0) return;
         for (Observer observer : observers){
             observer.update(this);
         }
