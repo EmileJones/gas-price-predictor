@@ -9,21 +9,32 @@ import com.ruoyi.gas.module.price.framework.AddPeriodEventSource;
 import com.ruoyi.gas.module.price.mapper.UserPeriodMapper;
 import com.ruoyi.gas.module.price.service.IUserPeriodService;
 import com.ruoyi.system.mapper.SysUserMapper;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 @Service
-public class UserPeriodService implements IUserPeriodService, Observer<AddPeriodEventSource> {
+public class UserPeriodService implements IUserPeriodService, Observer<AddPeriodEventSource>, ApplicationContextAware {
     @Autowired
     private UserPeriodMapper userPeriodMapper;
     @Autowired
     private SysUserMapper sysUserMapper;
     @Autowired
     private GasStationUserOwnedMapper gasStationUserOwnedMapper;
+    private ApplicationContext applicationContext;
+
+    @PostConstruct
+    void init() {
+        PeriodServiceImpl periodService = applicationContext.getBean(PeriodServiceImpl.class);
+        periodService.addObserver(this);
+    }
 
     @Override
     public List<UserPeriod> getUserPeriods(Long userId, String gasStationId, Long startIndex, Long amount) {
@@ -82,6 +93,11 @@ public class UserPeriodService implements IUserPeriodService, Observer<AddPeriod
             }
         }
         // 将数据写入数据库
-        userPeriodMapper.insertUserPeriod(list);
+        if (list.size() > 0) userPeriodMapper.insertUserPeriod(list);
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }

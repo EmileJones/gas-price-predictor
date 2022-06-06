@@ -36,7 +36,7 @@
     <insert id="insertUserPeriod">
         insert into `gas_station_user_period`(`user_id`, `gas_station_id`, `time_stamp`)
         values
-        <foreach collection="userPeriods" separator="," item="item">
+        <foreach collection="list" separator="," item="item">
             (#{item.userId},#{item.gasStationId},#{item.timeStamp})
         </foreach>
     </insert>
@@ -44,10 +44,11 @@
     <delete id="deleteUserPeriod">
         delete from `gas_station_user_period`
         <where>
-            <if test="id != null">`id` = #{id}</if>
-            <if test="userId != null">`user_id` = #{userId}</if>
-            <if test="gasStationId != null">`gas_station_id` = #{gasStationId}</if>
-            <if test="timeStamp != null">`time_stamp` = #{timeStamp}</if>
+            <if test="id != null">`id` = #{id} and</if>
+            <if test="userId != null">`user_id` = #{userId} and</if>
+            <if test="gasStationId != null">`gas_station_id` = #{gasStationId} and</if>
+            <if test="timeStamp != null">`time_stamp` = #{timeStamp} or</if>
+            1=0
         </where>
     </delete>
 
