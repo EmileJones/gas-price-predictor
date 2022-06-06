@@ -13,10 +13,10 @@
     </resultMap>
 
     <insert id="insertOpponentMessage" useGeneratedKeys="true">
-        insert into `gas_station_opponent_message`(`user_id`,`out_gas_station_id`,`out_gas_station_name`,`status`)
+        insert into `gas_station_opponent_message`(`user_id`, `gas_station_id`,`out_gas_station_id`,`out_gas_station_name`,`status`)
         values
         <foreach collection="opponentMessages" item="obj" separator=",">
-            (#{obj.userId},#{obj.outGasStationId},#{obj.outGasStationName},#{obj.status})
+            (#{obj.userId},#{obj.gasStationId},#{obj.outGasStationId},#{obj.outGasStationName},#{obj.status})
         </foreach>
     </insert>
 
@@ -24,10 +24,11 @@
         select *
         from `gas_station_opponent_message`
         <where>
-            <if test="id != null">`id` = #{id}</if>
-            <if test="userId != null">`user_id` = #{userId}</if>
-            <if test="outGasStationId != null">`out_gas_station_id` = #{outGasStationId}</if>
-            <if test="outGasStationName != null">`out_gas_station_name` = #{outGasStationName}</if>
+            <if test="id != null">`id` = #{id} and</if>
+            <if test="userId != null">`user_id` = #{userId}  and</if>
+            <if test="gasStationId != null">`gas_station_id` = #{gasStationId}  and</if>
+            <if test="outGasStationId != null">`out_gas_station_id` = #{outGasStationId}  and</if>
+            <if test="outGasStationName != null">`out_gas_station_name` = #{outGasStationName}  and</if>
             `status` = #{status}
         </where>
     </select>

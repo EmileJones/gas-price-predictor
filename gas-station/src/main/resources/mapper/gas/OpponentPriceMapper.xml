@@ -20,26 +20,26 @@
         select *
         from `gas_station_opponent_price`
         <where>
-            <if test="opponentPrice.id != null">`id` = #{opponentPrice.id}</if>
-            <if test="opponentPrice.userPeriodId != null">`user_period_id` = #{opponentPrice.userPeriodId}</if>
-            <if test="opponentPrice.userId != null">`user_id` = #{userId}</if>
-            <if test="opponentPrice.gasStationId != null">`gas_station_id` = #{gasStationId}</if>
-            <if test="opponentPrice.outGasStationId != null">`out_gas_station_id` = #{opponentPrice.outGasStationId}
-            </if>
-            <if test="opponentPrice.price92 != null">`price_92` = #{opponentPrice.price92}</if>
-            <if test="opponentPrice.price95 != null">`price_95` = #{opponentPrice.price95}</if>
-            <if test="opponentPrice.price98 != null">`price_98` = #{opponentPrice.price98}</if>
-            <if test="opponentPrice.price00 != null">`price_00` = #{opponentPrice.price00}</if>
+            <if test="opponentPrice.id != null">`id` = #{opponentPrice.id} and</if>
+            <if test="opponentPrice.userPeriodId != null">`user_period_id` = #{opponentPrice.userPeriodId} and</if>
+            <if test="opponentPrice.userId != null">`user_id` = #{opponentPrice.userId} and</if>
+            <if test="opponentPrice.gasStationId != null">`gas_station_id` = #{opponentPrice.gasStationId} and</if>
+            <if test="opponentPrice.outGasStationId != null">`out_gas_station_id` = #{opponentPrice.outGasStationId} and</if>
+            <if test="opponentPrice.price92 != null">`price_92` = #{opponentPrice.price92} and</if>
+            <if test="opponentPrice.price95 != null">`price_95` = #{opponentPrice.price95} and</if>
+            <if test="opponentPrice.price98 != null">`price_98` = #{opponentPrice.price98} and</if>
+            <if test="opponentPrice.price00 != null">`price_00` = #{opponentPrice.price00} and</if>
+            1=1
         </where>
-        <if test="startIndex != null &amp;&amp; amount != null">
-            limit #{startIndex},#{amount}
-        </if>
         <if test="orderField != null &amp;&amp; isDesc != null">
             order by #{orderField}
             <choose>
                 <when test="isDesc == true">Desc</when>
                 <otherwise>ASC</otherwise>
             </choose>
+        </if>
+        <if test="startIndex != null &amp;&amp; amount != null">
+            limit #{startIndex},#{amount}
         </if>
     </select>
 

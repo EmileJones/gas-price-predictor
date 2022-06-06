@@ -2,6 +2,7 @@ package com.ruoyi.gas.module.geo.mapper;
 
 import com.ruoyi.gas.module.geo.domain.OpponentMessage;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface OpponentMessageMapper {
      * @param opponentMessages 对手加油站信息
      * @return 返回添加成功的数据数
      */
-    int insertOpponentMessage(List<OpponentMessage> opponentMessages);
+    int insertOpponentMessage(@Param("opponentMessages") List<OpponentMessage> opponentMessages);
 
     /**
      * 查询对手加油站信息

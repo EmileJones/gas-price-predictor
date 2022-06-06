@@ -61,22 +61,24 @@ public class OpponentPriceServiceImpl implements IOpponentPriceService {
         condition.setUserId(userId);
         condition.setGasStationId(gasStationId);
         for (UserPeriod userPeriod : userPeriods){
-            condition.setUserPeriodId(userPeriod.getUserId());
+            condition.setUserPeriodId(userPeriod.getId());
             List<OpponentPrice> opponentPrices = opponentPriceMapper.selectOpponentPrices(condition,null,null,null,null);
-            List<ExportExcelDTO> exportExcelDTOS = convertOpponentPrice2ExportExcelDTO(opponentPrices);
+            List<ExportExcelDTO> exportExcelDTOS = convertOpponentPrice2ExportExcelDTO(opponentPrices, userId, gasStationId);
             map.put(userPeriod.getTimeStamp(), exportExcelDTOS);
         }
         Workbook workbook = OpponentPriceExcelUtil.generateExcel(map);
         return workbook;
     }
 
-    private List<ExportExcelDTO> convertOpponentPrice2ExportExcelDTO(List<OpponentPrice> opponentPriceList) {
+    private List<ExportExcelDTO> convertOpponentPrice2ExportExcelDTO(List<OpponentPrice> opponentPriceList,
+                                                                     Long userId,
+                                                                     String gasStationId) {
         LinkedList<ExportExcelDTO> exportExcelDTOS = new LinkedList<>();
         // 将对手加油站的信息全部查出放入内存中
         Map<String, String> nameMap = new HashMap<>();
-        List<OpponentMessageVO> opponentMessageVOs = opponentMessageService.getOpponentMessage(opponentPriceList.get(0).getUserId(),
-                opponentPriceList.get(0).getGasStationId());
-        opponentMessageVOs.stream().forEach(opponentMessageVO -> {
+        List<OpponentMessageVO> opponentMessageVOs = opponentMessageService.getOpponentMessage(userId, gasStationId);
+
+        opponentMessageVOs.forEach(opponentMessageVO -> {
             nameMap.put(opponentMessageVO.getOutGasStationId(), opponentMessageVO.getOutGasStationName());
         });
         // 转换
