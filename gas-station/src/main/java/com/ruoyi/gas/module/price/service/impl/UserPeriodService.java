@@ -19,6 +19,7 @@ import javax.annotation.PostConstruct;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserPeriodService implements IUserPeriodService, Observer<AddPeriodEventSource>, ApplicationContextAware {
@@ -46,14 +47,20 @@ public class UserPeriodService implements IUserPeriodService, Observer<AddPeriod
 
     @Override
     public int addUserPeriods(List<UserPeriod> userPeriods) {
+        userPeriods = userPeriods.stream().peek(userPeriod -> {
+            Date timeStamp = userPeriod.getTimeStamp();
+            timeStamp.setTime(timeStamp.getTime() + 1000);
+        }).collect(Collectors.toList());
         return userPeriodMapper.insertUserPeriod(userPeriods);
     }
 
     @Override
     public int deleteUserPeriod(long id) {
-        UserPeriod condition = new UserPeriod();
-        condition.setId(id);
-        return userPeriodMapper.deleteUserPeriod(condition);
+        UserPeriod condition = getUserPeriodById(id);
+        if (condition.getTimeStamp().getTime() % 10000 != 0)
+            return userPeriodMapper.deleteUserPeriod(condition);
+        else
+            return 0;
     }
 
     @Override
@@ -66,6 +73,16 @@ public class UserPeriodService implements IUserPeriodService, Observer<AddPeriod
                 .selectUserPeriod(condition, null, null, null, null);
 
         return userPeriods == null || userPeriods.size() == 0? null : userPeriods.get(0).getId();
+    }
+
+    @Override
+    public UserPeriod getUserPeriodById(Long id) {
+        UserPeriod condition = new UserPeriod();
+        condition.setId(id);
+        List<UserPeriod> userPeriods = userPeriodMapper
+                .selectUserPeriod(condition, null, null, null, null);
+
+        return userPeriods == null || userPeriods.size() == 0? null : userPeriods.get(0);
     }
 
     @Override

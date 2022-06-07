@@ -39,4 +39,11 @@ public interface IUserPeriodService {
      * @return 用户周期ID
      */
     Long getUserPeriodId(Long userId, String gasStationId, Date date);
+
+    /**
+     * 根据用户周期ID获取用户周期
+     * @param id 用户周期ID
+     * @return 用户周期详细信息
+     */
+    UserPeriod getUserPeriodById(Long id);
 }

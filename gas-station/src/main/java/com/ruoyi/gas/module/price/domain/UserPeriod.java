@@ -1,5 +1,7 @@
 package com.ruoyi.gas.module.price.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class UserPeriod {
@@ -18,6 +20,7 @@ public class UserPeriod {
     /**
      * 周期时间戳
      */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date timeStamp;
 
     public Long getId() {

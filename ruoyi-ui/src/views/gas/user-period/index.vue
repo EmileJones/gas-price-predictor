@@ -1,6 +1,16 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="加油站" prop="gasStationId">
+        <el-select v-model="queryParams.gasStationId" placeholder="请选择" @change="getList">
+          <el-option
+            v-for="item in userGasStations"
+            :key="item.stationId"
+            :label="item.stationName"
+            :value="item.stationId">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="开始时间" prop="startTime">
         <el-date-picker clearable size="small"
           v-model="queryParams.startTime"
@@ -61,22 +71,11 @@
 
     <el-table v-loading="loading" :data="periodList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="调整时间" align="center" prop="startTime" width="180">
+      <el-table-column label="调整时间" align="center" prop="timeStamp" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.startTime, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.timeStamp, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="是否上调" align="center" prop="rise" >
-          <template slot-scope="scope">
-            <div v-if="scope.row.rise">
-              <el-tag type="danger">油价上调</el-tag>
-            </div>
-            <div v-else>
-              <el-tag type="primary">油价下调</el-tag>
-            </div>
-          </template>
-      </el-table-column>
-      <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -84,14 +83,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['gas:period:edit']"
+            v-hasPermi="['gas:user-period:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['gas:period:remove']"
+            v-hasPermi="['gas:user-period:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -108,20 +107,13 @@
     <!-- 添加或修改加油站周期对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="调整时间" prop="startTime" required>
+        <el-form-item label="调整时间" prop="timeStamp" required>
           <el-date-picker clearable size="small"
-            v-model="form.startTime"
+            v-model="form.timeStamp"
             type="date"
             value-format="yyyy-MM-dd"
             placeholder="选择开始时间">
           </el-date-picker>
-        </el-form-item>
-        <el-form-item label="是否上调" prop="rise">
-          <el-switch v-model="form.rise" active-text="油价上调" inactive-text="油价下调" active-color="#BA0A0A"
-            inactive-color="#116CCD"></el-switch>
-        </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -133,7 +125,8 @@
 </template>
 
 <script>
-import { listPeriod, getPeriod, delPeriod, addPeriod, updatePeriod } from "@/api/gas/period";
+import { listPeriod, getPeriod, delPeriod, addPeriod, updatePeriod } from "@/api/gas/user-period";
+import { listStation } from "@/api/gas/station"
 
 export default {
   name: "Period",
@@ -153,12 +146,15 @@ export default {
       total: 0,
       // 加油站周期表格数据
       periodList: [],
+      // 用户加油站列表
+      userGasStations: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
       // 查询参数
       queryParams: {
+        gasStationId: '',
         pageNum: 1,
         pageSize: 10,
         startTime: null,
@@ -172,14 +168,12 @@ export default {
         startTime: [
           { required: true, message: "开始时间不能为空", trigger: "blur" }
         ],
-        isRise: [
-          { required: true, message: "是否上调不能为空", trigger: "blur" }
-        ],
       }
     };
   },
   created() {
     this.getList();
+    this.refreshStationList();
   },
   methods: {
     /** 查询加油站周期列表 */
@@ -200,9 +194,8 @@ export default {
     reset() {
       this.form = {
         id: null,
-        startTime: null,
-        rise: false,
-        remark: null
+        gasStationId: null,
+        timeStamp: null,
       };
       this.resetForm("form");
     },
@@ -224,6 +217,12 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
+      if (this.queryParams.gasStationId == null || 
+          this.queryParams.gasStationId == '' || 
+          this.queryParams.gasStationId == undefined) {
+        this.$modal.msgError("请选择加油站后再完成新增");
+        return;
+      }
       this.reset();
       this.open = true;
       this.title = "添加加油站周期";
@@ -240,6 +239,8 @@ export default {
     },
     /** 提交按钮 */
     submitForm() {
+      this.form.gasStationId = this.queryParams.gasStationId;
+
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != null) {
@@ -268,11 +269,11 @@ export default {
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
     },
-    /** 导出按钮操作 */
-    handleExport() {
-      this.download('gas/period/export', {
-        ...this.queryParams
-      }, `period_${new Date().getTime()}.xlsx`)
+    /** 查询加油站列表 */
+    refreshStationList() {
+      listStation().then(response => {
+        this.userGasStations = response.rows
+      })
     }
   }
 };

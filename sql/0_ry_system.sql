@@ -279,6 +279,14 @@ INSERT INTO `sys_menu`  VALUES (2016, '周期新增', 2014, 2, '#', '', NULL, 1,
 INSERT INTO `sys_menu`  VALUES (2017, '周期修改', 2014, 3, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:period:edit', '#', 'admin', '2022-04-21 11:16:43', '', NULL, '');
 INSERT INTO `sys_menu`  VALUES (2018, '周期删除', 2014, 4, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:period:remove', '#', 'admin', '2022-04-21 11:16:43', '', NULL, '');
 INSERT INTO `sys_menu`  VALUES (2019, '周期导出', 2014, 5, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:period:export', '#', 'admin', '2022-04-21 11:16:43', '', NULL, '');
+-- 用户加油站周期管理
+INSERT INTO `sys_menu`  VALUES (2020, '用户变价周期', 2000, 2, 'user-period', 'gas/user-period/index', NULL, 1, 0, 'C', '0', '0', 'gas:user-period:list', 'date', 'admin', '2022-04-21 11:16:40', '', NULL, '用户加油站周期菜单');
+INSERT INTO `sys_menu`  VALUES (2021, '周期查询', 2020, 1, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:user-period:query', '#', 'admin', '2022-05-21 11:16:41', '', NULL, '');
+INSERT INTO `sys_menu`  VALUES (2022, '周期新增', 2020, 2, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:user-period:add', '#', 'admin', '2022-05-21 11:16:42', '', NULL, '');
+INSERT INTO `sys_menu`  VALUES (2023, '周期修改', 2020, 3, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:user-period:edit', '#', 'admin', '2022-05-21 11:16:43', '', NULL, '');
+INSERT INTO `sys_menu`  VALUES (2024, '周期删除', 2020, 4, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:user-period:remove', '#', 'admin', '2022-05-21 11:16:43', '', NULL, '');
+INSERT INTO `sys_menu`  VALUES (2025, '周期导出', 2020, 5, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:user-period:export', '#', 'admin', '2022-05-21 11:16:43', '', NULL, '');
+
 -- ----------------------------
 -- 6、用户和角色关联表  用户N-1角色
 -- ----------------------------
