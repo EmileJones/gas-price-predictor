@@ -23,14 +23,16 @@ public class OpponentMessageServiceImpl implements IOpponentMessageService {
         OpponentMessage condition = new OpponentMessage();
         condition.setUserId(userId);
         condition.setGasStationId(gasStationId);
-        List<OpponentMessage> opponentMessages = opponentMessageMapper.selectOpponentMessage(condition);
-        // 如果该用户第一次查看次加油站的信息
-        if (opponentMessages.size() == 0) {
-            List<GasStationInfo> gasStationInfos = gasStationInfoService.listOutSystemStationBySystemStationId(gasStationId);
-            opponentMessages = convertGasStationInfo2OpponentMessage(userId, gasStationId, gasStationInfos);
-            opponentMessageMapper.insertOpponentMessage(opponentMessages);
-        }
-        return convertOpponentMessage2OpponentMessageVO(opponentMessages);
+        return getMessageVOS(userId, gasStationId, condition);
+    }
+
+    @Override
+    public List<OpponentMessageVO> getAllOpponentMessage(Long userId, String gasStationId) {
+        OpponentMessage condition = new OpponentMessage();
+        condition.setStatus(null);
+        condition.setUserId(userId);
+        condition.setGasStationId(gasStationId);
+        return getMessageVOS(userId, gasStationId, condition);
     }
 
     @Override
@@ -93,6 +95,25 @@ public class OpponentMessageServiceImpl implements IOpponentMessageService {
         return null;
     }
 
+    @Override
+    public void changeStationStatus(Long messageId, Integer status) {
+        OpponentMessage opponentMessage = new OpponentMessage();
+        opponentMessage.setId(messageId);
+        opponentMessage.setStatus(status);
+        opponentMessageMapper.updateOpponentMessage(opponentMessage);
+    }
+
+    private List<OpponentMessageVO> getMessageVOS(Long userId, String gasStationId, OpponentMessage condition) {
+        List<OpponentMessage> opponentMessages = opponentMessageMapper.selectOpponentMessage(condition);
+        // 如果该用户第一次查看次加油站的信息
+        if (opponentMessages.size() == 0) {
+            List<GasStationInfo> gasStationInfos = gasStationInfoService.listOutSystemStationBySystemStationId(gasStationId);
+            opponentMessages = convertGasStationInfo2OpponentMessage(userId, gasStationId, gasStationInfos);
+            opponentMessageMapper.insertOpponentMessage(opponentMessages);
+        }
+        return convertOpponentMessage2OpponentMessageVO(opponentMessages);
+    }
+
     private List<OpponentMessageVO> convertOpponentMessage2OpponentMessageVO(List<OpponentMessage> opponentMessages) {
         return opponentMessages.stream()
                 .map(opponentMessage -> {
@@ -102,6 +123,7 @@ public class OpponentMessageServiceImpl implements IOpponentMessageService {
                     opponentMessageVO.setOutGasStationName(opponentMessage.getOutGasStationName());
                     GasStationInfo gasStationInfo = gasStationInfoService.selectGasStationInfoById(opponentMessage.getOutGasStationId());
                     opponentMessageVO.setAddress(gasStationInfo.getAddress());
+                    opponentMessageVO.setStationStatus(opponentMessage.getStatus());
                     return opponentMessageVO;
                 })
                 .collect(Collectors.toList());

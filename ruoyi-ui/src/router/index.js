@@ -175,6 +175,20 @@ export const dynamicRoutes = [
         meta: { title: '加油站经营数据', activeMenu: '/station/data' }
       }
     ]
+  },
+  {
+    path: '/gas/opponent-station',
+    component: Layout,
+    hidden: true,
+    permissions: ['gas:station:list'],
+    children: [
+      {
+        path: 'index/:stationId(\\w+)',
+        component: () => import('@/views/gas/station/opponent-station'),
+        name: 'Data',
+        meta: { title: '加油站竞争对手', activeMenu: '/station/opponent-station' }
+      }
+    ]
   }
 ]
 

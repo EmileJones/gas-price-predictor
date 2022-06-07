@@ -27,7 +27,7 @@ public class OpponentMessage {
     /**
      * 此条信息的状态
      */
-    private int status = EFFECTIVE_FLAG;
+    private Integer status = EFFECTIVE_FLAG;
 
     public Long getId() {
         return id;
@@ -69,11 +69,11 @@ public class OpponentMessage {
         this.outGasStationName = outGasStationName;
     }
 
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 }

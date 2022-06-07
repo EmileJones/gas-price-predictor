@@ -13,13 +13,22 @@ import java.util.List;
 
 public interface IOpponentMessageService {
     /**
-     * 返回该用户的此加油站的所有对手信息
+     * 返回该用户的此加油站的所有正常状态的对手信息
      *
      * @param userId       用户唯一ID
      * @param gasStationId 系统内加油站ID
      * @return 所有竞争对手加油站的信息
      */
     List<OpponentMessageVO> getOpponentMessage(Long userId, String gasStationId);
+
+    /**
+     * 返回该用户的此加油站的所有对手信息
+     *
+     * @param userId       用户唯一ID
+     * @param gasStationId 系统内加油站ID
+     * @return 所有竞争对手加油站的信息
+     */
+    List<OpponentMessageVO> getAllOpponentMessage(Long userId, String gasStationId);
 
     /**
      * 为该用户修改对手加油站的名字
@@ -47,4 +56,11 @@ public interface IOpponentMessageService {
      * @return 加油站信息
      */
     OpponentMessage getOpponentMessageByStationId(Long userId, String gasStationId, String outGasStationId);
+
+    /**
+     * 修改对手加油站状态
+     * @param messageId 对手加油站信息ID
+     * @param status 加油站状态
+     */
+    void changeStationStatus(Long messageId, Integer status);
 }

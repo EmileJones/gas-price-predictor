@@ -18,6 +18,11 @@ public class OpponentMessageVO {
      */
     private String address;
 
+    /**
+     * 加油站状态
+     */
+    private Integer stationStatus;
+
     public Long getId() {
         return id;
     }
@@ -48,5 +53,13 @@ public class OpponentMessageVO {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Integer getStationStatus() {
+        return stationStatus;
+    }
+
+    public void setStationStatus(Integer stationStatus) {
+        this.stationStatus = stationStatus;
     }
 }

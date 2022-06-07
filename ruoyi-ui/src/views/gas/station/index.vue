@@ -43,6 +43,13 @@
             size="mini"
             type="text"
             icon="el-icon-receiving"
+            @click="redirectOpponentStation(scope.row.stationId)"
+            v-hasPermi="['gas:station:list']"
+          >对手加油站</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-receiving"
             @click="redirectStationSaleData(scope.row.stationId)"
             v-hasPermi="['gas:station:list']"
           >经营数据</el-button>
@@ -109,7 +116,6 @@
 </template>
 
 <script>
-import { Loading } from 'element-ui'
 import { listStation, addStation, deleteStation, changeStationStatus, uploadAction } from '@/api/gas/station'
 import { listGasStationCandidate } from "@/api/gas/geo"
 import { getToken } from '@/utils/auth'
@@ -195,11 +201,6 @@ export default {
       this.open = false
     },
 
-    // 跳转到经营数据
-    redirectStationSaleData(stationId) {
-      this.$router.push(`/gas/station-data/index/${stationId}`)
-    },
-
     /** 下载加油站导入模板 */
     handleExport() {
       this.download('gas/station/sale-data/template', {}, `加油站经营数据导入模板.xlsx`)
@@ -212,10 +213,12 @@ export default {
     handleUpload() {
       this.uploadOpen = true
     },
+
     // 关闭窗口
     close() {
       this.uploadOpen = false
     },
+
     // 上传成功
     onUploadSuccess(response, file, fileList) {
       if (response.code === 200) {
@@ -259,6 +262,7 @@ export default {
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
     },
+
     /** 寻找最详细的行政区划单位代码 */
     regionChange (data){
       let adcode = -1
@@ -271,6 +275,7 @@ export default {
       this.candidateGasStations = []
       console.log("重置候选列表, adcode=", adcode)
     },
+
     /** 刷新候选加油站列表 */
     refreshCandidateList(query) {
       this.queryParams.query = query
@@ -279,7 +284,17 @@ export default {
         this.candidateGasStations = response.rows
         this.loading = false;
       })
-      }
+    },
+
+    // 跳转到经营数据
+    redirectStationSaleData(stationId) {
+      this.$router.push(`/gas/station-data/index/${stationId}`)
+    },
+
+    /** 跳转到对手加油站页面 */
+    redirectOpponentStation(stationId) {
+      this.$router.push(`/gas/opponent-station/index/${stationId}`)
+    }
   }
 }
 </script>

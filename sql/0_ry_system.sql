@@ -286,6 +286,9 @@ INSERT INTO `sys_menu`  VALUES (2022, '周期新增', 2020, 2, '#', '', NULL, 1,
 INSERT INTO `sys_menu`  VALUES (2023, '周期修改', 2020, 3, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:user-period:edit', '#', 'admin', '2022-05-21 11:16:43', '', NULL, '');
 INSERT INTO `sys_menu`  VALUES (2024, '周期删除', 2020, 4, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:user-period:remove', '#', 'admin', '2022-05-21 11:16:43', '', NULL, '');
 INSERT INTO `sys_menu`  VALUES (2025, '周期导出', 2020, 5, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:user-period:export', '#', 'admin', '2022-05-21 11:16:43', '', NULL, '');
+-- 对手加油站相关权限
+INSERT INTO `sys_menu` VALUES (2026, '对手价格数据导出', 2008, 4, '#', NULL, NULL, 1, 0, 'F', '0', '0', 'gas:opponent-price:export', '#', 'admin', '2022-04-03 10:54:12', 'admin', '2022-04-03 10:54:21', '');
+INSERT INTO `sys_menu` VALUES (2027, '对手价格数据导入', 2008, 4, '#', NULL, NULL, 1, 0, 'F', '0', '0', 'gas:opponent-price:import', '#', 'admin', '2022-04-03 10:54:12', 'admin', '2022-04-03 10:54:21', '');
 
 -- ----------------------------
 -- 6、用户和角色关联表  用户N-1角色
