@@ -107,6 +107,7 @@ public class UserPeriodService implements IUserPeriodService, Observer<AddPeriod
                 userPeriod.setUserId(sysUser.getUserId());
                 userPeriod.setGasStationId(gasStationUserOwned.getStationId());
                 userPeriod.setTimeStamp(generator.getPeriod().getStartTime().toDate());
+                userPeriod.setIsSystemPeriod(true);
                 list.add(userPeriod);
             }
         }

@@ -289,6 +289,9 @@ INSERT INTO `sys_menu`  VALUES (2025, '周期导出', 2020, 5, '#', '', NULL, 1,
 -- 对手加油站相关权限
 INSERT INTO `sys_menu` VALUES (2026, '对手价格数据导出', 2008, 4, '#', NULL, NULL, 1, 0, 'F', '0', '0', 'gas:opponent-price:export', '#', 'admin', '2022-04-03 10:54:12', 'admin', '2022-04-03 10:54:21', '');
 INSERT INTO `sys_menu` VALUES (2027, '对手价格数据导入', 2008, 4, '#', NULL, NULL, 1, 0, 'F', '0', '0', 'gas:opponent-price:import', '#', 'admin', '2022-04-03 10:54:12', 'admin', '2022-04-03 10:54:21', '');
+-- 价格销量预测
+INSERT INTO `sys_menu`  VALUES (2028, '价格销量预测', 2000, 2, 'predict', 'gas/predict/index', NULL, 1, 0, 'C', '0', '0', 'gas:predict:predict', 'date', 'admin', '2022-04-21 11:16:40', '', NULL, '用户加油站周期菜单');
+INSERT INTO `sys_menu`  VALUES (2029, '预测', 2028, 1, '#', '', NULL, 1, 0, 'F', '0', '0', 'gas:predict:predict', '#', 'admin', '2022-05-21 11:16:41', '', NULL, '');
 
 -- ----------------------------
 -- 6、用户和角色关联表  用户N-1角色
