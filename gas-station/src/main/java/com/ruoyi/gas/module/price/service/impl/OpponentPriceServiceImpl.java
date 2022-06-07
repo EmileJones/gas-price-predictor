@@ -84,11 +84,10 @@ public class OpponentPriceServiceImpl implements IOpponentPriceService {
                                                                 String gasStationId,
                                                                 Map<Date, List<ExportExcelDTO>> dateListMap) {
         Map<String, String> nameIdMap = new HashMap<>();
-        List<OpponentMessageVO> opponentMessage = opponentMessageService.getOpponentMessage(userId, gasStationId);
+        List<OpponentMessageVO> opponentMessage = opponentMessageService.getAllOpponentMessage(userId, gasStationId);
         opponentMessage.forEach(opponentMessageVO -> {
             nameIdMap.put(opponentMessageVO.getOutGasStationName(), opponentMessageVO.getOutGasStationId());
         });
-
 
         List<OpponentPrice> opponentPrices = new ArrayList<>();
         for (Map.Entry<Date, List<ExportExcelDTO>> entry : dateListMap.entrySet()) {
