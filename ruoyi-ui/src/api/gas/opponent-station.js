@@ -25,3 +25,9 @@ export function changeStationName (newName) {
         params: {newName: newName}
     })
 }
+
+/** 对手价格上传接口 */
+export function importOpponentPrice () {
+    let baseUrl = process.env.VUE_APP_BASE_API
+    return `${baseUrl}/gas/opponent-price/import`
+}

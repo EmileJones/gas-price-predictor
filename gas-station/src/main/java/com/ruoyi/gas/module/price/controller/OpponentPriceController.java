@@ -42,14 +42,13 @@ public class OpponentPriceController {
 
     /**
      * 导入对手加油站数据
-     * TODO 待测试
      */
     @PreAuthorize("@ss.hasAnyPermi('gas:opponent-price:import')")
     @PostMapping("/import")
-    public AjaxResult export(MultipartFile file)
+    public AjaxResult importData(MultipartFile file)
     {
         Long userId = SecurityUtils.getUserId();
-        String gasStationId = file.getName().split("\\.")[0];
+        String gasStationId = file.getOriginalFilename().split("\\.")[0];
         if (gasStationId == null || gasStationId.length() < GAS_STATION_ID_LENGTH)
             return AjaxResult.error("文件名被修改，请重新下载并导入");
 

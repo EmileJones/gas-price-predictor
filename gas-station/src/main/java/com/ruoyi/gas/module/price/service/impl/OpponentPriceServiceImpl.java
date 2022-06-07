@@ -1,5 +1,6 @@
 package com.ruoyi.gas.module.price.service.impl;
 
+import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.gas.module.geo.domain.OpponentMessage;
 import com.ruoyi.gas.module.geo.domain.vo.OpponentMessageVO;
 import com.ruoyi.gas.module.geo.service.IOpponentMessageService;
@@ -99,7 +100,11 @@ public class OpponentPriceServiceImpl implements IOpponentPriceService {
                 opponentPrice.setGasStationId(gasStationId);
                 opponentPrice.setUserPeriodId(userPeriodId);
                 String outGasStationName = exportExcelDTO.getOutGasStationName();
-                opponentPrice.setOutGasStationId(nameIdMap.get(outGasStationName));
+                if (nameIdMap.get(outGasStationName) != null) {
+                    opponentPrice.setOutGasStationId(nameIdMap.get(outGasStationName));
+                } else {
+                    throw new ServiceException("对手加油站状态已更新，请重新下载模板填写");
+                }
 
                 opponentPrice.setPrice92(BigDecimal.valueOf(exportExcelDTO.getPrice92()));
                 opponentPrice.setPrice95(BigDecimal.valueOf(exportExcelDTO.getPrice95()));

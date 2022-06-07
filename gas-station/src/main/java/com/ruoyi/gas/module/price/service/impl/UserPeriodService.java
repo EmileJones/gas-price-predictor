@@ -49,7 +49,8 @@ public class UserPeriodService implements IUserPeriodService, Observer<AddPeriod
     public int addUserPeriods(List<UserPeriod> userPeriods) {
         userPeriods = userPeriods.stream().peek(userPeriod -> {
             Date timeStamp = userPeriod.getTimeStamp();
-            timeStamp.setTime(timeStamp.getTime() + 1000);
+            timeStamp.setTime(timeStamp.getTime());
+            userPeriod.setIsSystemPeriod(false);
         }).collect(Collectors.toList());
         return userPeriodMapper.insertUserPeriod(userPeriods);
     }
@@ -57,7 +58,7 @@ public class UserPeriodService implements IUserPeriodService, Observer<AddPeriod
     @Override
     public int deleteUserPeriod(long id) {
         UserPeriod condition = getUserPeriodById(id);
-        if (condition.getTimeStamp().getTime() % 10000 != 0)
+        if (!condition.getIsSystemPeriod())
             return userPeriodMapper.deleteUserPeriod(condition);
         else
             return 0;

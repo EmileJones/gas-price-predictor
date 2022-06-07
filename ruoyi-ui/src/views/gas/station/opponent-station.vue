@@ -47,11 +47,29 @@
       </el-table-column>
     </el-table>
 
+     <!-- 上传对话框 -->
+    <el-dialog title="竞争对手数据上传" :visible.sync="uploadOpen" width="500px" append-to-body>
+      <el-upload
+        ref="upload"
+        class="upload-demo"
+        :action="uploadUrl"
+        :headers="uploadHeaders"
+        :on-success="onUploadSuccess"
+        accept=".xls,.xlsx">
+        <el-button size="small" type="primary">点击上传</el-button>
+        <div slot="tip" class="el-upload__tip">只能上传xls/xlsx文件</div>
+      </el-upload>
+      <div slot="footer">
+        <el-button @click="close">取消</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
-import { listOpponentStation, changeStatus, changeStationName } from '@/api/gas/opponent-station.js'
+import { listOpponentStation, changeStatus, changeStationName, importOpponentPrice } from '@/api/gas/opponent-station.js'
+import { getToken } from '@/utils/auth'
 
 export default {
     data() {
@@ -63,13 +81,24 @@ export default {
                 { label: '禁用', value: 0, cssName: 'danger' },
                 { label: '正常', value: 1, cssName: 'success' },
             ],
+
+            // 表格上传
+            uploadOpen: false,
+            // 上传地址
+            uploadUrl: "",
+            // 权限头
+            uploadHeaders: {Authorization: "Bearer " + getToken()},
+
+            // 用户加油站ID 页面内
             gasStationId: null,
+            // 竞争对手加油站列表 页面内
             opponentStationList: []
         }
     },
     created() {
         this.gasStationId = this.$route.params && this.$route.params.stationId
         this.getList()
+        this.uploadUrl = importOpponentPrice()
     },
     methods: {
         /** 刷新当前列表 */
@@ -99,7 +128,34 @@ export default {
                     this.getList()
                 }
             })
-        }
+        },
+
+        /** 更新加油站信息 */
+        handleUpdate(message) {
+
+        },
+
+        // 上传经营数据按钮
+        handleUpload() {
+            this.uploadOpen = true
+        },
+
+        // 关闭窗口
+        close() {
+            this.uploadOpen = false
+        },
+        // 上传成功
+        onUploadSuccess(response, file, fileList) {
+            if (response.code === 200) {
+                this.$modal.msgSuccess(response.msg)
+                this.uploadOpen = false
+            } else {
+                this.$modal.msgError(response.msg)
+            }
+            
+            this.getList()
+            this.$refs.upload.clearFiles()
+        },
     }
 }
 </script>

@@ -23,6 +23,11 @@ public class UserPeriod {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date timeStamp;
 
+    /**
+     * 是否是系统周期
+     */
+    private Boolean isSystemPeriod;
+
     public Long getId() {
         return id;
     }
@@ -53,5 +58,13 @@ public class UserPeriod {
 
     public void setTimeStamp(Date timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    public Boolean getIsSystemPeriod() {
+        return isSystemPeriod;
+    }
+
+    public void setIsSystemPeriod(Boolean systemPeriod) {
+        isSystemPeriod = systemPeriod;
     }
 }

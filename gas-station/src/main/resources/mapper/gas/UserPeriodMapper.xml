@@ -9,6 +9,7 @@
         <result property="userId" column="user_id"/>
         <result property="gasStationId" column="gas_station_id"/>
         <result property="timeStamp" column="time_stamp"/>
+        <result property="isSystemPeriod" column="is_system_period"/>
     </resultMap>
 
     <select id="selectUserPeriod" resultMap="UserPeriod">
@@ -19,6 +20,7 @@
             <if test="condition.userId != null">`user_id` = #{condition.userId} and</if>
             <if test="condition.gasStationId != null">`gas_station_id` = #{condition.gasStationId} and</if>
             <if test="condition.timeStamp != null">`time_stamp` = #{condition.timeStamp} and</if>
+            <if test="condition.isSystemPeriod != null">`is_system_period` = #{condition.isSystemPeriod} and</if>
             1=1
         </where>
         <if test="orderField != null &amp;&amp; isDesc != null">
@@ -34,10 +36,10 @@
     </select>
 
     <insert id="insertUserPeriod">
-        insert into `gas_station_user_period`(`user_id`, `gas_station_id`, `time_stamp`)
+        insert into `gas_station_user_period`(`user_id`, `gas_station_id`, `time_stamp`, `is_system_period`)
         values
         <foreach collection="list" separator="," item="item">
-            (#{item.userId},#{item.gasStationId},#{item.timeStamp})
+            (#{item.userId},#{item.gasStationId},#{item.timeStamp},#{item.isSystemPeriod})
         </foreach>
     </insert>
 
@@ -50,6 +52,7 @@
                     <if test="userId != null">`user_id` = #{userId} and</if>
                     <if test="gasStationId != null">`gas_station_id` = #{gasStationId} and</if>
                     <if test="timeStamp != null">`time_stamp` = #{timeStamp} and</if>
+                    <if test="isSystemPeriod != null">`is_system_period` = #{isSystemPeriod} and</if>
                     1=1
                 </where>
             </when>

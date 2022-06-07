@@ -139,10 +139,10 @@ CREATE TABLE `gas_station_user_period`
     `user_id`        BIGINT UNSIGNED NOT NULL COMMENT '用户ID',
     `gas_station_id` VARCHAR(45)     NOT NULL COMMENT '系统内加油站ID',
     `time_stamp`     DATETIME        NOT NULL COMMENT '时间戳',
+    `is_system_period` boolean       NOT NULL DEFAULT FALSE COMMENT '是否为系统的周期',
     PRIMARY KEY (`id`),
     UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE
 )
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8
     COMMENT = '用户自己定义的周期表';
-
