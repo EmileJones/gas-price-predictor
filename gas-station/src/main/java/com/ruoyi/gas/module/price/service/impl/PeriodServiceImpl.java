@@ -26,7 +26,6 @@ public class PeriodServiceImpl extends AddPeriodEventSource implements IPeriodSe
     public List<PeriodVO> getPeriodList(PeriodForm form) {
         Date startTime = form.getStartTime();
         Date endTime = form.getEndTime();
-        System.out.println("StartTime: " + startTime + ", EndTime: " + endTime);
 
         return periodMapper.selectPeriodList(startTime, endTime).stream()
                 .map(this::convertPeriodEntityToVO)

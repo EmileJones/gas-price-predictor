@@ -46,4 +46,11 @@ public interface IUserPeriodService {
      * @return 用户周期详细信息
      */
     UserPeriod getUserPeriodById(Long id);
+
+    /**
+     * 用户在新增加油站的时候，为此加油站拉取最新的周期数据
+     * @param userId 用户ID
+     * @param gasStationId 加油站ID
+     */
+    void addUserPeriodForNewUserStation(Long userId, String gasStationId);
 }

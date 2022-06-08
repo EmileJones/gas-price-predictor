@@ -5,8 +5,11 @@ import com.ruoyi.gas.framewrok.Observer;
 import com.ruoyi.gas.module.geo.domain.GasStationUserOwned;
 import com.ruoyi.gas.module.geo.mapper.GasStationUserOwnedMapper;
 import com.ruoyi.gas.module.price.domain.UserPeriod;
+import com.ruoyi.gas.module.price.domain.form.PeriodForm;
+import com.ruoyi.gas.module.price.domain.vo.PeriodVO;
 import com.ruoyi.gas.module.price.framework.AddPeriodEventSource;
 import com.ruoyi.gas.module.price.mapper.UserPeriodMapper;
+import com.ruoyi.gas.module.price.service.IPeriodService;
 import com.ruoyi.gas.module.price.service.IUserPeriodService;
 import com.ruoyi.system.mapper.SysUserMapper;
 import org.springframework.beans.BeansException;
@@ -29,6 +32,8 @@ public class UserPeriodService implements IUserPeriodService, Observer<AddPeriod
     private SysUserMapper sysUserMapper;
     @Autowired
     private GasStationUserOwnedMapper gasStationUserOwnedMapper;
+    @Autowired
+    private IPeriodService periodService;
     private ApplicationContext applicationContext;
 
     @PostConstruct
@@ -84,6 +89,25 @@ public class UserPeriodService implements IUserPeriodService, Observer<AddPeriod
                 .selectUserPeriod(condition, null, null, null, null);
 
         return userPeriods == null || userPeriods.size() == 0? null : userPeriods.get(0);
+    }
+
+    @Override
+    public void addUserPeriodForNewUserStation(Long userId, String gasStationId) {
+        List<PeriodVO> periodList = periodService.getPeriodList(new PeriodForm());
+        if (periodList == null || periodList.size() == 0) {
+            return;
+        }
+
+        List<UserPeriod> userPeriods = periodList.stream()
+                .map(periodVO -> {
+                    UserPeriod userPeriod = new UserPeriod();
+                    userPeriod.setUserId(userId);
+                    userPeriod.setGasStationId(gasStationId);
+                    userPeriod.setTimeStamp(periodVO.getStartTime());
+                    userPeriod.setIsSystemPeriod(true);
+                    return userPeriod;
+                }).collect(Collectors.toList());
+        userPeriodMapper.insertUserPeriod(userPeriods);
     }
 
     @Override

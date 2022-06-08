@@ -17,6 +17,7 @@ import com.ruoyi.gas.module.geo.domain.GasStationUserOwned.StationStatus;
 import com.ruoyi.gas.module.geo.domain.vo.UserStationVO;
 import com.ruoyi.gas.module.geo.mapper.GasStationUserOwnedMapper;
 import com.ruoyi.gas.module.geo.service.IGasStationUserOwnedService;
+import com.ruoyi.gas.module.price.service.IUserPeriodService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -33,6 +34,9 @@ public class GasStationUserOwnedServiceImpl implements IGasStationUserOwnedServi
 {
     @Autowired
     private GasStationUserOwnedMapper gasStationUserOwnedMapper;
+
+    @Autowired
+    private IUserPeriodService userPeriodService;
 
     @Override
     public List<UserStationVO> listUserOwnedStation(Long userId) {
@@ -69,6 +73,9 @@ public class GasStationUserOwnedServiceImpl implements IGasStationUserOwnedServi
         if (affectRow == 0) {
             gasStationUserOwnedMapper.insertGasStationUserOwned(userStation);
         }
+
+        // 拉取所有的经营数据到
+        userPeriodService.addUserPeriodForNewUserStation(userId, stationId);
     }
 
     @Override
