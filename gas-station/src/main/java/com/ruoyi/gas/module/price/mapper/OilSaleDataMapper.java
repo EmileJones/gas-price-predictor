@@ -18,12 +18,13 @@ public interface OilSaleDataMapper {
      * @param userId 用户ID
      * @return 某时间段内的历史销量
      */
-    List<OilSaleData> selectHistorySaleData(@Param("userId")Long userId,
-                                            @Param("startIndex")Long startIndex,
-                                            @Param("amount")Integer amount);
+    List<OilSaleData> selectHistorySaleData(@Param("userId") Long userId,
+                                            @Param("startIndex") Long startIndex,
+                                            @Param("amount") Integer amount);
 
     /**
      * 获取某个用户的收据的数量
+     *
      * @param userId 用户ID
      * @return 收据数量
      */
@@ -56,13 +57,15 @@ public interface OilSaleDataMapper {
     /**
      * 获取某期间内的某种石油的总销量
      *
+     * @param userId       用户ID
      * @param gasStationId 加油站ID
      * @param oilType      石油类型
      * @param startTime    开始时间
      * @param endTime      结束时间
      * @return 总销量
      */
-    Double selectTotalPrice(@Param("gasStationId") String gasStationId,
+    Double selectTotalPrice(@Param("userId") Long userId,
+                            @Param("gasStationId") String gasStationId,
                             @Param("oilType") OilType oilType,
                             @Param("startTime") DateTime startTime,
                             @Param("endTime") DateTime endTime);
@@ -70,13 +73,15 @@ public interface OilSaleDataMapper {
     /**
      * 获取某期间内的某种石油的总收入
      *
+     * @param userId       用户ID
      * @param gasStationId 加油站ID
      * @param oilType      石油类型
      * @param startTime    开始时间
      * @param endTime      结束时间
      * @return 总收入
      */
-    Double selectTotalSalesVolume(@Param("gasStationId") String gasStationId,
+    Double selectTotalSalesVolume(@Param("userId") Long userId,
+                                  @Param("gasStationId") String gasStationId,
                                   @Param("oilType") OilType oilType,
                                   @Param("startTime") DateTime startTime,
                                   @Param("endTime") DateTime endTime);

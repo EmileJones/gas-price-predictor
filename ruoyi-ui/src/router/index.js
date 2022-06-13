@@ -189,6 +189,20 @@ export const dynamicRoutes = [
         meta: { title: '加油站竞争对手', activeMenu: '/station/opponent-station' }
       }
     ]
+  },
+  {
+    path: '/gas/calculator',
+    component: Layout,
+    hidden: true,
+    permissions: ['gas:predict:predict'],
+    children: [
+      {
+        path: 'index/:stationId(\\w+)',
+        component: () => import('@/views/gas/predict/input'),
+        name: 'Input',
+        meta: { title: '加油站价格预测', activeMenu: '/station/predict' }
+      }
+    ]
   }
 ]
 

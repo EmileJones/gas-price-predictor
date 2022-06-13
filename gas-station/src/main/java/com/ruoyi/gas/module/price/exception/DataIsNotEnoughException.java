@@ -1,6 +1,6 @@
 package com.ruoyi.gas.module.price.exception;
 
-public class DataIsNotEnoughException extends Exception {
+public class DataIsNotEnoughException extends RuntimeException {
     public DataIsNotEnoughException() {
     }
 

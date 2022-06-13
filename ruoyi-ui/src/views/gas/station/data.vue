@@ -22,7 +22,6 @@
 </template>
 
 <script>
-import {Loading} from 'element-ui'
 import {getSaleData} from "@/api/gas/data";
 
 

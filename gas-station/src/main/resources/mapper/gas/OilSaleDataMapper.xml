@@ -84,21 +84,23 @@
     <select id="selectTotalPrice" resultType="java.lang.Double">
         select sum(`price`)
         from `gas_station_sale_data`
-        where `gas_station_id` = #{gasStationId}
+        where `user_id` = #{userId}
+          and `gas_station_id` = #{gasStationId}
           and `effective` = true
           and `oil_type` = #{oilType}
-          and `date` &gt;= #{startTime}
-          and `date` $lt #{endTime};
+          and `date` &gt;= #{startTime,typeHandler=com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler}
+          and `date` &lt;= #{endTime,typeHandler=com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler};
     </select>
 
     <select id="selectTotalSalesVolume" resultType="java.lang.Double">
         select sum(`l_number`)
         from `gas_station_sale_data`
-        where `gas_station_id` = #{gasStationId}
+        where `user_id` = #{userId}
+          and `gas_station_id` = #{gasStationId}
           and `effective` = true
           and `oil_type` = #{oilType}
-          and `date` &gt;= #{startTime}
-          and `date` $lt #{endTime};
+          and `date` &gt;= #{startTime,typeHandler=com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler}
+          and `date` &lt; #{endTime,typeHandler=com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler};
     </select>
 
     <update id="rollBackLastBatch">

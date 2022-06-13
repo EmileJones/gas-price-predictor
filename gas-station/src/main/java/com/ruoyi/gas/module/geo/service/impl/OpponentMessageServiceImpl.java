@@ -84,9 +84,9 @@ public class OpponentMessageServiceImpl implements IOpponentMessageService {
 
     @Override
     public OpponentMessage getOpponentMessageByStationId(Long userId, String gasStationId, String outGasStationId) {
-        //刷新数据
+        // 刷新数据
         refreshOpponentMessage(userId, gasStationId);
-        //查询数据库的数据
+        // 查询数据库的数据并返回
         OpponentMessage condition = new OpponentMessage();
         condition.setUserId(userId);
         condition.setGasStationId(gasStationId);
