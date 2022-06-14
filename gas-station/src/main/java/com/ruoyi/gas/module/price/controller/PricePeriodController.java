@@ -1,10 +1,12 @@
 package com.ruoyi.gas.module.price.controller;
 
+import com.github.pagehelper.Page;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.PageUtils;
 import com.ruoyi.gas.module.price.domain.form.PeriodForm;
 import com.ruoyi.gas.module.price.service.IPeriodService;
 import com.ruoyi.gas.module.price.domain.vo.PeriodVO;
@@ -31,9 +33,14 @@ public class PricePeriodController extends BaseController {
     @PreAuthorize("@ss.hasPermi('gas:period:list')")
     @GetMapping("/list")
     public TableDataInfo list(PeriodForm period) {
-        startPage();
-        List<PeriodVO> pagePeriod =  periodService.getPeriodList(period);
-        return getDataTable(pagePeriod);
+        try (Page<?> page = PageUtils.startPageAndGet()) {
+            List<PeriodVO> pagePeriod =  periodService.getPeriodList(period);
+
+            TableDataInfo dataTable = getDataTable(pagePeriod);
+            assert page != null;
+            dataTable.setTotal(page.getTotal());
+            return dataTable;
+        }
     }
 
     /**

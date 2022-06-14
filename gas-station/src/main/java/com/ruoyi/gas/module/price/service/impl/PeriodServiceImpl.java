@@ -1,5 +1,6 @@
 package com.ruoyi.gas.module.price.service.impl;
 
+import com.github.pagehelper.Page;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.gas.module.price.domain.form.PeriodForm;
 import com.ruoyi.gas.module.price.domain.Period;

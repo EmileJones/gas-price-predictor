@@ -1,10 +1,12 @@
 package com.ruoyi.gas.module.price.controller;
 
+import com.github.pagehelper.Page;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.PageUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.gas.module.price.domain.UserPeriod;
 import com.ruoyi.gas.module.price.service.impl.UserPeriodService;
@@ -29,11 +31,16 @@ public class UserPeriodController extends BaseController {
     @PreAuthorize("@ss.hasAnyPermi('gas:user-period:list')")
     @GetMapping("list")
     public TableDataInfo getUserPeriodList(String gasStationId, Long pageNum, Long pageSize) {
-        Long userId = SecurityUtils.getUserId();
-        List<UserPeriod> userPeriods =
-                userPeriodService.getUserPeriods(userId, gasStationId, (pageNum - 1) * pageSize, pageSize);
+        try (Page<?> page = PageUtils.startPageAndGet()) {
+            Long userId = SecurityUtils.getUserId();
+            List<UserPeriod> userPeriods =
+                    userPeriodService.getUserPeriods(userId, gasStationId, (pageNum - 1) * pageSize, pageSize);
 
-        return getDataTable(userPeriods);
+            TableDataInfo dataTable = getDataTable(userPeriods);
+            assert page != null;
+            dataTable.setTotal(page.getTotal());
+            return dataTable;
+        }
     }
 
     /**

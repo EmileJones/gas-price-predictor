@@ -1,6 +1,7 @@
 package com.ruoyi.gas.module.price.service.impl;
 
 import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.gas.framewrok.Observer;
 import com.ruoyi.gas.module.geo.domain.GasStationUserOwned;
 import com.ruoyi.gas.module.geo.mapper.GasStationUserOwnedMapper;
@@ -66,7 +67,7 @@ public class UserPeriodService implements IUserPeriodService, Observer<AddPeriod
         if (!condition.getIsSystemPeriod())
             return userPeriodMapper.deleteUserPeriod(condition);
         else
-            return 0;
+            throw new ServiceException("此时间节点为发改委时间节点，不可删除");
     }
 
     @Override
