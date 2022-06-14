@@ -2,13 +2,16 @@ package com.ruoyi.gas.module.price.service.impl;
 
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.exception.ServiceException;
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.gas.framewrok.Observer;
 import com.ruoyi.gas.module.geo.domain.GasStationUserOwned;
 import com.ruoyi.gas.module.geo.mapper.GasStationUserOwnedMapper;
+import com.ruoyi.gas.module.price.domain.OpponentPrice;
 import com.ruoyi.gas.module.price.domain.UserPeriod;
 import com.ruoyi.gas.module.price.domain.form.PeriodForm;
 import com.ruoyi.gas.module.price.domain.vo.PeriodVO;
 import com.ruoyi.gas.module.price.framework.AddPeriodEventSource;
+import com.ruoyi.gas.module.price.mapper.OpponentPriceMapper;
 import com.ruoyi.gas.module.price.mapper.UserPeriodMapper;
 import com.ruoyi.gas.module.price.service.IPeriodService;
 import com.ruoyi.gas.module.price.service.IUserPeriodService;
@@ -35,6 +38,8 @@ public class UserPeriodService implements IUserPeriodService, Observer<AddPeriod
     private GasStationUserOwnedMapper gasStationUserOwnedMapper;
     @Autowired
     private IPeriodService periodService;
+    @Autowired
+    private OpponentPriceMapper opponentPriceMapper;
     private ApplicationContext applicationContext;
 
     @PostConstruct
@@ -52,6 +57,12 @@ public class UserPeriodService implements IUserPeriodService, Observer<AddPeriod
     }
 
     @Override
+    public long countUserPeriod(Long userId, String gasStationId) {
+        return userPeriodMapper.countUserPeriod(userId, gasStationId);
+    }
+
+
+    @Override
     public int addUserPeriods(List<UserPeriod> userPeriods) {
         userPeriods = userPeriods.stream().peek(userPeriod -> {
             Date timeStamp = userPeriod.getTimeStamp();
@@ -64,8 +75,16 @@ public class UserPeriodService implements IUserPeriodService, Observer<AddPeriod
     @Override
     public int deleteUserPeriod(long id) {
         UserPeriod condition = getUserPeriodById(id);
-        if (!condition.getIsSystemPeriod())
+        if (!condition.getIsSystemPeriod()) {
+            // 删除对手加油站对应周期的价格数据
+            OpponentPrice example = new OpponentPrice();
+            example.setUserId(SecurityUtils.getUserId());
+            example.setUserPeriodId(id);
+            opponentPriceMapper.deleteOpponentPrice(example);
+
+            // 删除用户该周期的价格数据
             return userPeriodMapper.deleteUserPeriod(condition);
+        }
         else
             throw new ServiceException("此时间节点为发改委时间节点，不可删除");
     }

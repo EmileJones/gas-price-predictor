@@ -32,6 +32,7 @@
         from `gas_station_price_period`
         <where>
             <if test="startTime != null">and #{startTime} &lt;= start_time</if>
+            <if test="endTime != null">and #{endTime} &gt;= start_time</if>
         </where>
         order by start_time DESC
     </select>

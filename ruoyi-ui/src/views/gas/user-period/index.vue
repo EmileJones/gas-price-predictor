@@ -11,22 +11,6 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="开始时间" prop="startTime">
-        <el-date-picker clearable size="small"
-          v-model="queryParams.startTime"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="选择开始时间">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="结束时间" prop="endTime">
-        <el-date-picker clearable size="small"
-          v-model="queryParams.endTime"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="选择结束时间">
-        </el-date-picker>
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>

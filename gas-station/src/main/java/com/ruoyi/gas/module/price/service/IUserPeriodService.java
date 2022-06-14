@@ -1,7 +1,6 @@
 package com.ruoyi.gas.module.price.service;
 
 import com.ruoyi.gas.module.price.domain.UserPeriod;
-import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
@@ -16,6 +15,14 @@ public interface IUserPeriodService {
      * @return 用户周期数据
      */
     List<UserPeriod> getUserPeriods(Long userId, String gasStationId, Long startIndex, Long amount);
+
+    /**
+     * 获取用户周期总数
+     * @param userId 用户ID
+     * @param gasStationId 加油站ID
+     * @return 用户周期总数
+     */
+    long countUserPeriod(Long userId, String gasStationId);
 
     /**
      * 添加用户周期

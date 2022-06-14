@@ -55,16 +55,16 @@
     <delete id="deleteOpponentPrice">
         delete from `gas_station_opponent_price`
         <where>
-            <if test="opponentPrice.id != null">`id` = #{opponentPrice.id}</if>
-            <if test="opponentPrice.userPeriodId != null">`user_period_id` = #{opponentPrice.userPeriodId}</if>
-            <if test="opponentPrice.userId != null">`user_id` = #{userId}</if>
-            <if test="opponentPrice.gasStationId != null">`gas_station_id` = #{gasStationId}</if>
-            <if test="opponentPrice.outGasStationId != null">`out_gas_station_id` = #{opponentPrice.outGasStationId}
+            <if test="opponentPrice.id != null">and `id` = #{opponentPrice.id}</if>
+            <if test="opponentPrice.userPeriodId != null">and `user_period_id` = #{opponentPrice.userPeriodId}</if>
+            <if test="opponentPrice.userId != null">and `user_id` = #{opponentPrice.userId}</if>
+            <if test="opponentPrice.gasStationId != null">and `gas_station_id` = #{opponentPrice.gasStationId}</if>
+            <if test="opponentPrice.outGasStationId != null">and `out_gas_station_id` = #{opponentPrice.outGasStationId}
             </if>
-            <if test="opponentPrice.price92 != null">`price_92` = #{opponentPrice.price92}</if>
-            <if test="opponentPrice.price95 != null">`price_95` = #{opponentPrice.price95}</if>
-            <if test="opponentPrice.price98 != null">`price_98` = #{opponentPrice.price98}</if>
-            <if test="opponentPrice.price00 != null">`price_00` = #{opponentPrice.price00}</if>
+            <if test="opponentPrice.price92 != null">and `price_92` = #{opponentPrice.price92}</if>
+            <if test="opponentPrice.price95 != null">and `price_95` = #{opponentPrice.price95}</if>
+            <if test="opponentPrice.price98 != null">and `price_98` = #{opponentPrice.price98}</if>
+            <if test="opponentPrice.price00 != null">and `price_00` = #{opponentPrice.price00}</if>
         </where>
     </delete>
 
@@ -72,16 +72,16 @@
         select count(*)
         from `gas_station_opponent_price`
         <where>
-            <if test="opponentPrice.id != null">`id` = #{opponentPrice.id}</if>
-            <if test="opponentPrice.userPeriodId != null">`user_period_id` = #{opponentPrice.userPeriodId}</if>
-            <if test="opponentPrice.userId != null">`user_id` = #{userId}</if>
-            <if test="opponentPrice.gasStationId != null">`gas_station_id` = #{gasStationId}</if>
-            <if test="opponentPrice.outGasStationId != null">`out_gas_station_id` = #{opponentPrice.outGasStationId}
+            <if test="opponentPrice.id != null">and `id` = #{opponentPrice.id}</if>
+            <if test="opponentPrice.userPeriodId != null">and `user_period_id` = #{opponentPrice.userPeriodId}</if>
+            <if test="opponentPrice.userId != null">and `user_id` = #{opponentPrice.userId}</if>
+            <if test="opponentPrice.gasStationId != null">and `gas_station_id` = #{opponentPrice.gasStationId}</if>
+            <if test="opponentPrice.outGasStationId != null">and `out_gas_station_id` = #{opponentPrice.outGasStationId}
             </if>
-            <if test="opponentPrice.price92 != null">`price_92` = #{opponentPrice.price92}</if>
-            <if test="opponentPrice.price95 != null">`price_95` = #{opponentPrice.price95}</if>
-            <if test="opponentPrice.price98 != null">`price_98` = #{opponentPrice.price98}</if>
-            <if test="opponentPrice.price00 != null">`price_00` = #{opponentPrice.price00}</if>
+            <if test="opponentPrice.price92 != null">and `price_92` = #{opponentPrice.price92}</if>
+            <if test="opponentPrice.price95 != null">and `price_95` = #{opponentPrice.price95}</if>
+            <if test="opponentPrice.price98 != null">and `price_98` = #{opponentPrice.price98}</if>
+            <if test="opponentPrice.price00 != null">and `price_00` = #{opponentPrice.price00}</if>
         </where>
     </select>
 </mapper>

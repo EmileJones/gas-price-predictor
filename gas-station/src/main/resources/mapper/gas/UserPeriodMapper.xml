@@ -72,5 +72,9 @@
             <if test="timeStamp != null">`time_stamp` = #{timeStamp}</if>
         </where>
     </select>
+    <select id="countUserPeriod" resultType="java.lang.Long">
+        select count(0) from `gas_station_user_period`
+        where user_id = #{userId} and gas_station_id = #{gasStationId}
+    </select>
 
 </mapper>

@@ -3,6 +3,7 @@ package com.ruoyi.gas.module.price.mapper;
 import com.ruoyi.gas.module.price.domain.UserPeriod;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 
@@ -39,8 +40,10 @@ public interface UserPeriodMapper {
     int deleteUserPeriod(UserPeriod condition);
 
     /**
-     * 查询符合条件的数据条数
-     * @return 符合条件的数据条数
+     * 获取用户周期数量
+     * @param userId 用户ID
+     * @param gasStationId 加油站ID
+     * @return 用户周期总数
      */
-    long selectAmountOfData(UserPeriod condition);
+    long countUserPeriod(@Param("userId") Long userId, @Param("gasStationId") String gasStationId);
 }

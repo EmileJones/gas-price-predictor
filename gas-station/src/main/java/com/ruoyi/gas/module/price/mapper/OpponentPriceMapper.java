@@ -48,7 +48,7 @@ public interface OpponentPriceMapper {
      * @param opponentPrice 查询条件
      * @return 受到影响的数据量
      */
-    int deleteOpponentPrice(@Param("opponentPrices") OpponentPrice opponentPrice);
+    int deleteOpponentPrice(@Param("opponentPrice") OpponentPrice opponentPrice);
 
     /**
      * 查询符合条件的数据总数
