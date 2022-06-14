@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.security.core.parameters.P;
 
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -46,4 +47,10 @@ public interface UserPeriodMapper {
      * @return 用户周期总数
      */
     long countUserPeriod(@Param("userId") Long userId, @Param("gasStationId") String gasStationId);
+
+    /**
+     * 在管理员删除用户的周期状态的时候，对应的用户周期需要更新为自定义用户周期
+     * @param date 需要被删除的周期
+     */
+    void updateUserPeriodState(@Param("date") Date date);
 }

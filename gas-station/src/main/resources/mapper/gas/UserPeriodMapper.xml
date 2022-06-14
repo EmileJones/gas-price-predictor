@@ -11,6 +11,11 @@
         <result property="timeStamp" column="time_stamp"/>
         <result property="isSystemPeriod" column="is_system_period"/>
     </resultMap>
+    <update id="updateUserPeriodState">
+        update `gas_station_user_period`
+        set `is_system_period` = 0
+        where `time_stamp` = #{date}
+    </update>
 
     <select id="selectUserPeriod" resultMap="UserPeriod">
         select *

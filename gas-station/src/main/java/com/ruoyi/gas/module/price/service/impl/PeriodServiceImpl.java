@@ -1,12 +1,12 @@
 package com.ruoyi.gas.module.price.service.impl;
 
-import com.github.pagehelper.Page;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.gas.module.price.domain.form.PeriodForm;
 import com.ruoyi.gas.module.price.domain.Period;
 import com.ruoyi.gas.module.price.domain.vo.PeriodVO;
 import com.ruoyi.gas.module.price.framework.AddPeriodEventSource;
 import com.ruoyi.gas.module.price.mapper.PricePeriodMapper;
+import com.ruoyi.gas.module.price.mapper.UserPeriodMapper;
 import com.ruoyi.gas.module.price.service.*;
 import com.ruoyi.gas.module.price.util.DateUtil;
 import org.joda.time.DateTime;
@@ -22,6 +22,9 @@ public class PeriodServiceImpl extends AddPeriodEventSource implements IPeriodSe
 
     @Autowired
     private PricePeriodMapper periodMapper;
+
+    @Autowired
+    private UserPeriodMapper userPeriodMapper;
 
     @Override
     public List<PeriodVO> getPeriodList(PeriodForm form) {
@@ -66,6 +69,8 @@ public class PeriodServiceImpl extends AddPeriodEventSource implements IPeriodSe
 //                previousPeriod.setEndTime(period.getEndTime());
 //                periodMapper.updatePeriod(previousPeriod);
 //            }
+
+            userPeriodMapper.updateUserPeriodState(startTime);
             periodMapper.deletePeriod(id);
         }
     }
