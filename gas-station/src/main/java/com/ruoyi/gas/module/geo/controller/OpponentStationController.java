@@ -1,10 +1,8 @@
 package com.ruoyi.gas.module.geo.controller;
 
-import com.github.pagehelper.Page;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
-import com.ruoyi.common.utils.PageUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.gas.module.geo.domain.vo.OpponentMessageVO;
 import com.ruoyi.gas.module.geo.service.IOpponentMessageService;
@@ -30,17 +28,25 @@ public class OpponentStationController extends BaseController {
      */
     @PreAuthorize("@ss.hasAnyPermi('gas:station:list')")
     @GetMapping("list")
-    public TableDataInfo opponentStationList(String gasStationId) {
-        try (Page<?> page = PageUtils.startPageAndGet()) {
-            Long userId = SecurityUtils.getUserId();
-            List<OpponentMessageVO> opponentMessage =
-                    opponentMessageService.getAllOpponentMessage(userId, gasStationId);
+    public TableDataInfo opponentStationAllList(String gasStationId) {
+        Long userId = SecurityUtils.getUserId();
+        List<OpponentMessageVO> opponentMessage =
+                opponentMessageService.getAllOpponentMessage(userId, gasStationId);
 
-            TableDataInfo dataTable = getDataTable(opponentMessage);
-            assert page != null;
-            dataTable.setTotal(page.getTotal());
-            return dataTable;
-        }
+        return getDataTable(opponentMessage);
+    }
+
+    /**
+     * 查加油站有效的对手加油站，被用户禁用的加油站不会返回
+     */
+    @PreAuthorize("@ss.hasAnyPermi('gas:station:list')")
+    @GetMapping("/list/enabled")
+    public TableDataInfo opponentStationList(String gasStationId) {
+        Long userId = SecurityUtils.getUserId();
+        List<OpponentMessageVO> opponentMessage =
+                opponentMessageService.getOpponentMessage(userId, gasStationId);
+
+        return getDataTable(opponentMessage);
     }
 
     /**

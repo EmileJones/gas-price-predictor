@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import {listOpponentStation} from '@/api/gas/opponent-station';
+import { listEnabledOpponentStation } from '@/api/gas/opponent-station';
 import {calculator, getOilTypes} from '@/api/gas/predict';
 
 export default {
@@ -112,7 +112,7 @@ export default {
     getOilTypes().then(resp => {
       this.oilType = resp;
     });
-    listOpponentStation(this.stationId).then(resp => {
+    listEnabledOpponentStation(this.formData.stationId).then(resp => {
       let basicData = resp.rows;
       basicData.forEach(row => {
         this.formData.opponentPriceData.push({

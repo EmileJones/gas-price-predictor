@@ -9,6 +9,15 @@ export function listOpponentStation (gasStationId) {
     })
 }
 
+/** 查询对手加油站列表 */
+export function listEnabledOpponentStation (gasStationId) {
+    return request({
+        url: '/gas/opponent-station/list/enabled',
+        method: 'get',
+        params: { gasStationId: gasStationId }
+    })
+}
+
 /** 修改对手加油站状态 */
 export function changeStatus (messageId, status) {
     return request({
