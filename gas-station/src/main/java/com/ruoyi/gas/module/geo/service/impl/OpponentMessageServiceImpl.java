@@ -84,12 +84,15 @@ public class OpponentMessageServiceImpl implements IOpponentMessageService {
 
     @Override
     public OpponentMessage getOpponentMessageByStationId(Long userId, String gasStationId, String outGasStationId) {
+        // 刷新数据
+        refreshOpponentMessage(userId, gasStationId);
+        // 查询数据库的数据并返回
         OpponentMessage condition = new OpponentMessage();
         condition.setUserId(userId);
         condition.setGasStationId(gasStationId);
         condition.setOutGasStationId(outGasStationId);
         List<OpponentMessage> opponentMessages = opponentMessageMapper.selectOpponentMessage(condition);
-        if (opponentMessages.size() == 1){
+        if (opponentMessages.size() == 1) {
             return opponentMessages.get(0);
         }
         return null;
@@ -108,8 +111,10 @@ public class OpponentMessageServiceImpl implements IOpponentMessageService {
         // 如果该用户第一次查看次加油站的信息
         if (opponentMessages.size() == 0) {
             List<GasStationInfo> gasStationInfos = gasStationInfoService.listOutSystemStationBySystemStationId(gasStationId);
-            opponentMessages = convertGasStationInfo2OpponentMessage(userId, gasStationId, gasStationInfos);
-            opponentMessageMapper.insertOpponentMessage(opponentMessages);
+            if (!gasStationInfos.isEmpty()) {
+                opponentMessages = convertGasStationInfo2OpponentMessage(userId, gasStationId, gasStationInfos);
+                opponentMessageMapper.insertOpponentMessage(opponentMessages);
+            }
         }
         return convertOpponentMessage2OpponentMessageVO(opponentMessages);
     }

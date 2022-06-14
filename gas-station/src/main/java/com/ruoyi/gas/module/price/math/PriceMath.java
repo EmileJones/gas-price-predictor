@@ -1,7 +1,7 @@
 package com.ruoyi.gas.module.price.math;
 
 public class PriceMath {
-    private Data data;
+    private PriceData data;
     /**
      * 覆盖面积
      */
@@ -11,7 +11,7 @@ public class PriceMath {
      */
     private Double asv;
 
-    public PriceMath(Data data) {
+    public PriceMath(PriceData data) {
         this.data = data;
         calculate();
     }
@@ -29,50 +29,52 @@ public class PriceMath {
         asv = asv();
     }
 
-    private double a(int n) {
-        double var1 = data.getInSalesVolume(n) - data.getInSalesVolume(n + 1);
+    private Double a(int n) {
+        Double var1 = data.getInSalesVolume(n) - data.getInSalesVolume(n + 1);
         var1 /= data.getInSalesVolume(n);
         var1 += 1;
         return var1;
     }
 
-    private double b(int n) {
-        double var1 = 0;
+    private Double b(int n) {
+        Double var1 = 0.0;
         for (int i = 0; i < data.getGasStationNumber(); i++) {
-            var1 += data.getOutMoney(i, n) * data.getRouteFactor(n);
+            var1 += data.getOutMoney(i, n) * data.getRouteFactor(i);
         }
         var1 -= data.getInMoney(n);
         return var1;
     }
 
-    private double c(int n) {
-        double var1 = 0;
+    private Double c(int n) {
+        Double var1 = 0.0;
         for (int i = 0; i < data.getGasStationNumber(); i++) {
-            var1 += data.getOutMoney(i, n) * data.getRouteFactor(n) * data.getDistance(i);
+            var1 += data.getOutMoney(i, n) * data.getRouteFactor(i) * data.getDistance(i);
         }
         return var1;
     }
 
-    private double y(int x) {
-        double var1 = a(x) * c(x) - c(x + 1);
-        double var2 = a(x) * b(x) - b(x + 1);
+    private Double y(int x) {
+        Double var1 = a(x) * c(x) - c(x + 1);
+        Double var2 = a(x) * b(x) - b(x + 1);
         return var1 / var2;
     }
 
-    private double y() {
+    private Double y() {
         int var1 = 1;
-        int var2 = data.getPeriodNumber();
+        int var2 = data.getPeriodNumber() - 2;
         for (int i = 0; i < var2; i++) {
-            var1 *= y(i);
+            Double temp = y(i);
+            if (!temp.isNaN(temp))
+                var1 *= y(i);
         }
-        return Math.pow(var1, var2 - 2);
+        return Math.pow(var1, var2);
     }
 
 
-    private double asv() {
-        double e = 0;
-        double f = 0;
-        double var1 = 0;
+    private Double asv() {
+        Double e = 0.0;
+        Double f = 0.0;
+        Double var1 = 0.0;
         for (int i = 0; i < data.getGasStationNumber(); i++) {
             var1 = 1 - data.getDistance(i);
             var1 /= y;

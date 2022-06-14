@@ -103,15 +103,15 @@ export default {
     methods: {
         /** 刷新当前列表 */
         getList() {
-            listOpponentStation().then(response => {
+            listOpponentStation(this.gasStationId).then(response => {
                 this.opponentStationList = response.rows
                 this.loading = false
             })
         },
         /** 下载导入模板 */
         handleExport() {
-            this.download('/gas/opponent-price/export', 
-            {gasStationId: this.gasStationId}, 
+            this.download('/gas/opponent-price/export',
+            {gasStationId: this.gasStationId},
             `${this.gasStationId}.xlsx`)
         },
 
@@ -152,7 +152,7 @@ export default {
             } else {
                 this.$modal.msgError(response.msg)
             }
-            
+
             this.getList()
             this.$refs.upload.clearFiles()
         },

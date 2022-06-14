@@ -1,6 +1,6 @@
 package com.ruoyi.gas.module.price.math;
 
-public class Data {
+public class PriceData {
     private Integer gasStationNumber;
     private Integer periodNumber;
     private Double[] routeFactor;
@@ -14,14 +14,14 @@ public class Data {
     private Double inPresentMoney;
     private Double inTargetMoney;
 
-    public Data(int gasStationNumber, int periodNumber) {
+    public PriceData(int gasStationNumber, int periodNumber) {
         this.gasStationNumber = gasStationNumber;
         this.periodNumber = periodNumber;
         routeFactor = new Double[gasStationNumber];
         distance = new Double[gasStationNumber];
         outMoney = new Double[gasStationNumber][periodNumber];
-        inAverageSalesVolume = new Double[gasStationNumber];
-        inMoney = new Double[gasStationNumber];
+        inAverageSalesVolume = new Double[periodNumber];
+        inMoney = new Double[periodNumber];
         presentMoney = new Double[gasStationNumber];
         chaseMoney = new Double[gasStationNumber];
     }

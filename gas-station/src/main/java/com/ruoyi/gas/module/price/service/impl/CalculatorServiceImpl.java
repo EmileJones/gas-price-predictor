@@ -1,13 +1,20 @@
 package com.ruoyi.gas.module.price.service.impl;
 
+import com.ruoyi.gas.module.geo.domain.GasStationGeo;
+import com.ruoyi.gas.module.geo.domain.GasStationInfo;
+import com.ruoyi.gas.module.geo.service.IGasStationGeoService;
+import com.ruoyi.gas.module.geo.service.IGasStationInfoService;
+import com.ruoyi.gas.module.geo.service.IOpponentMessageService;
 import com.ruoyi.gas.module.price.domain.OpponentPrice;
 import com.ruoyi.gas.module.price.domain.UserPeriod;
 import com.ruoyi.gas.module.price.domain.dto.DataForCalculation;
 import com.ruoyi.gas.module.price.domain.dto.OpponentGasStationDataForCalculation;
 import com.ruoyi.gas.module.price.domain.framwork.OilType;
+import com.ruoyi.gas.module.price.domain.vo.OpponentPriceDataVO;
+import com.ruoyi.gas.module.price.domain.vo.PriceDataVO;
 import com.ruoyi.gas.module.price.exception.DataIsNotEnoughException;
 import com.ruoyi.gas.module.price.mapper.*;
-import com.ruoyi.gas.module.price.math.Data;
+import com.ruoyi.gas.module.price.math.PriceData;
 import com.ruoyi.gas.module.price.math.PriceMath;
 import com.ruoyi.gas.module.price.service.ICalculatorService;
 import org.joda.time.DateTime;
@@ -15,9 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class CalculatorServiceImpl implements ICalculatorService {
@@ -27,9 +32,15 @@ public class CalculatorServiceImpl implements ICalculatorService {
     UserPeriodMapper userPeriodMapper;
     @Autowired
     OpponentPriceMapper opponentPriceMapper;
+    @Autowired
+    IGasStationGeoService gasStationGeoService;
+    @Autowired
+    IOpponentMessageService opponentMessageService;
+    @Autowired
+    IGasStationInfoService gasStationInfoService;
 
     @Override
-    public double getAverageSalesVolume(DataForCalculation data) throws DataIsNotEnoughException {
+    public double getAverageSalesVolume(DataForCalculation data) {
         // 获取对手加油站的信息
         List<OpponentGasStationDataForCalculation> outSystemDatas = data.getOutSystemData();
         // 按照要求计算的周期数获得周期
@@ -38,7 +49,7 @@ public class CalculatorServiceImpl implements ICalculatorService {
             throw new DataIsNotEnoughException("数据库中存入的周期不足,期望[" + data.getPeriodNumber() + "]个周期实际[" + periods.size() + "]个周期");
         }
         // 准备将数据封装入Data中
-        Data neededData = new Data(outSystemDatas.size(), data.getPeriodNumber());
+        PriceData neededData = new PriceData(outSystemDatas.size(), data.getPeriodNumber());
         // 将所有系统外的加油站数据封装入Data中
         for (int i = 0; i < outSystemDatas.size(); i++) {
             OpponentGasStationDataForCalculation outGasStationData = outSystemDatas.get(i);
@@ -65,7 +76,7 @@ public class CalculatorServiceImpl implements ICalculatorService {
         neededData.setInPresentMoney(data.getPresentMoney());
         // 封装系统内加油站 目标价格
         neededData.setInTargetMoney(data.getTargetMoney());
-        // 封装系统内加油站 当前平均销量
+        // 封装系统内加油站 当前平均销量(日均销量)
         neededData.setPresentAverageSalesVolume(data.getPresentAverageSalesVolume());
         for (int i = 0; i < data.getPeriodNumber(); i++) {
             UserPeriod userPeriod = periods.get(i);
@@ -79,33 +90,106 @@ public class CalculatorServiceImpl implements ICalculatorService {
             }
             DateTime startTime = new DateTime(userPeriod.getTimeStamp());
             DateTime endTime = new DateTime(nextUserPeriod.getTimeStamp());
-            double totalSalesVolume = saleDataMapper.selectTotalSalesVolume(data.getGasStationId(),
+            Double totalSalesVolume = saleDataMapper.selectTotalSalesVolume(
+                    data.getUserId(),
+                    data.getGasStationId(),
                     data.getOilType(),
                     startTime,
                     endTime);
-            double totalPrice = saleDataMapper.selectTotalPrice(data.getGasStationId(),
+            Double totalPrice = saleDataMapper.selectTotalPrice(
+                    data.getUserId(),
+                    data.getGasStationId(),
                     data.getOilType(),
                     startTime,
                     endTime);
-            // 当前周期持续时长
-            double differenceDay = calculateDifferenceDay(startTime, endTime);
-            // 封装系统内加油站 第i期的平均销量
-            neededData.setInAverageSalesVolume(i, totalSalesVolume / differenceDay);
-            // 封装系统内加油站 第i期的综合单价
-            neededData.setInMoney(i, totalPrice / totalPrice);
+            if (totalSalesVolume == null || totalPrice == null) {
+//                throw new DataIsNotEnoughException("数据库中存入的销售数据不足,在[" + startTime.toString("yyyy-MM-dd") + "---" + endTime.toString("yyyy-MM-dd") + "]时间内没有足够的销售数据");
+                neededData.setInAverageSalesVolume(i, Double.valueOf(0));
+                // 封装系统内加油站 第i期的综合单价
+                neededData.setInMoney(i, Double.valueOf(0));
+            } else {
+                // 当前周期持续时长
+                double differenceDay = calculateDifferenceDay(startTime, endTime);
+                // 封装系统内加油站 第i期的平均销量
+                neededData.setInAverageSalesVolume(i, totalSalesVolume / differenceDay);
+                // 封装系统内加油站 第i期的综合单价
+                neededData.setInMoney(i, totalPrice / totalPrice);
+            }
         }
         PriceMath priceMath = new PriceMath(neededData);
         return priceMath.getAsv();
     }
+//
+//    @Override
+//    public double getTotalPrice(String gasStationId, OilType oilType, DateTime startTime, DateTime endTime) {
+//        return saleDataMapper.selectTotalPrice(gasStationId, oilType, startTime, endTime);
+//    }
+//
+//    @Override
+//    public double getTotalSalesVolume(String gasStationId, OilType oilType, DateTime startTime, DateTime endTime) {
+//        return saleDataMapper.selectTotalSalesVolume(gasStationId, oilType, startTime, endTime);
+//    }
 
     @Override
-    public double getTotalPrice(String gasStationId, OilType oilType, DateTime startTime, DateTime endTime) {
-        return saleDataMapper.selectTotalPrice(gasStationId, oilType, startTime, endTime);
-    }
-
-    @Override
-    public double getTotalSalesVolume(String gasStationId, OilType oilType, DateTime startTime, DateTime endTime) {
-        return saleDataMapper.selectTotalSalesVolume(gasStationId, oilType, startTime, endTime);
+    public double getAverageSalesVolume(Long userId, PriceDataVO priceData) {
+        // 开始封装数据 QAQ
+        DataForCalculation data = new DataForCalculation();
+        // 一、传入用户ID
+        data.setUserId(userId);
+        // 二、传入加油站ID
+        data.setGasStationId(priceData.getStationId());
+        // 三、将周期数传入
+        data.setPeriodNumber(16);
+        // 四、封装对手加油站信息
+        // 0.准备一个List用于存储最终的GasStationGeo信息
+        List<GasStationGeo> finalGasStationGeos = new LinkedList<>();
+        // 1.获取本加油站的对手加油站信息
+        List<GasStationInfo> gasStationInfos = gasStationInfoService.listOutSystemStationBySystemStationId(priceData.getStationId());
+        // 2.获取本加油站的加油站信息
+        GasStationInfo systemGasStationInfo = gasStationInfoService.selectGasStationInfoById(priceData.getStationId());
+        // 3.获取对手加油站的地理位置信息
+        List<GasStationGeo> gasStationGeos = gasStationGeoService.listStationDistance(systemGasStationInfo, gasStationInfos, IGasStationGeoService.DEFAULT_RADIUS);
+        // 4.将用户承认的对手加油站ID存储到Map中，方便将用户不承认的加油站淘汰出计算，以及封装数据
+        Map<String, OpponentPriceDataVO> map = new HashMap<>();
+        for (OpponentPriceDataVO temp : priceData.getOpponentPriceData()) {
+            map.put(temp.getOutSystemGasStationId(), temp);
+        }
+        // 5.开始筛选数据，筛选出符合条件的数据
+        gasStationGeos.stream().forEach(gasStationGeo -> {
+            if (map.containsKey(gasStationGeo.getOutSystemStationId())) {
+                finalGasStationGeos.add(gasStationGeo);
+            }
+        });
+        // 6.变换数据格式为OpponentGasStationDataForCalculation格式
+        List<OpponentGasStationDataForCalculation> opponentMessages = new ArrayList<>();
+        for (GasStationGeo temp : finalGasStationGeos) {
+            OpponentGasStationDataForCalculation opponentMessage = new OpponentGasStationDataForCalculation();
+            // 获取对应的输入数据
+            OpponentPriceDataVO tempPriceDataVO = map.get(temp.getOutSystemStationId());
+            // 封装 对手加油站ID
+            opponentMessage.setOpponentGasStationId(temp.getOutSystemStationId());
+            // 封装 跟随价格
+            opponentMessage.setChaseMoney(tempPriceDataVO.getChaseMoney());
+            // 封装 影响因素
+            opponentMessage.setRouteFactor(temp.getRouteFactor());
+            // 封装 距离
+            opponentMessage.setDistance(temp.getDistance());
+            // 封装 当前价格
+            opponentMessage.setPresentMoney(tempPriceDataVO.getPresentMoney());
+            // 存入列表中
+            opponentMessages.add(opponentMessage);
+        }
+        // 7.封装 对手加油站信息
+        data.setOutSystemData(opponentMessages);
+        // 五、封装 目标价格
+        data.setTargetMoney(priceData.getTargetMoney());
+        // 六、封装 当前价格
+        data.setPresentMoney(priceData.getPresentMoney());
+        // 七、封装 当前平均销量
+        data.setPresentAverageSalesVolume(priceData.getPresentAverageSalesVolume());
+        // 八、封装石油类型
+        data.setOilType(priceData.getOilType());
+        return getAverageSalesVolume(data);
     }
 
     /**

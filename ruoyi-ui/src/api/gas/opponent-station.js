@@ -1,11 +1,11 @@
 import request from '@/utils/request'
 
 /** 查询对手加油站列表 */
-export function listOpponentStation (query) {
+export function listOpponentStation (gasStationId) {
     return request({
         url: '/gas/opponent-station/list',
         method: 'get',
-        params: query
+        params: {gasStationId: gasStationId}
     })
 }
 
