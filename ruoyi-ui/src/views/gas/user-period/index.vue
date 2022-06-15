@@ -25,7 +25,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['gas:period:add']"
+          v-hasPermi="['gas:user-period:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -36,7 +36,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['gas:period:edit']"
+          v-hasPermi="['gas:user-period:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -47,7 +47,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['gas:period:remove']"
+          v-hasPermi="['gas:user-period:remove']"
         >删除</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>

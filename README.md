@@ -7,44 +7,22 @@
 ## 代码行统计
 
 ```
-PS D:\projects\gas-station\gas-station> cd .\gas-station\src\
-PS D:\projects\gas-station\gas-station\gas-station\src> cloc .
-145 text files.
+     166 text files.
+     166 unique files.
+       0 files ignored.
 
-github.com/AlDanial/cloc v 1.92  T=0.21 s (675.6 files/s, 46565.2 lines/s)
+github.com/AlDanial/cloc v 1.92  T=0.22 s (770.1 files/s, 57707.1 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Java                           135           1406           2121           5654
-XML                              9             72              1            735
+Java                           139           1472           2293           6021
+Vuejs Component                  8             72            121           1231
+XML                              9             72              1            750
+JavaScript                       7             26             22            167
+SQL                              1              8              8            132
+Python                           1              5              0             33
 YAML                             1              0              0              5
 -------------------------------------------------------------------------------
-SUM:                           145           1478           2122           6394
--------------------------------------------------------------------------------
-PS D:\projects\gas-station\gas-station\gas-station\src> cd D:\projects\gas-station\gas-station\ruoyi-ui\src\api\gas
-5 unique files.
-0 files ignored.
-
-github.com/AlDanial/cloc v 1.92  T=0.04 s (132.0 files/s, 4146.1 lines/s)
--------------------------------------------------------------------------------
-Language                     files          blank        comment           code
--------------------------------------------------------------------------------
-JavaScript                       5             19             17            121
--------------------------------------------------------------------------------
-SUM:                             5             19             17            121
--------------------------------------------------------------------------------
-PS D:\projects\gas-station\gas-station\ruoyi-ui\src\api\gas> cd D:\projects\gas-station\gas-station\ruoyi-ui\src\views\gas
-PS D:\projects\gas-station\gas-station\ruoyi-ui\src\views\gas> cloc .
-5 text files.
-5 unique files.                              
-0 files ignored.
-
-github.com/AlDanial/cloc v 1.92  T=0.07 s (66.9 files/s, 14212.5 lines/s)
--------------------------------------------------------------------------------
-Language                     files          blank        comment           code
--------------------------------------------------------------------------------
-Vuejs Component                  5             43            104            915
--------------------------------------------------------------------------------
-SUM:                             5             43            104            915
+SUM:                           166           1655           2445           8339
 -------------------------------------------------------------------------------
 ```
