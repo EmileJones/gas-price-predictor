@@ -6,6 +6,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 
+import com.ruoyi.gas.constant.GeoConstant;
 import com.ruoyi.gas.module.geo.domain.GasStationInfo;
 import com.ruoyi.gas.module.geo.mapper.GasStationGeoMapper;
 import com.ruoyi.gas.module.map.MapService;
@@ -99,7 +100,13 @@ public class GasStationGeoServiceImpl implements IGasStationGeoService {
                     String outSystemStationId = outSystemStation.getId();
                     GasStationGeo geo =
                             convertToGasStationGeo(systemStationId, outSystemStationId, pathCost);
-                    gasStationGeoMapper.updateGasStationGeo(geo);
+
+                    // 如果加油站不符合条件，那么去除加油站
+                    if (geo.getDistance() > GeoConstant.DEFAULT_DISTANCE / 1000.0) {
+                        gasStationGeoMapper.deleteGasStationGeo(systemStationId, geo.getOutSystemStationId());
+                    } else {
+                        gasStationGeoMapper.updateGasStationGeo(geo);
+                    }
                 } finally {
                     countDownLatch.countDown();
                 }

@@ -90,4 +90,11 @@ public interface GasStationGeoMapper
     GasStationGeo selectGasStationGeoByStationId(@Param("systemStationId") String systemStationId,
                                                  @Param("outSystemStationId") String outSystemStationId);
 
+    /**
+     * 根据系统加油站ID和系统加油站外ID删除指定地理信息记录
+     * @param systemStationId 系统内加油站ID
+     * @param outSystemStationId 系统加油站外ID
+     */
+    void deleteGasStationGeo(@Param("systemStationId") String systemStationId,
+                             @Param("outSystemStationId") String outSystemStationId);
 }

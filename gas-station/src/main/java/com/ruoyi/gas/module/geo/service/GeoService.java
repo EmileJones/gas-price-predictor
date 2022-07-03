@@ -7,7 +7,7 @@ import com.ruoyi.gas.module.geo.domain.vo.GasStationCandidateVO;
 
 import java.util.List;
 
-import static com.ruoyi.gas.constant.GeoConstant.DEFAULT_RADIUS;
+import static com.ruoyi.gas.constant.GeoConstant.DEFAULT_DISTANCE;
 
 /**
  * 地理信息模块 -- 主模块服务
@@ -33,12 +33,12 @@ public interface GeoService {
 
     /**
      * 加载加油站数据
-     * <p>加载加油站数据信息以及竞争对手加油站数据</p>
+     * <p>加载加油站数据信息以及竞争对手加油站数据，如果加油张第一次使用，那么就使用这种方法加载数据</p>
      */
     default void loadGasStation(String location) {
         GasStationGeoForm gasStationGeoForm = new GasStationGeoForm();
         gasStationGeoForm.setLocation(location);
-        gasStationGeoForm.setDistance(DEFAULT_RADIUS);
+        gasStationGeoForm.setDistance(DEFAULT_DISTANCE);
         listStationGeo(gasStationGeoForm);
     }
 }

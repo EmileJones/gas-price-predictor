@@ -118,6 +118,12 @@
             #{id}
         </foreach>
     </delete>
+    <delete id="deleteGasStationGeo">
+        delete from gas_station.gas_station_geo
+        where system_station_id = #{systemStationId} and
+                out_system_station_id = #{outSystemStationId}
+        limit 1
+    </delete>
 
     <update id="truncateTable">
         truncate table gas_station_geo
