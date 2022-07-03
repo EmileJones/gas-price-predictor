@@ -35,7 +35,7 @@ public class GasStationGeoController extends BaseController
     /**
      * 查询加油站地理信息列表
      */
-    @PreAuthorize("@ss.hasPermi('gas:geo:list')")
+    @PreAuthorize("@ss.hasPermi('gas:geo:query')")
     @GetMapping("/list")
     public AjaxResult list(GasStationGeoForm gasStationGeo)
     {
@@ -53,7 +53,7 @@ public class GasStationGeoController extends BaseController
     /**
      * 查询候选加油站列表
      */
-    @PreAuthorize("@ss.hasPermi('gas:geo:list')")
+    @PreAuthorize("@ss.hasPermi('gas:geo:query')")
     @GetMapping("/station")
     public TableDataInfo station(GasStationForm gasStation)
     {
