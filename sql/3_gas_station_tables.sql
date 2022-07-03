@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `gas_station_opponent_price`
     `price_98`           DECIMAL         NULL DEFAULT 0 COMMENT '98号汽油价格',
     `price_00`           DECIMAL         NULL DEFAULT 0 COMMENT '柴油价格',
     PRIMARY KEY (`id`),
-    UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE
+    UNIQUE INDEX `id_UNIQUE` (`id` ASC)
 )
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8
@@ -127,13 +127,13 @@ CREATE TABLE IF NOT EXISTS `gas_station_opponent_message`
     `out_gas_station_name` VARCHAR(45)     NOT NULL COMMENT '系统外加油站名称',
     `status`               INT UNSIGNED    NOT NULL DEFAULT 1 COMMENT '状态',
     PRIMARY KEY (`id`),
-    UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE
+    UNIQUE INDEX `id_UNIQUE` (`id` ASC)
 )
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8
     COMMENT = '竞争对手加油站信息表';
 
-CREATE TABLE `gas_station_user_period`
+CREATE TABLE IF NOT EXISTS `gas_station_user_period`
 (
     `id`             BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '数据唯一标识',
     `user_id`        BIGINT UNSIGNED NOT NULL COMMENT '用户ID',
@@ -141,7 +141,7 @@ CREATE TABLE `gas_station_user_period`
     `time_stamp`     DATETIME        NOT NULL COMMENT '时间戳',
     `is_system_period` boolean       NOT NULL DEFAULT FALSE COMMENT '是否为系统的周期',
     PRIMARY KEY (`id`),
-    UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE
+    UNIQUE INDEX `id_UNIQUE` (`id` ASC)
 )
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8
