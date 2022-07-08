@@ -5,6 +5,7 @@ import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.gas.module.price.domain.framwork.OilType;
 import com.ruoyi.gas.module.price.domain.vo.OpponentPriceDataVO;
 import com.ruoyi.gas.module.price.domain.vo.PriceDataVO;
+import com.ruoyi.gas.module.price.math.PriceMath;
 import com.ruoyi.gas.module.price.service.ICalculatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,7 +22,7 @@ public class CalculatorController {
 
     @PreAuthorize("@ss.hasPermi('gas:predict:predict')")
     @PostMapping("/calculation")
-    public String calculate(@RequestBody String content) {
+    public PriceMath calculate(@RequestBody String content) {
         PriceDataVO data = new PriceDataVO();
         // 开始解析JSON字符串
         Map map = JSONObject.parseObject(content, HashMap.class);
@@ -49,8 +50,7 @@ public class CalculatorController {
         Long userId = SecurityUtils.getLoginUser()
                 .getUser()
                 .getUserId();
-        double averageSalesVolume = calculatorService.getAverageSalesVolume(userId, data);
-        return Double.toString(averageSalesVolume);
+        return calculatorService.getAverageSalesVolume(userId, data);
     }
 
     @PreAuthorize("@ss.hasPermi('gas:predict:predict')")

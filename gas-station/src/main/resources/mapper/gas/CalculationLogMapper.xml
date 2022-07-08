@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.gas.module.price.mapper.CalculationLogMapper">
+
+    <resultMap type="CalculationLog" id="CalculationLog">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="gasStationId" column="gas_station_id"/>
+        <result property="timeStamp" column="time_stamp"/>
+        <result property="param" column="calculation_parameter"/>
+        <result property="oilType" column="oil_type"
+                typeHandler="com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler"/>
+    </resultMap>
+
+    <insert id="insertSingle">
+        insert into `gas_station_price_calculation_log`(`user_id`, `gas_station_id`, `time_stamp`,
+                                                        `calculation_parameter`, `oil_type`)
+            value (#{userId},#{gasStationId},#{timeStamp},#{param},#{oilType,typeHandler=com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler})
+    </insert>
+</mapper>

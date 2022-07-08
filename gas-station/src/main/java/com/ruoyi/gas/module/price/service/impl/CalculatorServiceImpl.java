@@ -5,11 +5,11 @@ import com.ruoyi.gas.module.geo.domain.GasStationInfo;
 import com.ruoyi.gas.module.geo.service.IGasStationGeoService;
 import com.ruoyi.gas.module.geo.service.IGasStationInfoService;
 import com.ruoyi.gas.module.geo.service.IOpponentMessageService;
+import com.ruoyi.gas.module.price.domain.CalculationLog;
 import com.ruoyi.gas.module.price.domain.OpponentPrice;
 import com.ruoyi.gas.module.price.domain.UserPeriod;
 import com.ruoyi.gas.module.price.domain.dto.DataForCalculation;
 import com.ruoyi.gas.module.price.domain.dto.OpponentGasStationDataForCalculation;
-import com.ruoyi.gas.module.price.domain.framwork.OilType;
 import com.ruoyi.gas.module.price.domain.vo.OpponentPriceDataVO;
 import com.ruoyi.gas.module.price.domain.vo.PriceDataVO;
 import com.ruoyi.gas.module.price.exception.DataIsNotEnoughException;
@@ -38,9 +38,11 @@ public class CalculatorServiceImpl implements ICalculatorService {
     IOpponentMessageService opponentMessageService;
     @Autowired
     IGasStationInfoService gasStationInfoService;
+    @Autowired
+    CalculationLogMapper calculationLogMapper;
 
     @Override
-    public double getAverageSalesVolume(DataForCalculation data) {
+    public PriceMath getAverageSalesVolume(DataForCalculation data) {
         // 获取对手加油站的信息
         List<OpponentGasStationDataForCalculation> outSystemDatas = data.getOutSystemData();
         // 按照要求计算的周期数获得周期
@@ -116,22 +118,22 @@ public class CalculatorServiceImpl implements ICalculatorService {
                 neededData.setInMoney(i, totalPrice / totalPrice);
             }
         }
+        // 计算
         PriceMath priceMath = new PriceMath(neededData);
-        return priceMath.getAsv();
+        // 封装日志数据
+        CalculationLog log = new CalculationLog();
+        log.setGasStationId(data.getGasStationId());
+        log.setOilType(data.getOilType());
+        log.setUserId(data.getUserId());
+        log.setTimeStamp(new Date());
+        log.setParam(priceMath.getY());
+        // 记录日志
+        calculationLogMapper.insertSingle(log);
+        return priceMath;
     }
-//
-//    @Override
-//    public double getTotalPrice(String gasStationId, OilType oilType, DateTime startTime, DateTime endTime) {
-//        return saleDataMapper.selectTotalPrice(gasStationId, oilType, startTime, endTime);
-//    }
-//
-//    @Override
-//    public double getTotalSalesVolume(String gasStationId, OilType oilType, DateTime startTime, DateTime endTime) {
-//        return saleDataMapper.selectTotalSalesVolume(gasStationId, oilType, startTime, endTime);
-//    }
 
     @Override
-    public double getAverageSalesVolume(Long userId, PriceDataVO priceData) {
+    public PriceMath getAverageSalesVolume(Long userId, PriceDataVO priceData) {
         // 开始封装数据 QAQ
         DataForCalculation data = new DataForCalculation();
         // 一、传入用户ID

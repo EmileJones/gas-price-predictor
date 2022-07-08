@@ -58,6 +58,9 @@ public class OpponentPriceServiceImpl implements IOpponentPriceService {
     public Workbook getExcelToImportData(Long userId, String gasStationId, int periodNumber) {
         Map<Date, List<ExportExcelDTO>> map = new HashMap<>();
         List<UserPeriod> userPeriods = userPeriodService.getUserPeriods(userId, gasStationId, 0l, (long) periodNumber);
+        if (userPeriods.size() == 0){
+            throw new RuntimeException("请先导入周期数据");
+        }
         OpponentPrice condition = new OpponentPrice();
         condition.setUserId(userId);
         condition.setGasStationId(gasStationId);
