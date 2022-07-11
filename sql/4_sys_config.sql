@@ -1,5 +1,8 @@
--- 系统管理员角色以及权限
+-- 系统管理员以及系统用户角色
 INSERT INTO `sys_role` (`role_id`, `role_name`, `role_key`, `role_sort`, `data_scope`, `menu_check_strictly`, `dept_check_strictly`, `status`, `del_flag`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES (100, '系统管理员', 'gasadmin', 0, '1', 1, 1, '0', '0', 'admin', '2022-07-03 13:22:13', '', NULL, NULL);
+INSERT INTO `sys_role` (`role_id`, `role_name`, `role_key`, `role_sort`, `data_scope`, `menu_check_strictly`, `dept_check_strictly`, `status`, `del_flag`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES (101, '系统用户', 'gasuser', 0, '1', 0, 1, '0', '0', 'admin', '2022-07-11 13:28:12', '', NULL, NULL);
+
+-- 系统管理员权限
 INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (100, 1);
 INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (100, 2);
 INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (100, 100);
@@ -104,28 +107,32 @@ INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (100, 2029);
 INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (100, 2030);
 
 -- 系统普通角色权限
-INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 2000);
-INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 2003);
-INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 2008);
-INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 2009);
-INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 2010);
-INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 2011);
-INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 2012);
-INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 2013);
-INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 2015);
-INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 2020);
-INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 2021);
-INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 2022);
-INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 2023);
-INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 2024);
-INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 2025);
-INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 2026);
-INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 2027);
-INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 2028);
-INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 2029);
-INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (2, 2030);
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (101, 2000);
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (101, 2003);
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (101, 2008);
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (101, 2009);
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (101, 2010);
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (101, 2011);
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (101, 2012);
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (101, 2013);
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (101, 2015);
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (101, 2020);
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (101, 2021);
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (101, 2022);
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (101, 2023);
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (101, 2024);
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (101, 2025);
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (101, 2026);
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (101, 2027);
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (101, 2028);
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (101, 2029);
+INSERT INTO `sys_role_menu` (`role_id`, `menu_id`) VALUES (101, 2030);
 
 
 -- 系统用户
 INSERT INTO `sys_user` (`user_id`, `dept_id`, `user_name`, `nick_name`, `user_type`, `email`, `phonenumber`, `sex`, `avatar`, `password`, `status`, `del_flag`, `login_ip`, `login_date`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES (100, NULL, 'gasuser', 'gasuser', '00', '', '', '0', '', '$2a$10$OxG6IwZiN2ge6jSyAcI4eOvhqpkh5/hKJHA28aAeP8im3K18O68ea', '0', '0', '', NULL, 'admin', '2022-07-03 13:21:42', '', NULL, NULL);
 INSERT INTO `sys_user` (`user_id`, `dept_id`, `user_name`, `nick_name`, `user_type`, `email`, `phonenumber`, `sex`, `avatar`, `password`, `status`, `del_flag`, `login_ip`, `login_date`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES (101, NULL, 'gasadmin', 'gasadmin', '00', '', '', '0', '', '$2a$10$5kKtqOb53PqfBlMLkAfgX.vu1eaflYXjYamKY7DrlrLxi1evbGFu2', '0', '0', '', NULL, 'admin', '2022-07-03 13:22:44', '', NULL, NULL);
+
+-- 绑定初始化用户和初始化管理员
+INSERT INTO `sys_user_role` (`user_id`, `role_id`) VALUES (100, 101);
+INSERT INTO `sys_user_role` (`user_id`, `role_id`) VALUES (101, 100);
