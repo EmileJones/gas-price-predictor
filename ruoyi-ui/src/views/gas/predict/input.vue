@@ -74,6 +74,7 @@
         </el-col>
         <el-col :span="6" :offset="2">
           <h4>日均销量: {{ avgSalesVolume }}</h4>
+          <h4>计算参数: {{ calculationParam }}</h4>
         </el-col>
       </el-row>
     </el-main>
@@ -93,6 +94,7 @@ export default {
         presentMoney: 0,
         targetMoney: 0,
         presentAverageSalesVolume: 0,
+        calculationParam: 0,
         opponentPriceData: [],
         oilType: "",
       },
@@ -103,7 +105,9 @@ export default {
   methods: {
     calculate() {
       calculator(this.formData).then(resp => {
-        this.avgSalesVolume = Number(resp).toFixed(2);
+        console.log(resp)
+        this.avgSalesVolume = Number(resp.asv).toFixed(2);
+        this.calculationParam = resp.y;
       });
     }
   },
