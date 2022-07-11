@@ -7,6 +7,7 @@ import com.ruoyi.gas.module.map.amap.model.driving.Step;
 import com.ruoyi.gas.module.map.amap.model.place.POI;
 import com.ruoyi.gas.module.map.model.PathCost;
 import com.ruoyi.gas.module.map.model.PlaceInfo;
+import com.ruoyi.gas.utils.RateLimiter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 /**
  * <p>根据客户要求，使用BaiduMap</p>
  */
+@Service
 public class AmapMapService implements MapService {
 
     /** Log的类应该是 {@link MapService} 而不是自己的实现类 */
