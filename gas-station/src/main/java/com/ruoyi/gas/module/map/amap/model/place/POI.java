@@ -38,6 +38,9 @@ public class POI {
      */
     private String location;
 
+    /** 直线距离 */
+    private Long distance;
+
     public String getId() {
         return id;
     }
@@ -94,6 +97,14 @@ public class POI {
         this.address = address;
     }
 
+    public Long getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Long distance) {
+        this.distance = distance;
+    }
+
     @Override
     public String toString() {
         return "POI{" +
@@ -104,6 +115,7 @@ public class POI {
                 ", adname='" + adname + '\'' +
                 ", address='" + address + '\'' +
                 ", location='" + location + '\'' +
+                ", distance='" + distance + '\'' +
                 '}';
     }
 }

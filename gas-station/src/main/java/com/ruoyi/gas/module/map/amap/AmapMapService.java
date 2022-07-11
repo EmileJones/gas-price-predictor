@@ -139,6 +139,7 @@ public class AmapMapService implements MapService {
                     placeInfo.setCityname(poi.getCityname());
                     placeInfo.setName(poi.getName());
                     placeInfo.setPname(poi.getPname());
+                    placeInfo.setDirectDistance(poi.getDistance());
                     return placeInfo;
                 }).collect(Collectors.toList());
     }

@@ -22,6 +22,7 @@ import java.util.List;
  * <p>下面的API已经全部自动根据配置文件注入amapKey参数。</p>
  * @author klenkiven
  */
+@Repository
 public class AmapClient {
 
     private static final Logger log = LoggerFactory.getLogger(AmapClient.class);
