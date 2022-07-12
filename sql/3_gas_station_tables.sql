@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `gas_station_price_calculation_log`
     `user_id`               BIGINT UNSIGNED NOT NULL COMMENT '用户ID',
     `gas_station_id`        VARCHAR(45)   NOT NULL COMMENT '系统内加油站ID',
     `time_stamp`            DATETIME      NOT NULL COMMENT '时间戳',
-    `calculation_parameter` DECIMAL(8, 4) NOT NULL COMMENT '计算时的参数值',
+    `calculation_parameter` DOUBLE NOT NULL COMMENT '计算时的参数值',
     `oil_type`              INT           NOT NULL COMMENT '石油类型',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
