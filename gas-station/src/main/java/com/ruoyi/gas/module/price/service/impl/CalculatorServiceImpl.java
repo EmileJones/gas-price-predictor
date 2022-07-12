@@ -26,6 +26,8 @@ import java.util.*;
 
 @Service
 public class CalculatorServiceImpl implements ICalculatorService {
+    private static final int DEFAULT_PERIOD_NUMBER = 17;
+
     @Autowired
     OilSaleDataMapper saleDataMapper;
     @Autowired
@@ -141,7 +143,7 @@ public class CalculatorServiceImpl implements ICalculatorService {
         // 二、传入加油站ID
         data.setGasStationId(priceData.getStationId());
         // 三、将周期数传入
-        data.setPeriodNumber(16);
+        data.setPeriodNumber(DEFAULT_PERIOD_NUMBER);
         // 四、封装对手加油站信息
         // 0.准备一个List用于存储最终的GasStationGeo信息
         List<GasStationGeo> finalGasStationGeos = new LinkedList<>();

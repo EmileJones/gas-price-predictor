@@ -20,18 +20,19 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class OpponentPriceExcelUtil {
     private static final Logger log = LoggerFactory.getLogger(OpponentPriceExcelUtil.class);
 
     public static Workbook generateExcel(Map<Date, List<ExportExcelDTO>> data) {
         Workbook workbook = new XSSFWorkbook();
-        Set<Date> dates = data.keySet();
-        for (Date date : dates) {
-            String dateStr = new DateTime(date).toString("yyyy-MM-dd");
-            writeTitleIn0Row(workbook, dateStr);
-            writeData(workbook, dateStr, data.get(date));
-        }
+        data.keySet().stream().sorted((a, b) -> (int) ((a.getTime() - b.getTime()) / 1000))
+                .forEach(date -> {
+                    String dateStr = new DateTime(date).toString("yyyy-MM-dd");
+                    writeTitleIn0Row(workbook, dateStr);
+                    writeData(workbook, dateStr, data.get(date));
+                });
         return workbook;
     }
 
