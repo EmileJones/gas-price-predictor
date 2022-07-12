@@ -94,10 +94,10 @@ export default {
         presentMoney: 0,
         targetMoney: 0,
         presentAverageSalesVolume: 0,
-        calculationParam: 0,
         opponentPriceData: [],
         oilType: "",
       },
+      calculationParam: "",
       avgSalesVolume: "",
       oilType: []
     }
