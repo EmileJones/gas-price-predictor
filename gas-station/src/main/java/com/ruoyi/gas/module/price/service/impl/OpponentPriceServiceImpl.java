@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class OpponentPriceServiceImpl implements IOpponentPriceService {
@@ -58,15 +59,15 @@ public class OpponentPriceServiceImpl implements IOpponentPriceService {
     public Workbook getExcelToImportData(Long userId, String gasStationId, int periodNumber) {
         Map<Date, List<ExportExcelDTO>> map = new HashMap<>();
         List<UserPeriod> userPeriods = userPeriodService.getUserPeriods(userId, gasStationId, 0l, (long) periodNumber);
-        if (userPeriods.size() == 0){
+        if (userPeriods.size() == 0) {
             throw new RuntimeException("请先导入周期数据");
         }
         OpponentPrice condition = new OpponentPrice();
         condition.setUserId(userId);
         condition.setGasStationId(gasStationId);
-        for (UserPeriod userPeriod : userPeriods){
+        for (UserPeriod userPeriod : userPeriods) {
             condition.setUserPeriodId(userPeriod.getId());
-            List<OpponentPrice> opponentPrices = opponentPriceMapper.selectOpponentPrices(condition,null,null,null,null);
+            List<OpponentPrice> opponentPrices = opponentPriceMapper.selectOpponentPrices(condition, null, null, null, null);
             List<ExportExcelDTO> exportExcelDTOS = convertOpponentPrice2ExportExcelDTO(opponentPrices, userId, gasStationId);
             map.put(userPeriod.getTimeStamp(), exportExcelDTOS);
         }

@@ -67,4 +67,11 @@ public class UserPeriod {
     public void setIsSystemPeriod(Boolean systemPeriod) {
         isSystemPeriod = systemPeriod;
     }
+
+    @Override
+    public String toString() {
+        return "UserPeriod{" +
+                "timeStamp=" + timeStamp +
+                '}';
+    }
 }
