@@ -64,11 +64,11 @@ public interface OilSaleDataMapper {
      * @param endTime      结束时间
      * @return 总销量
      */
-    Double selectTotalPrice(@Param("userId") Long userId,
-                            @Param("gasStationId") String gasStationId,
-                            @Param("oilType") OilType oilType,
-                            @Param("startTime") DateTime startTime,
-                            @Param("endTime") DateTime endTime);
+    Double selectAveragePrice(@Param("userId") Long userId,
+                              @Param("gasStationId") String gasStationId,
+                              @Param("oilType") OilType oilType,
+                              @Param("startTime") DateTime startTime,
+                              @Param("endTime") DateTime endTime);
 
     /**
      * 获取某期间内的某种石油的总收入
