@@ -100,13 +100,13 @@ public class CalculatorServiceImpl implements ICalculatorService {
                     data.getOilType(),
                     startTime,
                     endTime);
-            Double totalPrice = saleDataMapper.selectTotalPrice(
+            Double averangePrice = saleDataMapper.selectAveragePrice(
                     data.getUserId(),
                     data.getGasStationId(),
                     data.getOilType(),
                     startTime,
                     endTime);
-            if (totalSalesVolume == null || totalPrice == null) {
+            if (totalSalesVolume == null || averangePrice == null) {
                 neededData.setInAverageSalesVolume(i, Double.valueOf(0));
                 // 封装系统内加油站 第i期的综合单价
                 neededData.setInMoney(i, Double.valueOf(0));
@@ -116,7 +116,7 @@ public class CalculatorServiceImpl implements ICalculatorService {
                 // 封装系统内加油站 第i期的平均销量
                 neededData.setInAverageSalesVolume(i, totalSalesVolume / differenceDay);
                 // 封装系统内加油站 第i期的综合单价
-                neededData.setInMoney(i, totalPrice / totalPrice);
+                neededData.setInMoney(i, averangePrice);
             }
         }
         // 计算

@@ -43,7 +43,9 @@
             <if test="id != null">and `id`=#{id}</if>
             <if test="userId != null">and `user_id`=#{userId}</if>
             <if test="gasStationId != null">and `gas_station_id` = #{gasStationId}</if>
-            <if test="oilType != null">and `oil_type` = #{oilType,typeHandler=com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler}</if>
+            <if test="oilType != null">and `oil_type` =
+                #{oilType,typeHandler=com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler}
+            </if>
             <if test="LNumber != null">and l_number = #{LNumber}</if>
             <if test="KgNumber != null">and `kg_number` = #{KgNumber}</if>
             <if test="price != null">and `price` = #{price}</if>
@@ -67,8 +69,8 @@
         where `id` = #{id};
     </update>
 
-    <select id="selectTotalPrice" resultType="java.lang.Double">
-        select sum(`price`)
+    <select id="selectAveragePrice" resultType="java.lang.Double">
+        select sum(`price`) / count(`price`)
         from `gas_station_sale_data`
         where `user_id` = #{userId}
           and `gas_station_id` = #{gasStationId}
