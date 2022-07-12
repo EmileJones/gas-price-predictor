@@ -92,8 +92,8 @@ public class CalculatorServiceImpl implements ICalculatorService {
                     setTimeStamp(new Date());
                 }};
             }
-            DateTime startTime = new DateTime(userPeriod.getTimeStamp());
-            DateTime endTime = new DateTime(nextUserPeriod.getTimeStamp());
+            DateTime endTime = new DateTime(userPeriod.getTimeStamp());
+            DateTime startTime = new DateTime(nextUserPeriod.getTimeStamp());
             Double totalSalesVolume = saleDataMapper.selectTotalSalesVolume(
                     data.getUserId(),
                     data.getGasStationId(),
@@ -107,7 +107,6 @@ public class CalculatorServiceImpl implements ICalculatorService {
                     startTime,
                     endTime);
             if (totalSalesVolume == null || totalPrice == null) {
-//                throw new DataIsNotEnoughException("数据库中存入的销售数据不足,在[" + startTime.toString("yyyy-MM-dd") + "---" + endTime.toString("yyyy-MM-dd") + "]时间内没有足够的销售数据");
                 neededData.setInAverageSalesVolume(i, Double.valueOf(0));
                 // 封装系统内加油站 第i期的综合单价
                 neededData.setInMoney(i, Double.valueOf(0));

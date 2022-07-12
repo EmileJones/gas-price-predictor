@@ -18,20 +18,6 @@
         <result property="batch" column="batch"/>
     </resultMap>
 
-    <parameterMap id="OilSaleData" type="com.ruoyi.gas.module.price.domain.OilSaleData">
-        <parameter property="id"/>
-        <parameter property="userId"/>
-        <parameter property="gasStationId"/>
-        <parameter property="oilType"
-                   typeHandler="com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler"/>
-        <parameter property="LNumber"/>
-        <parameter property="KgNumber"/>
-        <parameter property="price"/>
-        <parameter property="date"
-                   typeHandler="com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler"/>
-        <parameter property="batch"/>
-    </parameterMap>
-
     <select id="selectHistorySaleData" resultMap="OilSaleData">
         select *
         from `gas_station_sale_data`
@@ -50,14 +36,14 @@
           and `effective` = true
     </select>
 
-    <select id="selectSaleData" parameterMap="OilSaleData" resultMap="OilSaleData">
+    <select id="selectSaleData" resultMap="OilSaleData">
         select *
         from `gas_station_sale_data`
         <where>
             <if test="id != null">and `id`=#{id}</if>
             <if test="userId != null">and `user_id`=#{userId}</if>
             <if test="gasStationId != null">and `gas_station_id` = #{gasStationId}</if>
-            <if test="oilType != null">and `oil_type` = #{oilType}</if>
+            <if test="oilType != null">and `oil_type` = #{oilType,typeHandler=com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler}</if>
             <if test="LNumber != null">and l_number = #{LNumber}</if>
             <if test="KgNumber != null">and `kg_number` = #{KgNumber}</if>
             <if test="price != null">and `price` = #{price}</if>
@@ -67,7 +53,7 @@
         </where>
     </select>
 
-    <insert id="addSaleData" parameterMap="OilSaleData">
+    <insert id="addSaleData">
         insert into `gas_station_sale_data`(`user_id`, `gas_station_id`, `price`, `l_number`, `kg_number`, `oil_type`,
                                             `date`, `batch`)
             value (#{userId},#{gasStationId},#{price},#{LNumber},#{KgNumber},
@@ -87,7 +73,7 @@
         where `user_id` = #{userId}
           and `gas_station_id` = #{gasStationId}
           and `effective` = true
-          and `oil_type` = #{oilType}
+          and `oil_type` = #{oilType,typeHandler=com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler}
           and `date` &gt;= #{startTime,typeHandler=com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler}
           and `date` &lt;= #{endTime,typeHandler=com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler};
     </select>
@@ -98,7 +84,7 @@
         where `user_id` = #{userId}
           and `gas_station_id` = #{gasStationId}
           and `effective` = true
-          and `oil_type` = #{oilType}
+          and `oil_type` = #{oilType,typeHandler=com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler}
           and `date` &gt;= #{startTime,typeHandler=com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler}
           and `date` &lt; #{endTime,typeHandler=com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler};
     </select>
