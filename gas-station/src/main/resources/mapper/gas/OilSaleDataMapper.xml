@@ -70,18 +70,18 @@
     </update>
 
     <select id="selectAveragePrice" resultType="java.lang.Double">
-        select sum(`price`) / count(`price`)
+        select sum(`price`*`l_number`) / sum(`l_number`)
         from `gas_station_sale_data`
         where `user_id` = #{userId}
           and `gas_station_id` = #{gasStationId}
           and `effective` = true
           and `oil_type` = #{oilType,typeHandler=com.ruoyi.gas.module.price.mapper.handler.OilTypeHandler}
           and `date` &gt;= #{startTime,typeHandler=com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler}
-          and `date` &lt;= #{endTime,typeHandler=com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler};
+          and `date` &lt; #{endTime,typeHandler=com.ruoyi.gas.module.price.mapper.handler.DateTimeHandler};
     </select>
 
     <select id="selectTotalSalesVolume" resultType="java.lang.Double">
-        select sum(`l_number`)
+        select sum(`kg_number`)
         from `gas_station_sale_data`
         where `user_id` = #{userId}
           and `gas_station_id` = #{gasStationId}

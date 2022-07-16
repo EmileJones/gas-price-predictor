@@ -71,7 +71,7 @@ public interface OilSaleDataMapper {
                               @Param("endTime") DateTime endTime);
 
     /**
-     * 获取某期间内的某种石油的总收入
+     * 获取某期间内的某种石油的总销量(KG)
      *
      * @param userId       用户ID
      * @param gasStationId 加油站ID
