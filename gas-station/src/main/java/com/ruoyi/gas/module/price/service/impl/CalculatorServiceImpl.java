@@ -23,10 +23,11 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CalculatorServiceImpl implements ICalculatorService {
-    private static final int DEFAULT_PERIOD_NUMBER = 17;
+    private static final int DEFAULT_PERIOD_NUMBER = 16;
 
     @Autowired
     OilSaleDataMapper saleDataMapper;
@@ -52,6 +53,8 @@ public class CalculatorServiceImpl implements ICalculatorService {
         if (periods.size() != data.getPeriodNumber()) {
             throw new DataIsNotEnoughException("数据库中存入的周期不足,期望[" + data.getPeriodNumber() + "]个周期实际[" + periods.size() + "]个周期");
         }
+        // 将周期从小到大排序
+        periods = periods.stream().sorted((a, b) -> (int) (a.getTimeStamp().getTime() / 1000 - b.getTimeStamp().getTime() / 1000)).collect(Collectors.toList());
         // 准备将数据封装入Data中
         PriceData neededData = new PriceData(outSystemDatas.size(), data.getPeriodNumber());
         // 将所有系统外的加油站数据封装入Data中
@@ -73,7 +76,7 @@ public class CalculatorServiceImpl implements ICalculatorService {
                         data.getGasStationId(),
                         outGasStationData.getOpponentGasStationId());
                 BigDecimal price = opponentPrice.getPrice(data.getOilType());
-                neededData.setOutMoney(i, j, price.doubleValue());
+                neededData.setOutAverageMoney(i, j, price.doubleValue());
             }
         }
         // 封装系统内加油站 当前价格
@@ -81,19 +84,20 @@ public class CalculatorServiceImpl implements ICalculatorService {
         // 封装系统内加油站 目标价格
         neededData.setInTargetMoney(data.getTargetMoney());
         // 封装系统内加油站 当前平均销量(日均销量)
-        neededData.setPresentAverageSalesVolume(data.getPresentAverageSalesVolume());
+        neededData.setInPresentAverageSalesVolume(data.getPresentAverageSalesVolume());
         for (int i = 0; i < data.getPeriodNumber(); i++) {
             UserPeriod userPeriod = periods.get(i);
             UserPeriod nextUserPeriod = null;
             if (i != data.getPeriodNumber() - 1) {
                 nextUserPeriod = periods.get(i + 1);
             } else {
-                nextUserPeriod = new UserPeriod() {{
-                    setTimeStamp(new Date());
-                }};
+                UserPeriod condition = new UserPeriod();
+                condition.setUserId(data.getUserId());
+                condition.setGasStationId(data.getGasStationId());
+                nextUserPeriod = userPeriodMapper.selectUserPeriod(condition, true, UserPeriodMapper.TIME_STAMP, 0l, 1l).get(0);
             }
-            DateTime endTime = new DateTime(userPeriod.getTimeStamp());
-            DateTime startTime = new DateTime(nextUserPeriod.getTimeStamp());
+            DateTime startTime = new DateTime(userPeriod.getTimeStamp());
+            DateTime endTime = new DateTime(nextUserPeriod.getTimeStamp());
             Double totalSalesVolume = saleDataMapper.selectTotalSalesVolume(
                     data.getUserId(),
                     data.getGasStationId(),
@@ -127,7 +131,7 @@ public class CalculatorServiceImpl implements ICalculatorService {
         log.setOilType(data.getOilType());
         log.setUserId(data.getUserId());
         log.setTimeStamp(new Date());
-        log.setParam(priceMath.getY());
+        log.setParam(priceMath.getY().doubleValue());
         // 记录日志
         calculationLogMapper.insertSingle(log);
         return priceMath;
@@ -207,7 +211,7 @@ public class CalculatorServiceImpl implements ICalculatorService {
         UserPeriod condition = new UserPeriod();
         condition.setUserId(userId);
         condition.setGasStationId(gasStationId);
-        return userPeriodMapper.selectUserPeriod(condition, true, UserPeriodMapper.TIME_STAMP, 0l, (long) amount);
+        return userPeriodMapper.selectUserPeriod(condition, true, UserPeriodMapper.TIME_STAMP, 1l, (long) amount);
     }
 
     /**

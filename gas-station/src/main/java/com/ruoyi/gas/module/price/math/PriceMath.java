@@ -1,26 +1,30 @@
 package com.ruoyi.gas.module.price.math;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class PriceMath {
+    private final int DEFAULT_SCALE_NUMBER = 10;
     private PriceData data;
     /**
      * 覆盖面积
      */
-    private Double y;
+    private BigDecimal y;
     /**
      * 日均销量
      */
-    private Double asv;
+    private BigDecimal asv;
 
     public PriceMath(PriceData data) {
         this.data = data;
         calculate();
     }
 
-    public Double getY() {
+    public BigDecimal getY() {
         return y;
     }
 
-    public Double getAsv() {
+    public BigDecimal getAsv() {
         return asv;
     }
 
@@ -29,58 +33,84 @@ public class PriceMath {
         asv = asv();
     }
 
-    private Double a(int n) {
-        Double var1 = data.getInSalesVolume(n) - data.getInSalesVolume(n + 1);
-        var1 /= data.getInSalesVolume(n);
-        var1 += 1;
+    private BigDecimal a(int n) {
+        BigDecimal var1 = getBigDecimal(data.getInSalesVolume(n))
+                .subtract(getBigDecimal(data.getInSalesVolume(n + 1)))
+                .divide(getBigDecimal(data.getInSalesVolume(n)), DEFAULT_SCALE_NUMBER, RoundingMode.HALF_UP)
+                .add(getBigDecimal(1.0));
         return var1;
     }
 
-    private Double b(int n) {
-        Double var1 = 0.0;
+    private BigDecimal b(int n) {
+        BigDecimal var1 = getBigDecimal(0.0);
         for (int i = 0; i < data.getGasStationNumber(); i++) {
-            var1 += data.getOutMoney(i, n) * data.getRouteFactor(i);
+            BigDecimal var2 = getBigDecimal(data.getOutAverageMoney(i, n))
+                    .multiply(getBigDecimal(data.getRouteFactor(i)));
+            var1 = var1.add(var2);
         }
-        var1 -= data.getInMoney(n);
-        return var1;
+        return var1.subtract(getBigDecimal(data.getInMoney(n)));
     }
 
-    private Double c(int n) {
-        Double var1 = 0.0;
+    private BigDecimal c(int n) {
+        BigDecimal var1 = getBigDecimal(0.0);
         for (int i = 0; i < data.getGasStationNumber(); i++) {
-            var1 += data.getOutMoney(i, n) * data.getRouteFactor(i) * data.getDistance(i);
+            BigDecimal var2 = getBigDecimal(data.getOutAverageMoney(i, n))
+                    .multiply(getBigDecimal(data.getRouteFactor(i)))
+                    .multiply(getBigDecimal(data.getDistance(i)));
+            var1 = var1.add(var2);
         }
         return var1;
     }
 
-    private Double y(int x) {
-        Double var1 = a(x) * c(x) - c(x + 1);
-        Double var2 = a(x) * b(x) - b(x + 1);
-        return var1 / var2;
+    private BigDecimal y(int x) {
+//        BigDecimal var1 = a(x + 1).multiply(c(x + 1)).subtract(c(x));
+//        BigDecimal var2 = a(x + 1).multiply(b(x + 1)).subtract(b(x));
+//        return var1.divide(var2, DEFAULT_SCALE_NUMBER, RoundingMode.HALF_UP);
+        BigDecimal var1 = a(x).multiply(c(x)).subtract(c(x + 1));
+        BigDecimal var2 = a(x).multiply(b(x)).subtract(b(x + 1));
+        return var1.divide(var2, DEFAULT_SCALE_NUMBER, RoundingMode.HALF_UP);
     }
 
-    private Double y() {
-        int var1 = 1;
+    private BigDecimal y() {
+        BigDecimal var1 = getBigDecimal(1.0);
         int var2 = data.getPeriodNumber() - 2;
+        int var3 = 0;
         for (int i = 0; i < var2; i++) {
-            Double temp = y(i);
-            if (!temp.isNaN(temp))
-                var1 *= y(i);
+            try {
+                BigDecimal yi = y(i);
+                if (yi.compareTo(getBigDecimal(0.0)) > 0) {
+                    var1 = var1.multiply(yi);
+                    var3++;
+                }
+            } catch (ArithmeticException e) {
+                System.err.println("[" + i + "]被舍去");
+            }
         }
-        return Math.pow(var1, var2);
+        double pow = Math.pow(var1.doubleValue(), 1.0 / var3);
+        return getBigDecimal(pow);
     }
 
 
-    private Double asv() {
-        Double e = 0.0;
-        Double f = 0.0;
-        Double var1 = 0.0;
+    private BigDecimal asv() {
+        BigDecimal e = getBigDecimal(0.0);
+        BigDecimal f = getBigDecimal(0.0);
+        BigDecimal var1;
         for (int i = 0; i < data.getGasStationNumber(); i++) {
-            var1 = 1 - data.getDistance(i);
-            var1 /= y;
-            e += data.getChaseMoney(i) * data.getRouteFactor(i) * var1 - data.getInTargetMoney();
-            f += data.getPresentMoney(i) * data.getRouteFactor(i) * var1 - data.getInPresentMoney();
+            var1 = getBigDecimal(data.getDistance(i))
+                    .divide(y, DEFAULT_SCALE_NUMBER, RoundingMode.HALF_UP);
+            var1 = getBigDecimal(1.0).subtract(var1);
+            e = e.add(getBigDecimal(data.getOutChaseMoney(i)).multiply(getBigDecimal(data.getRouteFactor(i))).multiply(var1));
+            f = f.add(getBigDecimal(data.getOutPresentMoney(i)).multiply(getBigDecimal(data.getRouteFactor(i))).multiply(var1));
         }
-        return (2 - e / f) - data.getPresentAverageSalesVolume();
+        e = e.subtract(getBigDecimal(data.getInTargetMoney()));
+        f = f.subtract(getBigDecimal(data.getInPresentMoney()));
+        return getBigDecimal(2.0).subtract(e.divide(f, DEFAULT_SCALE_NUMBER, RoundingMode.HALF_UP))
+                .multiply(getBigDecimal(data.getInPresentAverageSalesVolume()));
+    }
+
+    private BigDecimal getBigDecimal(Double number) {
+        BigDecimal bigDecimal = new BigDecimal(number);
+        bigDecimal.setScale(5, RoundingMode.HALF_UP);
+        return bigDecimal;
     }
 }
