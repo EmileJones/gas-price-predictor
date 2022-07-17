@@ -48,10 +48,10 @@ public class OpponentPriceExcelUtil {
                     Row row = sheet.getRow(i);
                     ExportExcelDTO dto = new ExportExcelDTO();
                     dto.setOutGasStationName(row.getCell(0).getStringCellValue());
-                    dto.setPrice92(row.getCell(1).getNumericCellValue());
-                    dto.setPrice95(row.getCell(2).getNumericCellValue());
-                    dto.setPrice98(row.getCell(3).getNumericCellValue());
-                    dto.setPrice00(row.getCell(4).getNumericCellValue());
+                    dto.setPrice92(getCellValueAsDouble(row, 1));
+                    dto.setPrice95(getCellValueAsDouble(row, 2));
+                    dto.setPrice98(getCellValueAsDouble(row, 3));
+                    dto.setPrice00(getCellValueAsDouble(row, 4));
                     periodData.add(dto);
                 }
                 data.put(period, periodData);
@@ -61,6 +61,29 @@ public class OpponentPriceExcelUtil {
             throw new ServiceException("竞争对手数据导入错误");
         }
         return data;
+    }
+
+    /**
+     * 保证客户获取到的数据是数值类型的
+     * @param row 数据列
+     * @param cellNum 单元格位置
+     * @return 返回结果
+     */
+    private static double getCellValueAsDouble(Row row, int cellNum) {
+        CellType cellType = row.getCell(cellNum).getCellType();
+        try {
+            switch (cellType) {
+                case STRING:
+                    return Double.parseDouble(row.getCell(cellNum).getStringCellValue());
+                case NUMERIC:
+                    return row.getCell(cellNum).getNumericCellValue();
+                default:
+                    return 0.0;
+            }
+        } catch (Exception e) {
+            log.error("数据解析出现异常：" + e);
+            return 0.0;
+        }
     }
 
     private static void writeTitleIn0Row(Workbook workbook, String sheetName) {
