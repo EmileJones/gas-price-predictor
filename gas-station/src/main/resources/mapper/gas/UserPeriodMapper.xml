@@ -21,7 +21,7 @@
         select *
         from `gas_station_user_period`
         <where>
-            <if test="condition.id != null">`id` = #{condition.id} and </if>
+            <if test="condition.id != null">`id` = #{condition.id} and</if>
             <if test="condition.userId != null">`user_id` = #{condition.userId} and</if>
             <if test="condition.gasStationId != null">`gas_station_id` = #{condition.gasStationId} and</if>
             <if test="condition.timeStamp != null">`time_stamp` = #{condition.timeStamp} and</if>
@@ -78,8 +78,10 @@
         </where>
     </select>
     <select id="countUserPeriod" resultType="java.lang.Long">
-        select count(0) from `gas_station_user_period`
-        where user_id = #{userId} and gas_station_id = #{gasStationId}
+        select count(0)
+        from `gas_station_user_period`
+        where user_id = #{userId}
+          and gas_station_id = #{gasStationId}
     </select>
 
 </mapper>
