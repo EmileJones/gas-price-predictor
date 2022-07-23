@@ -17,10 +17,11 @@ public interface ISaleDataService {
      * @param userId 用户ID
      * @return 某时间段内的历史销量
      */
-    List<OilSaleDataVO> getHistorySaleDataByUserId(Long userId, Integer pageNum, Integer pageSize);
+    List<OilSaleDataVO> getHistorySaleDataByUserId(Long userId, String stationId, Integer pageNum, Integer pageSize);
 
     /**
      * 获取某个用户的收据的数量
+     *
      * @param userId 用户ID
      * @return 收据数量
      */

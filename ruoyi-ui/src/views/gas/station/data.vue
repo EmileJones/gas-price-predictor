@@ -30,7 +30,8 @@ export default {
     return {
       queryParams: {
         pageNum: 1,
-        pageSize: 10
+        pageSize: 10,
+        stationId: ""
       },
       loading: true,
       stationId: "",
@@ -52,7 +53,7 @@ export default {
 
   created() {
     this.stationId = this.$route.params && this.$route.params.stationId;
-    this.saleDatas = this.pullSaleData();
+    this.queryParams.saleDatas = this.saleDatas = this.pullSaleData();
   }
 }
 </script>

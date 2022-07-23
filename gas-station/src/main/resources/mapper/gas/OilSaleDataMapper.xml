@@ -22,6 +22,7 @@
         select *
         from `gas_station_sale_data`
         where `user_id` = #{userId}
+        and `gas_station_id` = #{stationId}
         and `effective` = true
         order by `id` DESC
         <if test="startIndex != null &amp;&amp; amount != null">
@@ -70,7 +71,7 @@
     </update>
 
     <select id="selectAveragePrice" resultType="java.lang.Double">
-        select sum(`price`*`l_number`) / sum(`l_number`)
+        select sum(`price` * `l_number`) / sum(`l_number`)
         from `gas_station_sale_data`
         where `user_id` = #{userId}
           and `gas_station_id` = #{gasStationId}

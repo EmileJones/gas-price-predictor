@@ -22,9 +22,9 @@ public class SaleDataServiceImpl implements ISaleDataService {
     IGasStationInfoService gasStationInfoService;
 
     @Override
-    public List<OilSaleDataVO> getHistorySaleDataByUserId(Long userId, Integer pageNum, Integer pageSize) {
+    public List<OilSaleDataVO> getHistorySaleDataByUserId(Long userId, String stationId, Integer pageNum, Integer pageSize) {
         Long startIndex = (long) ((pageNum - 1) * pageSize);
-        List<OilSaleData> oilSaleData = saleDataMapper.selectHistorySaleData(userId, startIndex, pageSize);
+        List<OilSaleData> oilSaleData = saleDataMapper.selectHistorySaleData(userId, stationId, startIndex, pageSize);
         List<OilSaleDataVO> oilSaleDataVOS = convertOilSaleDataList2OilSaleDataVOList(oilSaleData);
         // 根据id查询加油站名称
         oilSaleDataVOS.stream().forEach(temp -> {

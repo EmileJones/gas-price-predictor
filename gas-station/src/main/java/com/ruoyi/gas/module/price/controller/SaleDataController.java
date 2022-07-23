@@ -26,11 +26,13 @@ public class SaleDataController extends BaseController {
 
     @PreAuthorize("@ss.hasPermi('gas:price:list')")
     @GetMapping("/saleData")
-    public TableDataInfo getSaleData(@RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize) {
+    public TableDataInfo getSaleData(@RequestParam("pageNum") Integer pageNum,
+                                     @RequestParam("pageSize") Integer pageSize,
+                                     @RequestParam("stationId") String stationId) {
         Long userId = SecurityUtils.getLoginUser()
                 .getUser()
                 .getUserId();
-        List<OilSaleDataVO> historySaleData = saleDataService.getHistorySaleDataByUserId(userId, pageNum, pageSize);
+        List<OilSaleDataVO> historySaleData = saleDataService.getHistorySaleDataByUserId(userId, stationId, pageNum, pageSize);
         TableDataInfo dataTable = getDataTable(historySaleData);
         dataTable.setTotal(saleDataService.selectHistorySaleDataAmount(userId));
         return dataTable;

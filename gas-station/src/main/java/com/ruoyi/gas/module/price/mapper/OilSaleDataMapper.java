@@ -19,6 +19,7 @@ public interface OilSaleDataMapper {
      * @return 某时间段内的历史销量
      */
     List<OilSaleData> selectHistorySaleData(@Param("userId") Long userId,
+                                            @Param("stationId") String stationId,
                                             @Param("startIndex") Long startIndex,
                                             @Param("amount") Integer amount);
 
