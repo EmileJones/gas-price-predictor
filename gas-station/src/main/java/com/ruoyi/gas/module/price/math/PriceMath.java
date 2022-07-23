@@ -1,9 +1,13 @@
 package com.ruoyi.gas.module.price.math;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public class PriceMath {
+    private final Logger logger = LoggerFactory.getLogger(PriceMath.class);
     private final int DEFAULT_SCALE_NUMBER = 10;
     private PriceData data;
     /**
@@ -65,12 +69,14 @@ public class PriceMath {
     private BigDecimal y(int x) {
         BigDecimal var1 = a(x).multiply(c(x)).subtract(c(x + 1));
         BigDecimal var2 = a(x).multiply(b(x)).subtract(b(x + 1));
-        return var1.divide(var2, DEFAULT_SCALE_NUMBER, RoundingMode.HALF_UP);
+        BigDecimal var3 = var1.divide(var2, DEFAULT_SCALE_NUMBER, RoundingMode.HALF_UP);
+        logger.debug("y({}) = {}", x, var3);
+        return var3;
     }
 
     private BigDecimal y() {
         BigDecimal var1 = getBigDecimal(1.0);
-        int var2 = data.getPeriodNumber() - 2;
+        int var2 = data.getPeriodNumber() - 1;
         int var3 = 0;
         for (int i = 0; i < var2; i++) {
             try {
