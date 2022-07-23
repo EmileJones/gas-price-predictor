@@ -34,7 +34,7 @@ public class SaleDataController extends BaseController {
                 .getUserId();
         List<OilSaleDataVO> historySaleData = saleDataService.getHistorySaleDataByUserId(userId, stationId, pageNum, pageSize);
         TableDataInfo dataTable = getDataTable(historySaleData);
-        dataTable.setTotal(saleDataService.selectHistorySaleDataAmount(userId));
+        dataTable.setTotal(saleDataService.selectHistorySaleDataAmount(userId, stationId));
         return dataTable;
     }
 }

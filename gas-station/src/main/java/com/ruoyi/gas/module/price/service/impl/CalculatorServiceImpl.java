@@ -49,8 +49,8 @@ public class CalculatorServiceImpl implements ICalculatorService {
         // 获取对手加油站的信息
         List<OpponentGasStationDataForCalculation> outSystemDatas = data.getOutSystemData();
         // 按照要求计算的周期数获得周期
-        List<UserPeriod> periods = getLastUserPeriodByAmount(data.getUserId(), data.getGasStationId(), data.getPeriodNumber());
-        if (periods.size() != data.getPeriodNumber()) {
+        List<UserPeriod> periods = getLastUserPeriodByAmount(data.getUserId(), data.getGasStationId(), data.getPeriodNumber() + 1);
+        if (periods.size() != data.getPeriodNumber() + 1) {
             throw new DataIsNotEnoughException("数据库中存入的周期不足,期望[" + data.getPeriodNumber() + "]个周期实际[" + periods.size() + "]个周期");
         }
         // 将周期从小到大排序
@@ -87,15 +87,15 @@ public class CalculatorServiceImpl implements ICalculatorService {
         neededData.setInPresentAverageSalesVolume(data.getPresentAverageSalesVolume());
         for (int i = 0; i < data.getPeriodNumber(); i++) {
             UserPeriod userPeriod = periods.get(i);
-            UserPeriod nextUserPeriod = null;
-            if (i != data.getPeriodNumber() - 1) {
-                nextUserPeriod = periods.get(i + 1);
-            } else {
-                UserPeriod condition = new UserPeriod();
-                condition.setUserId(data.getUserId());
-                condition.setGasStationId(data.getGasStationId());
-                nextUserPeriod = userPeriodMapper.selectUserPeriod(condition, true, UserPeriodMapper.TIME_STAMP, 0l, 1l).get(0);
-            }
+            UserPeriod nextUserPeriod = periods.get(i + 1);
+//            if (i != data.getPeriodNumber() - 1) {
+//                nextUserPeriod = periods.get(i + 1);
+//            } else {
+//                UserPeriod condition = new UserPeriod();
+//                condition.setUserId(data.getUserId());
+//                condition.setGasStationId(data.getGasStationId());
+//                nextUserPeriod = userPeriodMapper.selectUserPeriod(condition, true, UserPeriodMapper.TIME_STAMP, 0l, 1l).get(0);
+//            }
             DateTime startTime = new DateTime(userPeriod.getTimeStamp());
             DateTime endTime = new DateTime(nextUserPeriod.getTimeStamp());
             Double totalSalesVolume = saleDataMapper.selectTotalSalesVolume(
@@ -211,7 +211,7 @@ public class CalculatorServiceImpl implements ICalculatorService {
         UserPeriod condition = new UserPeriod();
         condition.setUserId(userId);
         condition.setGasStationId(gasStationId);
-        return userPeriodMapper.selectUserPeriod(condition, true, UserPeriodMapper.TIME_STAMP, 1l, (long) amount);
+        return userPeriodMapper.selectUserPeriod(condition, true, UserPeriodMapper.TIME_STAMP, 0l, (long) amount);
     }
 
     /**

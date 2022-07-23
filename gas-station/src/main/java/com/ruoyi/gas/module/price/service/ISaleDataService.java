@@ -2,6 +2,7 @@ package com.ruoyi.gas.module.price.service;
 
 import com.ruoyi.gas.module.price.domain.OilSaleData;
 import com.ruoyi.gas.module.price.domain.vo.OilSaleDataVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Set;
@@ -14,7 +15,10 @@ public interface ISaleDataService {
     /**
      * 获取某个用户的历史销售记录
      *
-     * @param userId 用户ID
+     * @param userId    用户ID
+     * @param stationId 加油站ID
+     * @param pageNum   页数
+     * @param pageSize  页面大小
      * @return 某时间段内的历史销量
      */
     List<OilSaleDataVO> getHistorySaleDataByUserId(Long userId, String stationId, Integer pageNum, Integer pageSize);
@@ -22,10 +26,11 @@ public interface ISaleDataService {
     /**
      * 获取某个用户的收据的数量
      *
-     * @param userId 用户ID
+     * @param userId    用户ID
+     * @param stationId 加油站ID
      * @return 收据数量
      */
-    long selectHistorySaleDataAmount(Long userId);
+    long selectHistorySaleDataAmount(Long userId, String stationId);
 
     /**
      * 添加系统内加油站的销售记录 <br>

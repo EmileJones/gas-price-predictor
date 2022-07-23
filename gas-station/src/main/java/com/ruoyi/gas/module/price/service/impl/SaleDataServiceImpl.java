@@ -35,8 +35,8 @@ public class SaleDataServiceImpl implements ISaleDataService {
     }
 
     @Override
-    public long selectHistorySaleDataAmount(Long userId) {
-        return saleDataMapper.selectHistorySaleDataAmount(userId);
+    public long selectHistorySaleDataAmount(Long userId, String stationId) {
+        return saleDataMapper.selectHistorySaleDataAmount(userId, stationId);
     }
 
     @Override

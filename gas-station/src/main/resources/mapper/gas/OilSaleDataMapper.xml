@@ -34,6 +34,7 @@
         select count(*)
         from `gas_station_sale_data`
         where `user_id` = #{userId}
+          and `gas_station_id` = #{stationId}
           and `effective` = true
     </select>
 

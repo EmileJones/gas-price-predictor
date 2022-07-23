@@ -63,9 +63,6 @@ public class PriceMath {
     }
 
     private BigDecimal y(int x) {
-//        BigDecimal var1 = a(x + 1).multiply(c(x + 1)).subtract(c(x));
-//        BigDecimal var2 = a(x + 1).multiply(b(x + 1)).subtract(b(x));
-//        return var1.divide(var2, DEFAULT_SCALE_NUMBER, RoundingMode.HALF_UP);
         BigDecimal var1 = a(x).multiply(c(x)).subtract(c(x + 1));
         BigDecimal var2 = a(x).multiply(b(x)).subtract(b(x + 1));
         return var1.divide(var2, DEFAULT_SCALE_NUMBER, RoundingMode.HALF_UP);

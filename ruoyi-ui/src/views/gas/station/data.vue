@@ -52,8 +52,8 @@ export default {
   },
 
   created() {
-    this.stationId = this.$route.params && this.$route.params.stationId;
-    this.queryParams.saleDatas = this.saleDatas = this.pullSaleData();
+    this.queryParams.stationId = this.stationId = this.$route.params && this.$route.params.stationId;
+    this.saleDatas = this.pullSaleData();
   }
 }
 </script>

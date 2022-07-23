@@ -26,10 +26,12 @@ public interface OilSaleDataMapper {
     /**
      * 获取某个用户的收据的数量
      *
-     * @param userId 用户ID
+     * @param userId    用户ID
+     * @param stationId 用户加油站ID
      * @return 收据数量
      */
-    long selectHistorySaleDataAmount(Long userId);
+    long selectHistorySaleDataAmount(@Param("userId") Long userId,
+                                     @Param("stationId") String stationId);
 
     /**
      * 获取符合条件的加油站信息
