@@ -74,7 +74,7 @@
         </el-col>
         <el-col :span="6" :offset="2">
           <h4>日均销量: {{ avgSalesVolume }}</h4>
-          <h4>计算参数: {{ calculationParam }}</h4>
+<!--          <h4>计算参数: {{ calculationParam }}</h4>-->
         </el-col>
       </el-row>
     </el-main>

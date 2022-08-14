@@ -36,13 +36,13 @@
             @click="handleChangeStatus(scope.row)"
             v-hasPermi="['gas:station:edit']"
           >{{scope.row.stationStatus == 0 ? '启用' : '禁用'}}</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['gas:station:edit']"
-          >修改</el-button>
+<!--          <el-button-->
+<!--            size="mini"-->
+<!--            type="text"-->
+<!--            icon="el-icon-delete"-->
+<!--            @click="handleUpdate(scope.row)"-->
+<!--            v-hasPermi="['gas:station:edit']"-->
+<!--          >修改</el-button>-->
         </template>
       </el-table-column>
     </el-table>
