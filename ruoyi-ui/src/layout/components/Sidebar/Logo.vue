@@ -35,7 +35,7 @@ export default {
   },
   data() {
     return {
-      title: '若依管理系统',
+      title: '加油站销量预测系统',
       logo: logoImg
     }
   }
