@@ -4,7 +4,7 @@
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label-width="300" label="加油站所在地区">
         <template>
-          <v-region @values="regionChange" />
+          <v-region-selects @change="regionChange" />
         </template>
       </el-form-item>
       <el-form-item label-width="300" label="加油站名称">

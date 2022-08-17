@@ -93,7 +93,7 @@
       <el-form ref="form" :model="form" label-width="80px">
         <el-form-item label-width="300" label="加油站所在地区">
           <template>
-            <v-region @values="regionChange" />
+            <v-region-selects @change="regionChange" />
           </template>
         </el-form-item>
         <el-form-item label-width="300" label="加油站名称">
