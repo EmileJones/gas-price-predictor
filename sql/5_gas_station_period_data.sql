@@ -1,5 +1,7 @@
 insert into `gas_station_price_period`(`start_time`, `rise`)
-values ('2022-07-13', false),
+values ('2022-08-10', false),
+       ('2022-07-27', false),
+       ('2022-07-13', false),
        ('2022-06-29', false),
        ('2022-06-15', true),
        ('2022-05-31', true),
