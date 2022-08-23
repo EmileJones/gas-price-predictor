@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import {listOpponentStation} from '@/api/gas/opponent-station';
 import {calculator, getOilTypes} from '@/api/gas/predict';
 import {listStation} from '@/api/gas/station';
 

@@ -1,6 +1,5 @@
 <template>
   <div class="dashboard-editor-container">
-    <h1>欢迎使用加油站销量预测系统！</h1>
   </div>
 </template>
 
@@ -8,6 +7,9 @@
 export default {
   name: 'Index',
   data() {
+  },
+  created() {
+    this.$router.push(`/gas/station`)
   }
 }
 </script>
