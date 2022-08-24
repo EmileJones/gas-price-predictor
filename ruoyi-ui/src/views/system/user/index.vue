@@ -235,8 +235,8 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item v-if="form.userId == undefined" label="用户名称" prop="userName">
-              <el-input v-model="form.userName" placeholder="请输入用户名称" maxlength="30" />
+            <el-form-item v-if="form.userId == undefined" label="用户账号" prop="userName">
+              <el-input v-model="form.userName" placeholder="请使用小写英文或者数字" maxlength="30" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
