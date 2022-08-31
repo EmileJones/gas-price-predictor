@@ -1,23 +1,12 @@
 package com.ruoyi.gas.module.price.domain.excel;
 
 import com.ruoyi.common.annotation.Excel;
-import com.ruoyi.common.annotation.Excel.ColumnType;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-/**
- * 经营数据表格导入实类
- *
- * @author KlenKiven
- * @email wzl709@outlook.com
- */
-public class SaleDataExcel implements Serializable {
+public class SaleDataExcel {
     private static final long serialVersionUID = 1L;
-
-    @Excel(name = "加油站名称")
-    private String stationName;
 
     @Excel(name = "物料名称")
     private String materialName;
@@ -25,39 +14,20 @@ public class SaleDataExcel implements Serializable {
     @Excel(name = "业务发生日期", dateFormat = "yyyy/MM/dd")
     private Date businessDate;
 
-    @Excel(name = "销售数量KG", cellType = ColumnType.NUMERIC)
+    @Excel(name = "销售数量KG", cellType = Excel.ColumnType.NUMERIC)
     private BigDecimal quantityKG;
 
-    @Excel(name = "销售金额", cellType = ColumnType.NUMERIC)
+    @Excel(name = "销售金额", cellType = Excel.ColumnType.NUMERIC)
     private BigDecimal amount;
 
-    @Excel(name = "销售数量L", cellType = ColumnType.NUMERIC)
+    @Excel(name = "销售数量L", cellType = Excel.ColumnType.NUMERIC)
     private BigDecimal quantityL;
 
-    @Excel(name = "销售单价", cellType = ColumnType.NUMERIC)
+    @Excel(name = "销售单价", cellType = Excel.ColumnType.NUMERIC)
     private BigDecimal price;
 
-    @Excel(name = "销售订单类型", defaultValue = SaleType.BY_CASH)
+    @Excel(name = "销售订单类型", defaultValue = ExportSaleDataExcel.SaleType.BY_CASH)
     private String type;
-
-    /**
-     * 销售的订单类型
-     */
-    public static final class SaleType {
-        /** 现金销售 */
-        public static final String BY_CASH = "XJ";
-
-        /** 刷卡销售 */
-        public static final String BY_CARD = "YK";
-    }
-
-    public String getStationName() {
-        return stationName;
-    }
-
-    public void setStationName(String stationName) {
-        this.stationName = stationName;
-    }
 
     public String getMaterialName() {
         return materialName;
@@ -117,9 +87,8 @@ public class SaleDataExcel implements Serializable {
 
     @Override
     public String toString() {
-        return "SaleDataExcel{" +
-                "stationName='" + stationName + '\'' +
-                ", materialName='" + materialName + '\'' +
+        return "ImportSaleDataExcel{" +
+                "materialName='" + materialName + '\'' +
                 ", businessDate=" + businessDate +
                 ", quantityKG=" + quantityKG +
                 ", amount=" + amount +
