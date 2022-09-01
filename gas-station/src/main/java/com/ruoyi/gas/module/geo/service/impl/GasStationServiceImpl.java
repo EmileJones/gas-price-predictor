@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class GasStationServiceImpl implements GasStationService {
@@ -64,6 +65,9 @@ public class GasStationServiceImpl implements GasStationService {
 
         List<OilSaleData> oilSaleData = map.entrySet().stream()
                 .flatMap(entry -> {
+                    if (!stationNameAndIdMap.containsKey(entry.getKey())){
+                        return Stream.empty();
+                    }
                     String stationId = stationNameAndIdMap.get(entry.getKey());
                     return entry.getValue().stream()
                             .map(data -> convertToOilSaleData(userId, stationId, data));

@@ -45,7 +45,7 @@ public interface GasStationService {
 
     /**
      * 保存用户的加油站经营数据
-     * @param saleData 经营数据
+     * @param map 经营数据
      */
     void importSaleData(Map<String, List<SaleDataExcel>> map);
 }

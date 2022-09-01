@@ -6,6 +6,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.gas.module.geo.domain.form.GasStationAddForm;
 import com.ruoyi.gas.module.geo.domain.vo.UserStationVO;
+import com.ruoyi.gas.module.geo.exception.HaveNotUserStationException;
 import com.ruoyi.gas.module.geo.service.GasStationService;
 import com.ruoyi.gas.module.geo.utils.GasExcelUtil;
 import com.ruoyi.gas.module.price.domain.excel.SaleDataExcel;
@@ -60,6 +61,9 @@ public class GasStationController extends BaseController {
         Long userId = SecurityUtils.getUserId();
         List<UserStationVO> userStationVOS = gasStationService.listGasStationByUserId(userId);
         GasExcelUtil<SaleDataExcel> excelUtils = new GasExcelUtil<>(SaleDataExcel.class);
+        if (userStationVOS.isEmpty()){
+            throw new HaveNotUserStationException("请先添加自己的加油站！");
+        }
         for (UserStationVO userStationVO : userStationVOS) {
             excelUtils.createSheet(userStationVO.getStationName(),
                     "物料名称应填: 92号汽油、95号汽油、98号汽油、00号柴油",
