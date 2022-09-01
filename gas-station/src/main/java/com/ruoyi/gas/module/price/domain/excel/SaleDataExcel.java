@@ -33,10 +33,14 @@ public class SaleDataExcel {
      * 销售的订单类型
      */
     public static final class SaleType {
-        /** 现金销售 */
+        /**
+         * 现金销售
+         */
         public static final String BY_CASH = "XJ";
 
-        /** 刷卡销售 */
+        /**
+         * 刷卡销售
+         */
         public static final String BY_CARD = "YK";
     }
 

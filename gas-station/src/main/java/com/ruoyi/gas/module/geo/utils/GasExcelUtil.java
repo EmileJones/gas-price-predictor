@@ -420,7 +420,6 @@ public class GasExcelUtil<T> {
         style.setAlignment(HorizontalAlignment.RIGHT);
         styles.put("data3", style);
 
-
         style = wb.createCellStyle();
         style.setAlignment(HorizontalAlignment.LEFT);
         style.setVerticalAlignment(VerticalAlignment.CENTER);
@@ -430,7 +429,6 @@ public class GasExcelUtil<T> {
         remarkFont.setColor(IndexedColors.RED.getIndex());
         style.setFont(remarkFont);
         styles.put("remark", style);
-
         return styles;
     }
 }
