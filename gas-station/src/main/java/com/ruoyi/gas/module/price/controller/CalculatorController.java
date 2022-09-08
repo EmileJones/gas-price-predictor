@@ -1,7 +1,10 @@
 package com.ruoyi.gas.module.price.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.gas.module.price.domain.PredictReferenceData;
 import com.ruoyi.gas.module.price.domain.framwork.OilType;
 import com.ruoyi.gas.module.price.domain.vo.OpponentPriceDataVO;
 import com.ruoyi.gas.module.price.domain.vo.PriceDataVO;
@@ -15,7 +18,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/gas/price")
-public class CalculatorController {
+public class CalculatorController extends BaseController {
 
     @Autowired
     private ICalculatorService calculatorService;
@@ -62,6 +65,13 @@ public class CalculatorController {
         }
         return oilTypes;
     }
+
+    @PreAuthorize("@ss.hasPermi('gas:predict:predict')")
+    @GetMapping("/referenceData")
+    public TableDataInfo getReferenceData(String gasStationId, String oilType) {
+        return null;
+    }
+
 
     /**
      * 封装对象

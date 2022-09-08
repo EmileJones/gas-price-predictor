@@ -58,7 +58,7 @@ public interface OilSaleDataMapper {
     int deleteSaleData(int id);
 
     /**
-     * 获取某期间内的某种石油的总销量
+     * 获取某期间内的某种石油的总销量（样本区间: [startTime, endTime) ）
      *
      * @param userId       用户ID
      * @param gasStationId 加油站ID
@@ -74,7 +74,7 @@ public interface OilSaleDataMapper {
                               @Param("endTime") DateTime endTime);
 
     /**
-     * 获取某期间内的某种石油的总销量(KG)
+     * 获取某期间内的某种石油的总销量(KG) （样本区间: [startTime, endTime) ）
      *
      * @param userId       用户ID
      * @param gasStationId 加油站ID

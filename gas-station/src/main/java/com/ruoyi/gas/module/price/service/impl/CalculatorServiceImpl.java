@@ -7,9 +7,11 @@ import com.ruoyi.gas.module.geo.service.IGasStationInfoService;
 import com.ruoyi.gas.module.geo.service.IOpponentMessageService;
 import com.ruoyi.gas.module.price.domain.CalculationLog;
 import com.ruoyi.gas.module.price.domain.OpponentPrice;
+import com.ruoyi.gas.module.price.domain.PredictReferenceData;
 import com.ruoyi.gas.module.price.domain.UserPeriod;
 import com.ruoyi.gas.module.price.domain.dto.DataForCalculation;
 import com.ruoyi.gas.module.price.domain.dto.OpponentGasStationDataForCalculation;
+import com.ruoyi.gas.module.price.domain.framwork.OilType;
 import com.ruoyi.gas.module.price.domain.vo.OpponentPriceDataVO;
 import com.ruoyi.gas.module.price.domain.vo.PriceDataVO;
 import com.ruoyi.gas.module.price.exception.DataIsNotEnoughException;
@@ -88,14 +90,6 @@ public class CalculatorServiceImpl implements ICalculatorService {
         for (int i = 0; i < data.getPeriodNumber(); i++) {
             UserPeriod userPeriod = periods.get(i);
             UserPeriod nextUserPeriod = periods.get(i + 1);
-//            if (i != data.getPeriodNumber() - 1) {
-//                nextUserPeriod = periods.get(i + 1);
-//            } else {
-//                UserPeriod condition = new UserPeriod();
-//                condition.setUserId(data.getUserId());
-//                condition.setGasStationId(data.getGasStationId());
-//                nextUserPeriod = userPeriodMapper.selectUserPeriod(condition, true, UserPeriodMapper.TIME_STAMP, 0l, 1l).get(0);
-//            }
             DateTime startTime = new DateTime(userPeriod.getTimeStamp());
             DateTime endTime = new DateTime(nextUserPeriod.getTimeStamp());
             Double totalSalesVolume = saleDataMapper.selectTotalSalesVolume(
@@ -104,13 +98,13 @@ public class CalculatorServiceImpl implements ICalculatorService {
                     data.getOilType(),
                     startTime,
                     endTime);
-            Double averangePrice = saleDataMapper.selectAveragePrice(
+            Double averagePrice = saleDataMapper.selectAveragePrice(
                     data.getUserId(),
                     data.getGasStationId(),
                     data.getOilType(),
                     startTime,
                     endTime);
-            if (totalSalesVolume == null || averangePrice == null) {
+            if (totalSalesVolume == null || averagePrice == null) {
                 neededData.setInAverageSalesVolume(i, Double.valueOf(0));
                 // 封装系统内加油站 第i期的综合单价
                 neededData.setInMoney(i, Double.valueOf(0));
@@ -120,7 +114,7 @@ public class CalculatorServiceImpl implements ICalculatorService {
                 // 封装系统内加油站 第i期的平均销量
                 neededData.setInAverageSalesVolume(i, totalSalesVolume / differenceDay);
                 // 封装系统内加油站 第i期的综合单价
-                neededData.setInMoney(i, averangePrice);
+                neededData.setInMoney(i, averagePrice);
             }
         }
         // 计算
@@ -197,6 +191,12 @@ public class CalculatorServiceImpl implements ICalculatorService {
         // 八、封装石油类型
         data.setOilType(priceData.getOilType());
         return getAverageSalesVolume(data);
+    }
+
+    @Override
+    public List<PredictReferenceData> getReferenceData(Long userId, String gasStationId, OilType oilType) {
+
+        return null;
     }
 
     /**
