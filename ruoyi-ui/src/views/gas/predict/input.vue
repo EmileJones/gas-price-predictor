@@ -93,7 +93,7 @@
           </el-form>
         </el-col>
         <el-col :span="6">
-          <manageData></manageData>
+          <manageData v-show="isSelectTrue"></manageData>
         </el-col>
       </el-row>
       <el-row>
@@ -126,6 +126,8 @@ export default {
         opponentPriceData: [],
         oilType: "",
       },
+      //下拉框是否选中
+      isSelectTrue: false,
       calculationParam: "",
       avgSalesVolume: "",
       oilType: [],
@@ -144,12 +146,19 @@ export default {
     },
     //发送石油类型给子组件以获取数据
     sendOilType(oilType) {
+      //下拉栏选中，侧边栏显示
+      this.isSelectTrue = true;
       let oilNumber = 0;
       //如果不为柴油，给oilNumber赋值
       if (oilType != "柴油") {
         oilNumber = parseInt(oilType);
       }
-      this.$bus.$emit("oilType", oilNumber);
+      console.log(666);
+      let data = {
+        stationId: this.formData.stationId,
+        oilType: oilNumber,
+      };
+      this.$bus.$emit("oilType", data);
     },
   },
   created() {

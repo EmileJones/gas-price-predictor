@@ -3,7 +3,7 @@
     <h3>近三个周期内的经营数据</h3>
     <el-table
       :data="manageData"
-      height="250"
+      max-height="250"
       border
       style="width: 100%"
       class="box"
@@ -60,12 +60,19 @@ export default {
     };
   },
   mounted() {
-    this.$bus.$on("oilType", (oilType) => {
-      console.log(oilType, 666);
-      getOilManageData(oilType).then((res) => {
+    this.$bus.$on("oilType", (data) => {
+      // console.log(777);
+      getOilManageData(data.stationId, data.oilType).then((res) => {
         //剥离出传回来的数据
         let data = res.data;
-        data.forEach((data) => {});
+        data.forEach((item) => {
+          this.manageData.push({
+            startTime: item.startTime,
+            endTime: item.endTime,
+            comprehensiveUnitPrice: item.comprehensiveUnitPrice,
+            dayAvgSalesVolume: item.dayAvgSalesVolume,
+          });
+        });
       });
     });
   },
