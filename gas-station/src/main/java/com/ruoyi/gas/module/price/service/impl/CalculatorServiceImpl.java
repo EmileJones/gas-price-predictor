@@ -19,7 +19,9 @@ import com.ruoyi.gas.module.price.mapper.*;
 import com.ruoyi.gas.module.price.math.PriceData;
 import com.ruoyi.gas.module.price.math.PriceMath;
 import com.ruoyi.gas.module.price.service.ICalculatorService;
+import com.ruoyi.gas.module.price.service.IUserPeriodService;
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +47,8 @@ public class CalculatorServiceImpl implements ICalculatorService {
     IGasStationInfoService gasStationInfoService;
     @Autowired
     CalculationLogMapper calculationLogMapper;
+    @Autowired
+    IUserPeriodService userPeriodService;
 
     @Override
     public PriceMath getAverageSalesVolume(DataForCalculation data) {
@@ -195,8 +199,40 @@ public class CalculatorServiceImpl implements ICalculatorService {
 
     @Override
     public List<PredictReferenceData> getReferenceData(Long userId, String gasStationId, OilType oilType) {
+        List<PredictReferenceData> predictReferenceDataList = new LinkedList<>();
+        PredictReferenceData predictReferenceData = new PredictReferenceData();
 
-        return null;
+        //查出周期的开始时间和截至时间
+        List<UserPeriod> userPeriodList = userPeriodService.getUserPeriods(userId, gasStationId,0L, REFERENCE_DATA_NUMBER + 1L);
+
+        for (int i = 0; i < userPeriodList.size() - 1; i++) {
+            //计算周期的开始时间及截至时间
+            UserPeriod userPeriod = userPeriodList.get(i);
+            UserPeriod userNextPeriod = userPeriodList.get(i + 1);
+            //周期开始时间
+            predictReferenceData.setStartTime(userPeriod.getTimeStamp());
+            //周期截至时间
+            predictReferenceData.setEndingTime(userNextPeriod.getTimeStamp());
+
+            //计算日均销量
+            DateTime startTime = new DateTime(predictReferenceData.getStartTime());
+            DateTime endTime = new DateTime(predictReferenceData.getEndingTime());
+            //计算日均销量-得到该周期的天数
+            int predictDays = Days.daysBetween(startTime, endTime).getDays();
+            //计算日均销量-得到总销量
+            Double totalOilSale = saleDataMapper.selectAveragePrice(userId, gasStationId, oilType, startTime, endTime);
+            //计算日均销量-得到该周期内的日均销量
+            Double oilSaleOnPeriod = totalOilSale / predictDays ;  //有问题
+            predictReferenceData.setOilSaleOnPeriod(oilSaleOnPeriod);
+
+            //计算综合单价
+            Double totalPrice = saleDataMapper.selectTotalSalesVolume(userId, gasStationId, oilType, startTime, endTime);
+            Double unitPrice = totalPrice / predictReferenceData.getOilSaleOnPeriod();//有问题
+            predictReferenceData.setUnitPrice(unitPrice);
+
+            predictReferenceDataList.add(predictReferenceData);
+        }
+        return predictReferenceDataList;
     }
 
     /**

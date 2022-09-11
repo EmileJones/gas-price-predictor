@@ -15,7 +15,7 @@ import java.util.List;
  * 用于计算 最终价格 的类
  */
 public interface ICalculatorService {
-    int REFERENCE_DATA_NUMBER = 3;
+    long REFERENCE_DATA_NUMBER = 3;
 
     /**
      * 计算日均销量（传入经过处理后的数据）
