@@ -12,14 +12,14 @@ public class PredictReferenceData {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date endingTime;
     //日均销量
-    private double oilSaleOnPeriod;
+    private Double oilSaleOnPeriod;
     //综合单价
-    private double unitPrice;
+    private Double unitPrice;
 
     public PredictReferenceData() {
     }
 
-    public PredictReferenceData(Date startTime, Date endingTime, double oilSaleOnPeriod, double unitPrice) {
+    public PredictReferenceData(Date startTime, Date endingTime, Double oilSaleOnPeriod, Double unitPrice) {
         this.startTime = startTime;
         this.endingTime = endingTime;
         this.oilSaleOnPeriod = oilSaleOnPeriod;
@@ -42,19 +42,19 @@ public class PredictReferenceData {
         this.endingTime = endingTime;
     }
 
-    public double getOilSaleOnPeriod() {
+    public Double getOilSaleOnPeriod() {
         return oilSaleOnPeriod;
     }
 
-    public void setOilSaleOnPeriod(double oilSaleOnPeriod) {
+    public void setOilSaleOnPeriod(Double oilSaleOnPeriod) {
         this.oilSaleOnPeriod = oilSaleOnPeriod;
     }
 
-    public double getUnitPrice() {
+    public Double getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(double unitPrice) {
+    public void setUnitPrice(Double unitPrice) {
         this.unitPrice = unitPrice;
     }
 
