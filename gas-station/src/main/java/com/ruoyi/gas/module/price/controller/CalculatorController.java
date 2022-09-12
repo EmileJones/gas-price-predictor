@@ -68,13 +68,13 @@ public class CalculatorController extends BaseController {
 
     @PreAuthorize("@ss.hasPermi('gas:predict:predict')")
     @GetMapping("/referenceData/{gasStationId}/{oilTypeNum}")
-    public TableDataInfo getReferenceData(@PathVariable("gasStationId") String gasStationId, @PathVariable("oilTypeNum") String oilType) {
+    public TableDataInfo getReferenceData(@PathVariable("gasStationId") String gasStationId, @PathVariable("oilTypeNum") int oilType) {
         // 获取用户ID
         Long userId = SecurityUtils.getLoginUser()
                 .getUser()
                 .getUserId();
 
-        OilType oilTypeNum = OilType.valueOf(oilType);
+        OilType oilTypeNum = OilType.getOilByTypeNumber(oilType);
         List<PredictReferenceData> referenceData = calculatorService.getReferenceData(userId, gasStationId, oilTypeNum);
         TableDataInfo tableDataInfo = new TableDataInfo();
         tableDataInfo.setRows(referenceData);

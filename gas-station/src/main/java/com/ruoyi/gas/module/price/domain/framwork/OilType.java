@@ -38,7 +38,7 @@ public enum OilType {
             case 00:
                 return Oil00;
             default:
-                return null;
+                throw new NotExistOilTypeException("不存在的石油型号: " + typeNumber);
         }
     }
 
