@@ -65,6 +65,7 @@ export default {
       getOilManageData(data.stationId, data.oilType).then((res) => {
         //剥离出传回来的数据
         let data = res.data;
+        console.log(res);
         data.forEach((item) => {
           this.manageData.push({
             startTime: item.startTime,

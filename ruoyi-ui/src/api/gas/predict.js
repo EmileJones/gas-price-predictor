@@ -15,9 +15,9 @@ export function getOilTypes() {
   });
 }
 
-export function getOilManageData(stationId, oilType) {
+export function getOilManageData(gasstationId, oilTypeNum) {
   return service({
-    url: `/gas/price/referenceData/${stationId}/${oilType}`,
-    method: "post",
+    url: `/gas/price/referenceData/${gasstationId}/${oilTypeNum}`,
+    method: "get",
   })
 }
