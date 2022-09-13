@@ -8,9 +8,16 @@ export function calculator(query) {
   });
 }
 
-export function getOilTypes(){
+export function getOilTypes() {
   return service({
     url: "/gas/price/oilType",
     method: "get"
   });
+}
+
+export function getOilManageData(gasstationId, oilTypeNum) {
+  return service({
+    url: `/gas/price/referenceData/${gasstationId}/${oilTypeNum}`,
+    method: "get",
+  })
 }
