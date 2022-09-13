@@ -56,7 +56,7 @@ export default {
       getOilManageData(data.stationId, data.oilType).then((res) => {
         //剥离出传回来的数据
         let data = res.rows;
-        console.log(data);
+        this.manageData = [];
         data.forEach((item) => {
           //判断日均销量和综合单间是否为 null
           if (item.unitPrice === null) {
