@@ -6,10 +6,10 @@ import java.util.Date;
 
 public class PredictReferenceData {
     //开始时间
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yy-MM-dd")
     private Date startTime;
     //截止时间
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yy-MM-dd")
     private Date endingTime;
     //日均销量
     private Double oilSaleOnPeriod;

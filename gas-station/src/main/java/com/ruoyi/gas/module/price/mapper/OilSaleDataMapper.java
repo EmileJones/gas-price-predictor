@@ -65,7 +65,7 @@ public interface OilSaleDataMapper {
      * @param oilType      石油类型
      * @param startTime    开始时间
      * @param endTime      结束时间
-     * @return 总销量
+     * @return 平均价格
      */
     Double selectAveragePrice(@Param("userId") Long userId,
                               @Param("gasStationId") String gasStationId,
@@ -81,7 +81,7 @@ public interface OilSaleDataMapper {
      * @param oilType      石油类型
      * @param startTime    开始时间
      * @param endTime      结束时间
-     * @return 总收入
+     * @return 总销量
      */
     Double selectTotalSalesVolume(@Param("userId") Long userId,
                                   @Param("gasStationId") String gasStationId,

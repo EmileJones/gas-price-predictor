@@ -16,6 +16,7 @@ import java.util.List;
  */
 public interface ICalculatorService {
     long REFERENCE_DATA_NUMBER = 3;
+    int  DEFAULT_KEEP_DECIMAL = 2;
 
     /**
      * 计算日均销量（传入经过处理后的数据）
