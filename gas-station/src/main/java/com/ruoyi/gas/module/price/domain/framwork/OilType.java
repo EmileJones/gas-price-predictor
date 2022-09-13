@@ -4,13 +4,19 @@ import com.ruoyi.gas.module.price.exception.NotExistOilTypeException;
 import org.apache.poi.ss.formula.functions.T;
 
 public enum OilType {
-    Oil92("92号汽油", 92), Oil95("95号汽油", 95), Oil98("98号汽油", 98), Oil00("柴油", 00);
+    Oil92("92号汽油", 92, true),
+    Oil95("95号汽油", 95, true),
+    Oil98("98号汽油", 98, true),
+    Oil00("柴油", 00, false);
     private String typeName;
     private int typeNumber;
 
-    OilType(String typeName, int typeNumber) {
+    private boolean isEnable;
+
+    OilType(String typeName, int typeNumber, boolean isEnable) {
         this.typeName = typeName;
         this.typeNumber = typeNumber;
+        this.isEnable = isEnable;
     }
 
     public static OilType getOilByTypeName(String typeName) {
@@ -48,6 +54,10 @@ public enum OilType {
 
     public int getTypeNumber() {
         return typeNumber;
+    }
+
+    public boolean isEnable() {
+        return isEnable;
     }
 
     @Override

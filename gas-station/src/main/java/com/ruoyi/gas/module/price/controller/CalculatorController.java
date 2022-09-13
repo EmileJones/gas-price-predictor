@@ -61,7 +61,9 @@ public class CalculatorController extends BaseController {
     public List<String> calculate() {
         List<String> oilTypes = new ArrayList<>();
         for (OilType o : OilType.values()) {
-            oilTypes.add(o.getTypeName());
+            if (o.isEnable()){
+                oilTypes.add(o.getTypeName());
+            }
         }
         return oilTypes;
     }
