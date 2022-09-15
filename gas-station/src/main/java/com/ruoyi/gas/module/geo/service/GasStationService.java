@@ -1,11 +1,11 @@
 package com.ruoyi.gas.module.geo.service;
 
-import com.ruoyi.gas.module.geo.domain.GasStationInfo;
 import com.ruoyi.gas.module.geo.domain.form.GasStationAddForm;
 import com.ruoyi.gas.module.geo.domain.vo.UserStationVO;
 import com.ruoyi.gas.module.price.domain.excel.SaleDataExcel;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 加油站服务 -- 用户侧
@@ -45,7 +45,7 @@ public interface GasStationService {
 
     /**
      * 保存用户的加油站经营数据
-     * @param saleData 经营数据
+     * @param map 经营数据
      */
-    void importSaleData(List<SaleDataExcel> saleData);
+    void importSaleData(Map<String, List<SaleDataExcel>> map);
 }

@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class GasStationServiceImpl implements GasStationService {
@@ -57,17 +58,19 @@ public class GasStationServiceImpl implements GasStationService {
     }
 
     @Override
-    public void importSaleData(List<SaleDataExcel> saleData) {
+    public void importSaleData(Map<String, List<SaleDataExcel>> map) {
         Long userId = SecurityUtils.getUserId();
         Map<String, String> stationNameAndIdMap = userOwnedService.listUserOwnedStation(userId).stream()
                 .collect(Collectors.toMap(UserStationVO::getStationName, UserStationVO::getStationId));
 
-        List<OilSaleData> oilSaleData = saleData.stream()
-                // 剔除加油站名称不合法的数据
-                .filter(excel -> stationNameAndIdMap.containsKey(excel.getStationName()))
-                .map(excel -> {
-                    String stationId = stationNameAndIdMap.get(excel.getStationName());
-                    return convertToOilSaleData(userId, stationId, excel);
+        List<OilSaleData> oilSaleData = map.entrySet().stream()
+                .flatMap(entry -> {
+                    if (!stationNameAndIdMap.containsKey(entry.getKey())){
+                        return Stream.empty();
+                    }
+                    String stationId = stationNameAndIdMap.get(entry.getKey());
+                    return entry.getValue().stream()
+                            .map(data -> convertToOilSaleData(userId, stationId, data));
                 }).collect(Collectors.toList());
 
         Future<Set<String>> stationIdSet = saleDataService.addOilSaleDatas(oilSaleData);
