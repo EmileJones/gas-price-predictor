@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `gas_station_info`(
     `id` varchar(45) NOT NULL COMMENT '唯一ID',
     `name` varchar(512) NOT NULL COMMENT '加油站名称',
     `location` varchar(64) NOT NULL COMMENT '加油站位置',
-    `province` varchar(4) NOT NULL COMMENT '加油站所在省',
+    `province` varchar(15) NOT NULL COMMENT '加油站所在省',
     `city` varchar(32) NOT NULL COMMENT '加油站所在市',
     `address` varchar(1024) NOT NULL COMMENT '加油站地址',
     `isSystem` tinyint NOT NULL,
