@@ -208,22 +208,22 @@ public class CalculatorServiceImpl implements ICalculatorService {
         for (int i = 0; i < userPeriodList.size() - 1; i++) {
             PredictReferenceData predictReferenceData = new PredictReferenceData();
             //计算周期的开始时间及截至时间
-            UserPeriod userPeriod = userPeriodList.get(i);
-            UserPeriod userNextPeriod = userPeriodList.get(i + 1);
+            UserPeriod userPeriod = userPeriodList.get(i); //8.23  7.23
+            UserPeriod userNextPeriod = userPeriodList.get(i + 1); //7.23  6.23
             //周期开始时间
-            predictReferenceData.setStartTime(userNextPeriod.getTimeStamp());
+            predictReferenceData.setStartTime(userNextPeriod.getTimeStamp()); //7.23  6.23
             //周期截至时间
-            predictReferenceData.setEndingTime(userPeriod.getTimeStamp());
+            predictReferenceData.setEndingTime(userPeriod.getTimeStamp()); //8.23  7.23
             if(i != 0){
                 DateTime date = new DateTime(userPeriod.getTimeStamp());
                 DateTime subDate = date.minusDays(1);
-                predictReferenceData.setStartTime(subDate.toDate());
+                predictReferenceData.setEndingTime(subDate.toDate());
             }
             //计算日均销量
             DateTime startTime = new DateTime(predictReferenceData.getStartTime());
             DateTime endTime = new DateTime(predictReferenceData.getEndingTime());
             if(i != 0){
-                endTime = endTime.minusDays(1);
+                endTime = endTime.plusDays(1);
             }
             //计算日均销量-得到该周期的天数
             int predictDays = Days.daysBetween(startTime, endTime).getDays();
