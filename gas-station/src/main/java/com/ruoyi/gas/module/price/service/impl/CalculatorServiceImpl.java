@@ -202,7 +202,6 @@ public class CalculatorServiceImpl implements ICalculatorService {
     public List<PredictReferenceData> getReferenceData(Long userId, String gasStationId, OilType oilType) {
         List<PredictReferenceData> predictReferenceDataList = new LinkedList<>();
 
-
         //查出周期的开始时间和截至时间
         List<UserPeriod> userPeriodList = userPeriodService.getUserPeriods(userId, gasStationId, 0L, REFERENCE_DATA_NUMBER + 1L);
 
@@ -215,10 +214,17 @@ public class CalculatorServiceImpl implements ICalculatorService {
             predictReferenceData.setStartTime(userNextPeriod.getTimeStamp());
             //周期截至时间
             predictReferenceData.setEndingTime(userPeriod.getTimeStamp());
-
+            if(i != 0){
+                DateTime date = new DateTime(userPeriod.getTimeStamp());
+                DateTime subDate = date.minusDays(1);
+                predictReferenceData.setStartTime(subDate.toDate());
+            }
             //计算日均销量
             DateTime startTime = new DateTime(predictReferenceData.getStartTime());
             DateTime endTime = new DateTime(predictReferenceData.getEndingTime());
+            if(i != 0){
+                endTime = endTime.minusDays(1);
+            }
             //计算日均销量-得到该周期的天数
             int predictDays = Days.daysBetween(startTime, endTime).getDays();
             //计算日均销量-得到总销量
