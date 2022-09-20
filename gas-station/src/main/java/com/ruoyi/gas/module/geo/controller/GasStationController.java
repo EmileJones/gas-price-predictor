@@ -66,7 +66,6 @@ public class GasStationController extends BaseController {
         }
         for (UserStationVO userStationVO : userStationVOS) {
             excelUtils.createSheet(userStationVO.getStationName(),
-                    "物料名称应填: 92号汽油、95号汽油、98号汽油、00号柴油",
                     "销售订单类型应填: XJ、YK（XJ代表现金销售，YK代表刷卡销售）");
         }
         excelUtils.exportTo(response);
