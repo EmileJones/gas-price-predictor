@@ -70,6 +70,7 @@
 <script>
 import { listOpponentStation, changeStatus, changeStationName, importOpponentPrice } from '@/api/gas/opponent-station.js'
 import { getToken } from '@/utils/auth'
+import log from "@/views/monitor/job/log";
 
 export default {
     data() {

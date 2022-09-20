@@ -12,7 +12,7 @@
         <result property="status" column="status"/>
     </resultMap>
 
-    <insert id="insertOpponentMessage" useGeneratedKeys="true">
+    <insert id="insertOpponentMessage" useGeneratedKeys="true" keyProperty="id">
         insert into `gas_station_opponent_message`(`user_id`, `gas_station_id`,`out_gas_station_id`,`out_gas_station_name`,`status`)
         values
         <foreach collection="opponentMessages" item="obj" separator=",">
