@@ -66,6 +66,7 @@ public class GasStationController extends BaseController {
         }
         for (UserStationVO userStationVO : userStationVOS) {
             excelUtils.createSheet(userStationVO.getStationName(),
+                    "本系统只支持汽油型号的计算（92号、95号、98号）",
                     "销售订单类型应填: XJ、YK（XJ代表现金销售，YK代表刷卡销售）");
         }
         excelUtils.exportTo(response);

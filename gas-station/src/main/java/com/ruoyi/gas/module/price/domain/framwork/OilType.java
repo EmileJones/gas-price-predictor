@@ -19,6 +19,27 @@ public enum OilType {
         this.isEnable = isEnable;
     }
 
+    public static OilType getEnableOilByTypeName(String typeName) {
+        OilType oilType;
+        if (typeName.contains("92")) {
+            oilType = Oil92;
+        } else if (typeName.contains("95")) {
+            oilType = Oil95;
+        } else if (typeName.contains("98")) {
+            oilType = Oil98;
+        } else if (typeName.contains(("柴油"))) {
+            oilType = Oil00;
+        } else {
+            throw new NotExistOilTypeException("不存在的石油类型: " + typeName);
+        }
+
+        if (oilType.isEnable) {
+            return oilType;
+        }
+
+        throw new NotExistOilTypeException("不存在的石油类型: " + typeName);
+    }
+
     public static OilType getOilByTypeName(String typeName) {
         if (typeName.contains("92")) {
             return Oil92;

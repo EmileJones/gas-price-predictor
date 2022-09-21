@@ -84,7 +84,7 @@ public class GasStationServiceImpl implements GasStationService {
         oilSaleData.setUserId(userId);
         oilSaleData.setGasStationId(stationId);
         oilSaleData.setDate(businessDate);
-        oilSaleData.setOilType(OilType.getOilByTypeName(excel.getMaterialName()));
+        oilSaleData.setOilType(OilType.getEnableOilByTypeName(excel.getMaterialName()));
         oilSaleData.setLNumber(excel.getQuantityL().doubleValue());
         oilSaleData.setKgNumber(excel.getQuantityKG().doubleValue());
         oilSaleData.setPrice(excel.getPrice().doubleValue());
