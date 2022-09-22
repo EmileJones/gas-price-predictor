@@ -209,22 +209,22 @@ public class CalculatorServiceImpl implements ICalculatorService {
             PredictReferenceData predictReferenceData = new PredictReferenceData();
             //计算周期的开始时间及截至时间
             UserPeriod userPeriod = userPeriodList.get(i); //8.23  7.23
-            UserPeriod userNextPeriod = userPeriodList.get(i + 1); //7.23  6.23
+            UserPeriod userNextPeriod = userPeriodList.get(i + 1);
             //周期开始时间
-            predictReferenceData.setStartTime(userNextPeriod.getTimeStamp()); //7.23  6.23
+            predictReferenceData.setStartTime(userNextPeriod.getTimeStamp());
             //周期截至时间
-            predictReferenceData.setEndingTime(userPeriod.getTimeStamp()); //8.23  7.23
-            if(i != 0){
-                DateTime date = new DateTime(userPeriod.getTimeStamp());
-                DateTime subDate = date.minusDays(1);
-                predictReferenceData.setEndingTime(subDate.toDate());
-            }
+            predictReferenceData.setEndingTime(userPeriod.getTimeStamp());
+
+            DateTime date = new DateTime(userPeriod.getTimeStamp());
+            DateTime subDate = date.minusDays(1);
+            predictReferenceData.setEndingTime(subDate.toDate());
+
             //计算日均销量
             DateTime startTime = new DateTime(predictReferenceData.getStartTime());
             DateTime endTime = new DateTime(predictReferenceData.getEndingTime());
-            if(i != 0){
-                endTime = endTime.plusDays(1);
-            }
+
+            endTime = endTime.plusDays(1);
+
             //计算日均销量-得到该周期的天数
             int predictDays = Days.daysBetween(startTime, endTime).getDays();
             //计算日均销量-得到总销量
@@ -235,7 +235,7 @@ public class CalculatorServiceImpl implements ICalculatorService {
             if (Objects.nonNull(totalOilSale)) {
                 oilSaleOnPeriod = totalOilSale / predictDays;
                 totalOilSaleDecimal = new BigDecimal(oilSaleOnPeriod);
-                oilSaleOnPeriod = totalOilSaleDecimal.setScale(ICalculatorService.DEFAULT_KEEP_DECIMAL,RoundingMode.HALF_DOWN).doubleValue();
+                oilSaleOnPeriod = totalOilSaleDecimal.setScale(ICalculatorService.DEFAULT_KEEP_DECIMAL, RoundingMode.HALF_DOWN).doubleValue();
             }
 
             predictReferenceData.setOilSaleOnPeriod(oilSaleOnPeriod);
@@ -243,7 +243,7 @@ public class CalculatorServiceImpl implements ICalculatorService {
             //计算综合单价(平均价格)
             Double totalPrice = saleDataMapper.selectAveragePrice(userId, gasStationId, oilType, startTime, endTime);
             BigDecimal totalPriceDecimal = null;
-            if(Objects.nonNull(totalPrice)){
+            if (Objects.nonNull(totalPrice)) {
                 totalPriceDecimal = new BigDecimal(totalPrice);
                 totalPrice = totalPriceDecimal.setScale(ICalculatorService.DEFAULT_KEEP_DECIMAL, RoundingMode.HALF_DOWN).doubleValue();
             }
