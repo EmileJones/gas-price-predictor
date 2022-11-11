@@ -30,7 +30,7 @@ public enum OilType {
         } else if (typeName.contains(("柴油"))) {
             oilType = Oil00;
         } else {
-            throw new NotExistOilTypeException("不存在的石油类型: " + typeName);
+            throw new NotExistOilTypeException("系统不支持的石油类型: " + typeName);
         }
 
         if (oilType.isEnable) {
