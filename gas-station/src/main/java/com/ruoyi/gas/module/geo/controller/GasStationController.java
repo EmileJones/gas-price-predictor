@@ -61,7 +61,7 @@ public class GasStationController extends BaseController {
         Long userId = SecurityUtils.getUserId();
         List<UserStationVO> userStationVOS = gasStationService.listGasStationByUserId(userId);
         GasExcelUtil<SaleDataExcel> excelUtils = new GasExcelUtil<>(SaleDataExcel.class);
-        if (userStationVOS.isEmpty()){
+        if (userStationVOS.isEmpty()) {
             throw new HaveNotUserStationException("请先添加自己的加油站！");
         }
         for (UserStationVO userStationVO : userStationVOS) {
@@ -91,6 +91,7 @@ public class GasStationController extends BaseController {
     @PreAuthorize("@ss.hasPermi('gas:station:upload')")
     @PostMapping("/import")
     public AjaxResult importStationSaleData(MultipartFile file) throws Exception {
+        logger.info("User which id is {} import the sale data, the file size is {}B", getUserId(), file.getSize());
         GasExcelUtil<SaleDataExcel> excelUtil = new GasExcelUtil<>(SaleDataExcel.class);
         excelUtil.loadForm(file.getInputStream());
         Map<String, List<SaleDataExcel>> saleData = excelUtil.getData();
