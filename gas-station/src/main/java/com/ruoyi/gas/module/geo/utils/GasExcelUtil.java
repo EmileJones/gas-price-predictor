@@ -8,6 +8,7 @@ import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.reflect.ReflectUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.util.IOUtils;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javax.servlet.ServletOutputStream;
@@ -40,7 +41,7 @@ public class GasExcelUtil<T> {
     }
 
     private void init() {
-        this.workbook = new XSSFWorkbook();
+        this.workbook = new SXSSFWorkbook();
         this.styleMap = createStyles(this.workbook);
     }
 
@@ -77,6 +78,7 @@ public class GasExcelUtil<T> {
             }
             list.add(parseData(row));
         }
+        ((SXSSFWorkbook)workbook).dispose();
         return list;
     }
 
