@@ -39,6 +39,7 @@ nbdist/
 *.xml.versionsBackup
 *.swp
 测算表.xlsx
+.DS_Store
 
 
 !*/build/*.java
