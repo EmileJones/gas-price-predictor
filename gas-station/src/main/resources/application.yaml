@@ -1,7 +1,7 @@
 gas:
   baidu:
-    ak: '4pj7fcabdyL8SgEwPZ4fYshRKxMByDwN'
+    ak: '<YOUR_KEY>'
   tencent:
-    key: '4DRBZ-ZPWL6-E6KSK-EP74Z-RUPI7-TMFBO'
+    key: '<YOUR_KEY>'
   amap:
-    key: '25dc8e3377f5d44b60b5a7881cbb7cd2'
+    key: '<YOUR_KEY>'
